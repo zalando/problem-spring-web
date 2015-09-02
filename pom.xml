@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.zalando</groupId>
-    <artifactId>problem-handling</artifactId>
+    <artifactId>problem-spring-web</artifactId>
     <version>0.1.0-SNAPSHOT</version>
 
     <inceptionYear>2015</inceptionYear>
@@ -20,7 +20,7 @@
         <maven.compiler.target>1.8</maven.compiler.target>
 
         <spring.version>4.2.0.RELEASE</spring.version>
-        <problem.version>1.0-SNAPSHOT</problem.version>
+        <problem.version>0.2.0</problem.version>
         <jackson.version>2.6.0</jackson.version>
     </properties>
 
@@ -47,6 +47,11 @@
             <groupId>org.zalando</groupId>
             <artifactId>jackson-datatype-problem</artifactId>
             <version>${problem.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.12</version>
         </dependency>
         <dependency>
             <groupId>com.google.code.findbugs</groupId>

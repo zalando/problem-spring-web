@@ -1,4 +1,4 @@
-package org.zalando.problemhandling;
+package org.zalando.problem.springweb;
 
 /*
  * #%L
@@ -27,5 +27,8 @@ public interface MediaTypes {
 
     String PROBLEM_VALUE = "application/problem+json";
     MediaType PROBLEM = MediaType.parseMediaType(PROBLEM_VALUE);
+
+    String WILDCARD_JSON_VALUE = "application/*+json";
+    MediaType WILDCARD_JSON = MediaType.parseMediaType(WILDCARD_JSON_VALUE);
     
 }

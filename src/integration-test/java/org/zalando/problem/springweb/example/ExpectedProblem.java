@@ -1,4 +1,4 @@
-package org.zalando.problemhandling.example;
+package org.zalando.problem.springweb.example;
 
 /*
  * #%L

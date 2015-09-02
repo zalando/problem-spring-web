@@ -1,5 +1,4 @@
-@ParametersAreNonnullByDefault
-package org.zalando.problemhandling;
+package org.zalando.problem.springweb;
 
 /*
  * #%L
@@ -22,5 +21,14 @@ package org.zalando.problemhandling;
  */
 
 
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.springframework.http.HttpStatus;
 
+import javax.ws.rs.core.Response;
+
+interface StatusMapper {
+
+    static HttpStatus map(final Response.StatusType status) {
+        return HttpStatus.valueOf(status.getStatusCode());
+    }
+
+}
