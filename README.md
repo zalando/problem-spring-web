@@ -1,7 +1,7 @@
 # Problems for Spring Web MVC
 
-[![Build Status](https://img.shields.io/travis/zalando/problem-handling.svg)](https://travis-ci.org/zalando/problem-handling)
-[![Coverage Status](https://img.shields.io/coveralls/zalando/problem-handling.svg)](https://coveralls.io/r/zalando/problem-handling)
+[![Build Status](https://img.shields.io/travis/zalando/problem-spring-web.svg)](https://travis-ci.org/zalando/problem-spring-web)
+[![Coverage Status](https://img.shields.io/coveralls/zalando/problem-spring-web.svg)](https://coveralls.io/r/zalando/problem-spring-web)
 
 This library offers 
 [`@ControllerAdvice`](http://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/web/bind/annotation/ControllerAdvice.html)

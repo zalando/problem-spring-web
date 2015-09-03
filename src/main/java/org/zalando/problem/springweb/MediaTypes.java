@@ -21,14 +21,54 @@ package org.zalando.problem.springweb;
  */
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
+import org.springframework.web.HttpMediaTypeNotAcceptableException;
+import org.springframework.web.accept.HeaderContentNegotiationStrategy;
+import org.springframework.web.context.request.NativeWebRequest;
+
+import java.util.List;
+import java.util.Optional;
 
 public interface MediaTypes {
+
+    Logger LOG = LoggerFactory.getLogger(MediaTypes.class);
 
     String PROBLEM_VALUE = "application/problem+json";
     MediaType PROBLEM = MediaType.parseMediaType(PROBLEM_VALUE);
 
+    String X_PROBLEM_VALUE = "application/xproblem+json";
+    MediaType X_PROBLEM = MediaType.parseMediaType(X_PROBLEM_VALUE);
+
     String WILDCARD_JSON_VALUE = "application/*+json";
     MediaType WILDCARD_JSON = MediaType.parseMediaType(WILDCARD_JSON_VALUE);
-    
+
+    final HeaderContentNegotiationStrategy headerNegotiator = new HeaderContentNegotiationStrategy();
+
+    static Optional<MediaType> determineContentType(final NativeWebRequest request) {
+        try {
+            final List<MediaType> acceptedMediaTypes = headerNegotiator.resolveMediaTypes(request);
+
+            if (acceptedMediaTypes.isEmpty()) {
+                return Optional.of(PROBLEM);
+            }
+
+            if (acceptedMediaTypes.stream().anyMatch(PROBLEM::isCompatibleWith)) {
+                return Optional.of(PROBLEM);
+            }
+
+            if (acceptedMediaTypes.stream().anyMatch(X_PROBLEM::isCompatibleWith)) {
+                return Optional.of(X_PROBLEM);
+            }
+
+            if (acceptedMediaTypes.stream().anyMatch(WILDCARD_JSON::isCompatibleWith)) {
+                return Optional.of(PROBLEM);
+            }
+
+        } catch (final HttpMediaTypeNotAcceptableException exception) {
+            LOG.info("Unable to determine content type due to error during parsing Accept header: [{}]", exception);
+        }
+        return Optional.empty();
+    }
 }
