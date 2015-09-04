@@ -1,4 +1,4 @@
-package org.zalando.problem.springweb;
+package org.zalando.problem.springweb.advice;
 
 /*
  * #%L
@@ -23,35 +23,29 @@ package org.zalando.problem.springweb;
 
 import org.junit.Test;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.zalando.problem.springweb.advice.MethodNotAllowed;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
-import static org.springframework.http.HttpMethod.POST;
+import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.request;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class MethodNotAllowedIT extends AdviceIT {
+public class TypeMismatchIT extends AdviceIT {
 
     @Override
     protected Object advice() {
-        return new MethodNotAllowed() {};
+        return new TypeMistmatch() {
+        };
     }
 
     @Test
-    public void methodNotAllowed() throws Exception {
-        mvc.perform(request(POST, URI_HANDLER_PROBLEM)
-                .accept(MediaType.parseMediaType("application/x.bla+json"), MediaTypes.PROBLEM))
-                .andDo(print())
-                .andExpect(header().string("Content-Type", is(MediaTypes.PROBLEM_VALUE)))
-                .andExpect(status().isMethodNotAllowed())
-                .andExpect(jsonPath("$.title", is(HttpStatus.METHOD_NOT_ALLOWED.getReasonPhrase())))
-                .andExpect(jsonPath("$.status", is(HttpStatus.METHOD_NOT_ALLOWED.value())))
-                .andExpect(jsonPath("$.detail", containsString("not supported")));
+    public void typeMismatch() throws Exception {
+        mvc.perform(request(GET, URI_HANDLER_CONVERSION + "?dateTime=abc"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.title", is(HttpStatus.BAD_REQUEST.getReasonPhrase())))
+                .andExpect(jsonPath("$.status", is(HttpStatus.BAD_REQUEST.value())))
+                .andExpect(jsonPath("$.detail", containsString("Failed to convert")));
     }
 
 }

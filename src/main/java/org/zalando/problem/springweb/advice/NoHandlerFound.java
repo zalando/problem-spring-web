@@ -21,10 +21,10 @@ package org.zalando.problem.springweb.advice;
  */
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.NativeWebRequest;
+import org.springframework.web.servlet.NoHandlerFoundException;
 import org.zalando.problem.Problem;
 
 import javax.ws.rs.core.Response;
@@ -32,13 +32,12 @@ import javax.ws.rs.core.Response;
 import static org.zalando.problem.springweb.EntityBuilder.buildEntity;
 
 @ControllerAdvice
-public interface MethodNotAllowed {
+public interface NoHandlerFound {
 
     @ExceptionHandler
-    default ResponseEntity<Problem> handleRequestMethodNotSupportedException(
-            final HttpRequestMethodNotSupportedException exception,
+    default ResponseEntity<Problem> handleNotFound(final NoHandlerFoundException exception,
             final NativeWebRequest request) {
-        return buildEntity(Response.Status.METHOD_NOT_ALLOWED, exception, request);
+        return buildEntity(Response.Status.NOT_FOUND, exception, request);
     }
 
 }

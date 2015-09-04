@@ -1,4 +1,4 @@
-package org.zalando.problem.springweb;
+package org.zalando.problem.springweb.advice;
 
 /*
  * #%L
@@ -26,16 +26,22 @@ import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.web.servlet.MockMvc;
 import org.zalando.problem.ProblemModule;
-import org.zalando.problem.springweb.example.ExampleRestController;
+import org.zalando.problem.springweb.advice.example.ExampleRestController;
 
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
 public abstract class AdviceIT {
 
-    static final String URI_HANDLER = "http://localhost/api/handler";
+    static final String URI_HANDLER_OK = "http://localhost/api/handler-ok";
+    static final String URI_HANDLER_PUT = "http://localhost/api/handler-put";
     static final String URI_HANDLER_PROBLEM = "http://localhost/api/handler-problem";
     static final String URI_HANDLER_THROWABLE = "http://localhost/api/handler-throwable";
     static final String URI_HANDLER_NO_MAPPING = "http://localhost/api/no-handler";
+    static final String URI_HANDLER_PARAMS = "http://localhost/api/handler-params";
+    static final String URI_HANDLER_HEADERS = "http://localhost/api/handler-headers";
+    static final String URI_HANDLER_CONVERSION = "http://localhost/api/handler-conversion";
+    static final String URI_HANDLER_MULTIPART = "http://localhost/api/handler-multipart";
+
     static final String URI_HANDLER_CONSUMES_PRODUCES = "http://localhost/api/handler-problem";
     static final String URI_NO_MAPPING = "http://localhost/no-handler";
 

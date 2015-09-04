@@ -1,4 +1,4 @@
-package org.zalando.problem.springweb.example;
+package org.zalando.problem.springweb.advice.example;
 
 /*
  * #%L
@@ -26,7 +26,7 @@ import org.zalando.problem.ThrowableProblem;
 import javax.ws.rs.core.Response;
 import java.net.URI;
 
-class ExpectedProblem extends ThrowableProblem {
+public class ExpectedProblem extends ThrowableProblem {
     @Override
     public URI getType() {
         return URI.create("about:blank");

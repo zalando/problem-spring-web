@@ -20,26 +20,37 @@ package org.zalando.problem.springweb.advice;
  * #L%
  */
 
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.util.CollectionUtils;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.zalando.problem.Problem;
+import org.zalando.problem.springweb.EntityBuilder;
 
 import javax.ws.rs.core.Response;
-
-import static org.zalando.problem.springweb.EntityBuilder.buildEntity;
+import java.util.List;
 
 @ControllerAdvice
-public interface MessageNotReadable {
+public interface MediaTypeNotSupported {
 
     @ExceptionHandler
-    default ResponseEntity<Problem> handleMessageNotReadableException(final HttpMessageNotReadableException exception,
+    default ResponseEntity<Problem> handleMediaTypeNotSupportedException(
+            final HttpMediaTypeNotSupportedException exception,
             final NativeWebRequest request) {
+        return EntityBuilder.buildEntity(Response.Status.UNSUPPORTED_MEDIA_TYPE, exception, request, builder -> {
+            final List<MediaType> mediaTypes = exception.getSupportedMediaTypes();
 
-        // TODO: Jackson stuff
-        return buildEntity(Response.Status.BAD_REQUEST, exception, request);
+            if (!CollectionUtils.isEmpty(mediaTypes)) {
+                final HttpHeaders headers = new HttpHeaders();
+                headers.setAccept(mediaTypes);
+                return builder.headers(headers);
+            }
+            return builder;
+
+        });
     }
-
 }

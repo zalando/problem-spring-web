@@ -21,7 +21,7 @@ package org.zalando.problem.springweb.advice;
  */
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.HttpMediaTypeNotSupportedException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -32,12 +32,12 @@ import javax.ws.rs.core.Response;
 import static org.zalando.problem.springweb.EntityBuilder.buildEntity;
 
 @ControllerAdvice
-public interface UnsupportedMediaType {
+public interface MissingServletRequestParameter {
 
     @ExceptionHandler
-    default ResponseEntity<Problem> handleMediaTypeNotSupportedException(
-            final HttpMediaTypeNotSupportedException exception,
+    default ResponseEntity<Problem> handleMissingServletRequestParameter(
+            final MissingServletRequestParameterException exception,
             final NativeWebRequest request) {
-        return buildEntity(Response.Status.UNSUPPORTED_MEDIA_TYPE, exception, request);
+        return buildEntity(Response.Status.BAD_REQUEST, exception, request);
     }
 }

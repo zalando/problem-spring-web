@@ -23,24 +23,103 @@ package org.zalando.problem.springweb;
 
 import org.junit.Test;
 import org.springframework.http.MediaType;
+import org.springframework.web.context.request.NativeWebRequest;
+
+import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.aMapWithSize;
+import static org.hamcrest.Matchers.not;
 import static org.hamcrest.core.Is.is;
 import static org.hobsoft.hamcrest.compose.ComposeMatchers.hasFeature;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static org.springframework.http.MediaType.APPLICATION_ATOM_XML;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.zalando.problem.springweb.MediaTypes.PROBLEM;
+import static org.zalando.problem.springweb.MediaTypes.WILDCARD_JSON;
+import static org.zalando.problem.springweb.MediaTypes.X_PROBLEM;
+import static org.zalando.problem.springweb.MediaTypes.determineContentType;
 
 public class MediaTypesTest {
 
     @Test
     public void isApplicationProblemJson() {
-        assertThat(MediaTypes.PROBLEM, hasFeature("Type", MediaType::getType, is("application")));
-        assertThat(MediaTypes.PROBLEM, hasFeature("Subtype", MediaType::getSubtype, is("problem+json")));
-        assertThat(MediaTypes.PROBLEM, hasFeature("Parameters", MediaType::getParameters, is(aMapWithSize(0))));
+        assertThat(PROBLEM, hasFeature("Type", MediaType::getType, is("application")));
+        assertThat(PROBLEM, hasFeature("Subtype", MediaType::getSubtype, is("problem+json")));
+        assertThat(PROBLEM, hasFeature("Parameters", MediaType::getParameters, is(aMapWithSize(0))));
     }
 
     @Test
-    public void isCompatibleWithApplicationJsonWildcard() {
-        assertThat(MediaTypes.PROBLEM.isCompatibleWith(MediaType.parseMediaType("application/*+json")), is(true));
+    public void isApplicationXProblemJson() {
+        assertThat(X_PROBLEM, hasFeature("Type", MediaType::getType, is("application")));
+        assertThat(X_PROBLEM, hasFeature("Subtype", MediaType::getSubtype, is("x.problem+json")));
+        assertThat(X_PROBLEM, hasFeature("Parameters", MediaType::getParameters, is(aMapWithSize(0))));
     }
+
+    @Test
+    public void areCompatibleWithApplicationJsonWildcard() {
+        assertThat(PROBLEM.isCompatibleWith(MediaType.parseMediaType("application/*+json")), is(true));
+        assertThat(X_PROBLEM.isCompatibleWith(MediaType.parseMediaType("application/*+json")), is(true));
+    }
+
+    @Test
+    public void problemGivesProblem() {
+        final Optional<MediaType> contentType = determineContentType(request(PROBLEM));
+        assertThat(contentType, is(not(Optional.empty())));
+        assertThat(contentType.get(), is(PROBLEM));
+    }
+
+    @Test
+    public void xproblemGivesXProblem() {
+        final Optional<MediaType> contentType = determineContentType(request(X_PROBLEM));
+        assertThat(contentType, is(not(Optional.empty())));
+        assertThat(contentType.get(), is(X_PROBLEM));
+    }
+
+    @Test
+    public void jsonGivesProblem() {
+        final Optional<MediaType> contentType = determineContentType(request(APPLICATION_JSON));
+        assertThat(contentType, is(not(Optional.empty())));
+        assertThat(contentType.get(), is(PROBLEM));
+    }
+
+    @Test
+    public void wildcardJsonGivesProblem() {
+        final Optional<MediaType> contentType = determineContentType(request(WILDCARD_JSON));
+        assertThat(contentType, is(not(Optional.empty())));
+        assertThat(contentType.get(), is(PROBLEM));
+    }
+
+    @Test
+    public void specificJsonGivesProblem() {
+        final MediaType customMediaType = MediaType.parseMediaType("application/x.vendor.specific+json");
+        final Optional<MediaType> contentType = determineContentType(request(customMediaType));
+        assertThat(contentType, is(not(Optional.empty())));
+        assertThat(contentType.get(), is(PROBLEM));
+    }
+
+    @Test
+    public void nonJsonGivesEmpty() {
+        final Optional<MediaType> contentType = determineContentType(request(APPLICATION_ATOM_XML));
+        assertThat(contentType, is(Optional.empty()));
+    }
+
+    @Test
+    public void invalidGivesEmpty() {
+        final Optional<MediaType> contentType = determineContentType(request("_|°|_"));
+        assertThat(contentType, is(Optional.empty()));
+    }
+
+    private NativeWebRequest request(final String acceptMediaType) {
+        final NativeWebRequest request = mock(NativeWebRequest.class);
+        when(request.getHeader("Accept")).thenReturn(acceptMediaType);
+        return request;
+    }
+
+    private NativeWebRequest request(MediaType acceptMediaType) {
+        return request(acceptMediaType.toString());
+    }
+
 
 }

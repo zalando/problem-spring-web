@@ -20,8 +20,8 @@ package org.zalando.problem.springweb.advice;
  * #L%
  */
 
+import org.springframework.beans.TypeMismatchException;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -32,14 +32,12 @@ import javax.ws.rs.core.Response;
 import static org.zalando.problem.springweb.EntityBuilder.buildEntity;
 
 @ControllerAdvice
-public interface MessageNotReadable {
+public interface TypeMistmatch {
 
     @ExceptionHandler
-    default ResponseEntity<Problem> handleMessageNotReadableException(final HttpMessageNotReadableException exception,
+    default ResponseEntity<Problem> handleTypeMismatch(
+            final TypeMismatchException exception,
             final NativeWebRequest request) {
-
-        // TODO: Jackson stuff
         return buildEntity(Response.Status.BAD_REQUEST, exception, request);
     }
-
 }

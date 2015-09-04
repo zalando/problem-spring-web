@@ -1,4 +1,4 @@
-package org.zalando.problem.springweb;
+package org.zalando.problem.springweb.advice;
 
 /*
  * #%L
@@ -21,11 +21,12 @@ package org.zalando.problem.springweb;
  */
 
 
+import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.servlet.DispatcherServlet;
-import org.zalando.problem.springweb.advice.NotFound;
+import org.zalando.problem.springweb.MediaTypes;
 
 import java.lang.reflect.Field;
 
@@ -36,11 +37,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class NotFoundIT extends AdviceIT {
+public class NoHandlerFoundIT extends AdviceIT {
 
     @Override
     protected Object advice() {
-        return new NotFound() {};
+        return new NoHandlerFound() {
+        };
     }
 
     @Test
@@ -48,7 +50,7 @@ public class NotFoundIT extends AdviceIT {
         throwExceptionIfNoHandlerFound();
 
         mvc.perform(request(GET, URI_HANDLER_NO_MAPPING))
-                .andExpect(header().string("Content-Type", is(MediaTypes.PROBLEM_VALUE)))
+                .andExpect(header().string("Content-Type", Matchers.is(MediaTypes.PROBLEM_VALUE)))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.title", is(HttpStatus.NOT_FOUND.getReasonPhrase())))
                 .andExpect(jsonPath("$.status", is(HttpStatus.NOT_FOUND.value())));

@@ -39,7 +39,7 @@ import static org.hobsoft.hamcrest.compose.ComposeMatchers.hasFeature;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.HttpStatus.RESET_CONTENT;
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.http.MediaType.APPLICATION_ATOM_XML_VALUE;
 import static org.zalando.problem.springweb.EntityBuilder.buildEntity;
 import static org.zalando.problem.springweb.MediaTypes.PROBLEM;
 import static org.zalando.problem.springweb.MediaTypes.WILDCARD_JSON_VALUE;
@@ -100,17 +100,7 @@ public class EntityBuilderTest {
     @Test
     public void buildsEmptyIfNotIncludes() {
         final ResponseEntity<Problem> result = buildEntity(Response.Status.RESET_CONTENT, "",
-                request(APPLICATION_JSON_VALUE));
-
-        assertThat(result, hasFeature("Status", ResponseEntity::getStatusCode, is(RESET_CONTENT)));
-        assertThat(result.getHeaders().getContentType(), is(nullValue()));
-        assertThat(result.getBody(), is(nullValue()));
-    }
-
-    @Test
-    public void buildsEmptyIfNotDetectable() {
-        final ResponseEntity<Problem> result = buildEntity(Response.Status.RESET_CONTENT, "",
-                request("_|°|_"));
+                request(APPLICATION_ATOM_XML_VALUE));
 
         assertThat(result, hasFeature("Status", ResponseEntity::getStatusCode, is(RESET_CONTENT)));
         assertThat(result.getHeaders().getContentType(), is(nullValue()));

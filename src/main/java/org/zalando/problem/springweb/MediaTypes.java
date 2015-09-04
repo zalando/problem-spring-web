@@ -31,6 +31,8 @@ import org.springframework.web.context.request.NativeWebRequest;
 import java.util.List;
 import java.util.Optional;
 
+import static org.springframework.http.MediaType.APPLICATION_JSON;
+
 public interface MediaTypes {
 
     Logger LOG = LoggerFactory.getLogger(MediaTypes.class);
@@ -38,13 +40,13 @@ public interface MediaTypes {
     String PROBLEM_VALUE = "application/problem+json";
     MediaType PROBLEM = MediaType.parseMediaType(PROBLEM_VALUE);
 
-    String X_PROBLEM_VALUE = "application/xproblem+json";
+    String X_PROBLEM_VALUE = "application/x.problem+json";
     MediaType X_PROBLEM = MediaType.parseMediaType(X_PROBLEM_VALUE);
 
     String WILDCARD_JSON_VALUE = "application/*+json";
     MediaType WILDCARD_JSON = MediaType.parseMediaType(WILDCARD_JSON_VALUE);
 
-    final HeaderContentNegotiationStrategy headerNegotiator = new HeaderContentNegotiationStrategy();
+    HeaderContentNegotiationStrategy headerNegotiator = new HeaderContentNegotiationStrategy();
 
     static Optional<MediaType> determineContentType(final NativeWebRequest request) {
         try {
@@ -63,6 +65,10 @@ public interface MediaTypes {
             }
 
             if (acceptedMediaTypes.stream().anyMatch(WILDCARD_JSON::isCompatibleWith)) {
+                return Optional.of(PROBLEM);
+            }
+
+            if (acceptedMediaTypes.stream().anyMatch(APPLICATION_JSON::isCompatibleWith)) {
                 return Optional.of(PROBLEM);
             }
 

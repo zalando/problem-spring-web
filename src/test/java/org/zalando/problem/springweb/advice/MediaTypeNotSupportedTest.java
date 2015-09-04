@@ -2,7 +2,7 @@ package org.zalando.problem.springweb.advice;
 
 /*
  * #%L
- * problem-handling
+ * problem-spring-web
  * %%
  * Copyright (C) 2015 Zalando SE
  * %%
@@ -20,26 +20,30 @@ package org.zalando.problem.springweb.advice;
  * #L%
  */
 
+import org.junit.Test;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.zalando.problem.Problem;
 
-import javax.ws.rs.core.Response;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.collection.IsMapContaining.hasKey;
+import static org.mockito.Mockito.mock;
 
-import static org.zalando.problem.springweb.EntityBuilder.buildEntity;
+public class MediaTypeNotSupportedTest {
 
-@ControllerAdvice
-public interface MessageNotReadable {
+    private final MediaTypeNotSupported unit = new MediaTypeNotSupported() {
+    };
 
-    @ExceptionHandler
-    default ResponseEntity<Problem> handleMessageNotReadableException(final HttpMessageNotReadableException exception,
-            final NativeWebRequest request) {
+    @Test
+    public void noAcceptHeaderIfNonSupported() {
 
-        // TODO: Jackson stuff
-        return buildEntity(Response.Status.BAD_REQUEST, exception, request);
+        final ResponseEntity<Problem> entity = unit.handleMediaTypeNotSupportedException(
+                new HttpMediaTypeNotSupportedException("non supported"), mock(NativeWebRequest.class));
+
+        assertThat(entity.getHeaders(), not(hasKey("Accept")));
+
     }
 
 }

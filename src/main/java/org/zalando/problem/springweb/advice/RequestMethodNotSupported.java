@@ -20,26 +20,38 @@ package org.zalando.problem.springweb.advice;
  * #L%
  */
 
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.zalando.problem.Problem;
 
 import javax.ws.rs.core.Response;
+import java.util.Set;
 
 import static org.zalando.problem.springweb.EntityBuilder.buildEntity;
 
 @ControllerAdvice
-public interface MessageNotReadable {
+public interface RequestMethodNotSupported {
 
     @ExceptionHandler
-    default ResponseEntity<Problem> handleMessageNotReadableException(final HttpMessageNotReadableException exception,
+    default ResponseEntity<Problem> handleRequestMethodNotSupportedException(
+            final HttpRequestMethodNotSupportedException exception,
             final NativeWebRequest request) {
-
-        // TODO: Jackson stuff
-        return buildEntity(Response.Status.BAD_REQUEST, exception, request);
+        return buildEntity(Response.Status.METHOD_NOT_ALLOWED, exception, request, builder -> {
+            if (exception.getSupportedMethods() != null) {
+                final Set<HttpMethod> supportedMethods = exception.getSupportedHttpMethods();
+                if (!supportedMethods.isEmpty()) {
+                    final HttpHeaders headers = new HttpHeaders();
+                    headers.setAllow(supportedMethods);
+                    return builder.headers(headers);
+                }
+            }
+            return builder;
+        });
     }
 
 }

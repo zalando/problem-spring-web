@@ -1,4 +1,4 @@
-package org.zalando.problem.springweb;
+package org.zalando.problem.springweb.advice;
 
 /*
  * #%L
@@ -21,31 +21,31 @@ package org.zalando.problem.springweb;
  */
 
 
+import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.zalando.problem.springweb.advice.NotFound;
+import org.zalando.problem.springweb.MediaTypes;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.http.HttpMethod.GET;
-import static org.springframework.http.HttpMethod.PUT;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.request;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class AllAdvicesIT extends AdviceIT {
+public class ThrowablesIT extends AdviceIT {
 
     @Override
     protected Object advice() {
-        return new NotFound() {};
+        return new Throwables() {
+        };
     }
 
     @Test
     public void throwableProblem() throws Exception {
         mvc.perform(request(GET, URI_HANDLER_PROBLEM))
-                .andExpect(header().string("Content-Type", is(MediaTypes.PROBLEM_VALUE)))
+                .andExpect(header().string("Content-Type", Matchers.is(MediaTypes.PROBLEM_VALUE)))
                 .andExpect(status().isConflict())
                 .andExpect(jsonPath("$.title", is("expected")))
                 .andExpect(jsonPath("$.status", is(HttpStatus.CONFLICT.value())));
@@ -59,27 +59,6 @@ public class AllAdvicesIT extends AdviceIT {
                 .andExpect(jsonPath("$.title", is(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase())))
                 .andExpect(jsonPath("$.status", is(HttpStatus.INTERNAL_SERVER_ERROR.value())))
                 .andExpect(jsonPath("$.detail", containsString("expected")));
-    }
-
-    @Test
-    public void unsupportedContentType() throws Exception {
-        mvc.perform(request(PUT, URI_HANDLER)
-                .contentType(MediaType.APPLICATION_ATOM_XML))
-                .andExpect(status().isUnsupportedMediaType())
-                .andExpect(jsonPath("$.title", is(HttpStatus.UNSUPPORTED_MEDIA_TYPE.getReasonPhrase())))
-                .andExpect(jsonPath("$.status", is(HttpStatus.UNSUPPORTED_MEDIA_TYPE.value())))
-                .andExpect(jsonPath("$.detail", containsString(MediaType.APPLICATION_ATOM_XML.toString())));
-    }
-
-    @Test
-    public void missingRequestBody() throws Exception {
-        mvc.perform(request(PUT, URI_HANDLER)
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(header().string("Content-Type", is(MediaTypes.PROBLEM_VALUE)))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.title", is(HttpStatus.BAD_REQUEST.getReasonPhrase())))
-                .andExpect(jsonPath("$.status", is(HttpStatus.BAD_REQUEST.value())))
-                .andExpect(jsonPath("$.detail", containsString("request body is missing")));
     }
 
 }
