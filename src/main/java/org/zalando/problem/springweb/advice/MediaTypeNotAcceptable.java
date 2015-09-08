@@ -22,22 +22,19 @@ package org.zalando.problem.springweb.advice;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.zalando.problem.Problem;
 
-import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
-import static org.zalando.problem.springweb.EntityBuilder.buildEntity;
-
-@ControllerAdvice
 public interface MediaTypeNotAcceptable {
 
     @ExceptionHandler
     default ResponseEntity<Problem> handleMediaTypeNotAcceptable(
             final HttpMediaTypeNotAcceptableException exception,
             final NativeWebRequest request) {
-        return buildEntity(Response.Status.NOT_ACCEPTABLE, exception, request);
+        return Responses.create(Status.NOT_ACCEPTABLE, exception, request);
     }
+
 }

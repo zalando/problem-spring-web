@@ -24,7 +24,7 @@ package org.zalando.problem.springweb.advice;
 import org.junit.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.zalando.problem.springweb.MediaTypes;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
@@ -36,10 +36,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class RequestMethodNotSupportedIT extends AdviceIT {
 
+    @ControllerAdvice
+    private static class Advice implements RequestMethodNotSupported {
+
+    }
+
     @Override
-    protected Object advice() {
-        return new RequestMethodNotSupported() {
-        };
+    protected RequestMethodNotSupported advice() {
+        return new Advice();
     }
 
     @Test

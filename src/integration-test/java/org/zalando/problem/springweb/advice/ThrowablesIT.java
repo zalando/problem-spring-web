@@ -21,10 +21,9 @@ package org.zalando.problem.springweb.advice;
  */
 
 
-import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.springframework.http.HttpStatus;
-import org.zalando.problem.springweb.MediaTypes;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
@@ -36,19 +35,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class ThrowablesIT extends AdviceIT {
 
-    @Override
-    protected Object advice() {
-        return new Throwables() {
-        };
+    @ControllerAdvice
+    private static class Advice implements ThrowableTrait {
+
     }
 
-    @Test
-    public void throwableProblem() throws Exception {
-        mvc.perform(request(GET, URI_HANDLER_PROBLEM))
-                .andExpect(header().string("Content-Type", Matchers.is(MediaTypes.PROBLEM_VALUE)))
-                .andExpect(status().isConflict())
-                .andExpect(jsonPath("$.title", is("expected")))
-                .andExpect(jsonPath("$.status", is(HttpStatus.CONFLICT.value())));
+    @Override
+    protected ThrowableTrait advice() {
+        return new Advice();
     }
 
     @Test

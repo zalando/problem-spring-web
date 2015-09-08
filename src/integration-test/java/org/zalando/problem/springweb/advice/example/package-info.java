@@ -1,4 +1,4 @@
-package org.zalando.problem.springweb.advice;
+@ParametersAreNonnullByDefault package org.zalando.problem.springweb.advice.example;
 
 /*
  * #%L
@@ -20,20 +20,6 @@ package org.zalando.problem.springweb.advice;
  * #L%
  */
 
-import org.springframework.beans.TypeMismatchException;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.context.request.NativeWebRequest;
-import org.zalando.problem.Problem;
 
-import javax.ws.rs.core.Response.Status;
+import javax.annotation.ParametersAreNonnullByDefault;
 
-public interface TypeMistmatch {
-
-    @ExceptionHandler
-    default ResponseEntity<Problem> handleTypeMismatch(
-            final TypeMismatchException exception,
-            final NativeWebRequest request) {
-        return Responses.create(Status.BAD_REQUEST, exception, request);
-    }
-}

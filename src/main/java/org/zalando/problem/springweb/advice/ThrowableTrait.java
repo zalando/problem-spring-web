@@ -21,27 +21,23 @@ package org.zalando.problem.springweb.advice;
  */
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.zalando.problem.Problem;
 import org.zalando.problem.ThrowableProblem;
 
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
-import static org.zalando.problem.springweb.EntityBuilder.buildEntity;
+import static org.zalando.problem.springweb.advice.Responses.create;
 
-@ControllerAdvice
-public interface Throwables {
-
-    @ExceptionHandler
-    default ResponseEntity<Problem> handleThrowable(final Throwable throwable, final NativeWebRequest request) {
-        return buildEntity(Response.Status.INTERNAL_SERVER_ERROR, throwable, request);
-    }
+public interface ThrowableTrait {
 
     @ExceptionHandler
-    default ResponseEntity<Problem> handleProblem(final ThrowableProblem problem, final NativeWebRequest request) {
-        return buildEntity(problem, request);
+    default ResponseEntity<Problem> handleThrowable(
+            final Throwable throwable,
+            final NativeWebRequest request) {
+        return Responses.create(Status.INTERNAL_SERVER_ERROR, throwable, request);
     }
 
 }

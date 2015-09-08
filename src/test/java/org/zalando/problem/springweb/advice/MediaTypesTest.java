@@ -1,4 +1,4 @@
-package org.zalando.problem.springweb;
+package org.zalando.problem.springweb.advice;
 
 /*
  * #%L
@@ -36,10 +36,10 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_ATOM_XML;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.zalando.problem.springweb.MediaTypes.PROBLEM;
-import static org.zalando.problem.springweb.MediaTypes.WILDCARD_JSON;
-import static org.zalando.problem.springweb.MediaTypes.X_PROBLEM;
-import static org.zalando.problem.springweb.MediaTypes.determineContentType;
+import static org.zalando.problem.springweb.advice.MediaTypes.PROBLEM;
+import static org.zalando.problem.springweb.advice.MediaTypes.WILDCARD_JSON;
+import static org.zalando.problem.springweb.advice.MediaTypes.X_PROBLEM;
+import static org.zalando.problem.springweb.advice.MediaTypes.determineContentType;
 
 public class MediaTypesTest {
 

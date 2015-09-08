@@ -20,21 +20,15 @@ package org.zalando.problem.springweb.advice;
  * #L%
  */
 
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.ServletRequestBindingException;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.context.request.NativeWebRequest;
-import org.zalando.problem.Problem;
 
-import javax.ws.rs.core.Response.Status;
+import org.springframework.http.HttpStatus;
 
-public interface ServletRequestBinding {
+import javax.ws.rs.core.Response;
 
-    @ExceptionHandler
-    default ResponseEntity<Problem> handleServletRequestBinding(
-            final ServletRequestBindingException exception,
-            final NativeWebRequest request) {
-        return Responses.create(Status.BAD_REQUEST, exception, request);
+final class StatusMapper {
+
+    static HttpStatus map(final Response.StatusType status) {
+        return HttpStatus.valueOf(status.getStatusCode());
     }
 
 }

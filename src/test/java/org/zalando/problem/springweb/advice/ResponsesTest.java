@@ -1,4 +1,4 @@
-package org.zalando.problem.springweb;
+package org.zalando.problem.springweb.advice;
 
 /*
  * #%L
@@ -28,7 +28,7 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.zalando.problem.Problem;
 import org.zalando.problem.ThrowableProblem;
 
-import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 import java.util.Optional;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -40,22 +40,21 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.HttpStatus.RESET_CONTENT;
 import static org.springframework.http.MediaType.APPLICATION_ATOM_XML_VALUE;
-import static org.zalando.problem.springweb.EntityBuilder.buildEntity;
-import static org.zalando.problem.springweb.MediaTypes.PROBLEM;
-import static org.zalando.problem.springweb.MediaTypes.WILDCARD_JSON_VALUE;
+import static org.zalando.problem.springweb.advice.MediaTypes.PROBLEM;
+import static org.zalando.problem.springweb.advice.MediaTypes.WILDCARD_JSON_VALUE;
 
-public class EntityBuilderTest {
+public class ResponsesTest {
 
     @Test
     public void buildsOnProblem() {
         final ThrowableProblem problem = mock(ThrowableProblem.class);
-        when(problem.getStatus()).thenReturn(Response.Status.RESET_CONTENT);
+        when(problem.getStatus()).thenReturn(Status.RESET_CONTENT);
 
-        final ResponseEntity<Problem> result = buildEntity(problem, request());
+        final ResponseEntity<Problem> result = Responses.create(problem, request());
 
         assertThat(result, hasFeature("Status", ResponseEntity::getStatusCode, is(RESET_CONTENT)));
         assertThat(result.getHeaders(), hasFeature("Content-Type", HttpHeaders::getContentType, is(PROBLEM)));
-        assertThat(result.getBody(), hasFeature("Status", Problem::getStatus, is(Response.Status.RESET_CONTENT)));
+        assertThat(result.getBody(), hasFeature("Status", Problem::getStatus, is(Status.RESET_CONTENT)));
     }
 
     @Test
@@ -64,11 +63,11 @@ public class EntityBuilderTest {
         final Throwable throwable = mock(Throwable.class);
         when(throwable.getMessage()).thenReturn(message);
 
-        final ResponseEntity<Problem> result = buildEntity(Response.Status.RESET_CONTENT, throwable, request());
+        final ResponseEntity<Problem> result = Responses.create(Status.RESET_CONTENT, throwable, request());
 
         assertThat(result, hasFeature("Status", ResponseEntity::getStatusCode, is(RESET_CONTENT)));
         assertThat(result.getHeaders(), hasFeature("Content-Type", HttpHeaders::getContentType, is(PROBLEM)));
-        assertThat(result.getBody(), compose(hasFeature("Status", Problem::getStatus, is(Response.Status.RESET_CONTENT)))
+        assertThat(result.getBody(), compose(hasFeature("Status", Problem::getStatus, is(Status.RESET_CONTENT)))
                 .and(hasFeature("Detail", Problem::getDetail, is(Optional.of(message)))));
     }
 
@@ -76,11 +75,11 @@ public class EntityBuilderTest {
     public void buildsOnMessage() {
         final String message = "Message";
 
-        final ResponseEntity<Problem> result = buildEntity(Response.Status.RESET_CONTENT, message, request());
+        final ResponseEntity<Problem> result = Responses.create(Status.RESET_CONTENT, message, request());
 
         assertThat(result, hasFeature("Status", ResponseEntity::getStatusCode, is(RESET_CONTENT)));
         assertThat(result.getHeaders(), hasFeature("Content-Type", HttpHeaders::getContentType, is(PROBLEM)));
-        assertThat(result.getBody(), compose(hasFeature("Status", Problem::getStatus, is(Response.Status.RESET_CONTENT)))
+        assertThat(result.getBody(), compose(hasFeature("Status", Problem::getStatus, is(Status.RESET_CONTENT)))
                 .and(hasFeature("Detail", Problem::getDetail, is(Optional.of(message)))));
     }
 
@@ -88,18 +87,18 @@ public class EntityBuilderTest {
     public void buildsIfIncludes() {
         final String message = "Message";
 
-        final ResponseEntity<Problem> result = buildEntity(Response.Status.RESET_CONTENT, message,
+        final ResponseEntity<Problem> result = Responses.create(Status.RESET_CONTENT, message,
                 request(WILDCARD_JSON_VALUE));
 
         assertThat(result, hasFeature("Status", ResponseEntity::getStatusCode, is(RESET_CONTENT)));
         assertThat(result.getHeaders(), hasFeature("Content-Type", HttpHeaders::getContentType, is(PROBLEM)));
-        assertThat(result.getBody(), compose(hasFeature("Status", Problem::getStatus, is(Response.Status.RESET_CONTENT)))
+        assertThat(result.getBody(), compose(hasFeature("Status", Problem::getStatus, is(Status.RESET_CONTENT)))
                 .and(hasFeature("Detail", Problem::getDetail, is(Optional.of(message)))));
     }
 
     @Test
     public void buildsEmptyIfNotIncludes() {
-        final ResponseEntity<Problem> result = buildEntity(Response.Status.RESET_CONTENT, "",
+        final ResponseEntity<Problem> result = Responses.create(Status.RESET_CONTENT, "",
                 request(APPLICATION_ATOM_XML_VALUE));
 
         assertThat(result, hasFeature("Status", ResponseEntity::getStatusCode, is(RESET_CONTENT)));

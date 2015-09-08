@@ -22,24 +22,20 @@ package org.zalando.problem.springweb.advice;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.zalando.problem.Problem;
 
-import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
-import static org.zalando.problem.springweb.EntityBuilder.buildEntity;
-
-@ControllerAdvice
 public interface MessageNotReadable {
 
     @ExceptionHandler
-    default ResponseEntity<Problem> handleMessageNotReadableException(final HttpMessageNotReadableException exception,
+    default ResponseEntity<Problem> handleMessageNotReadableException(
+            final HttpMessageNotReadableException exception,
             final NativeWebRequest request) {
-
         // TODO: Jackson stuff
-        return buildEntity(Response.Status.BAD_REQUEST, exception, request);
+        return Responses.create(Status.BAD_REQUEST, exception, request);
     }
 
 }

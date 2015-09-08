@@ -21,49 +21,37 @@ package org.zalando.problem.springweb.advice;
  */
 
 
+import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 
-import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.request;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class MediaTypeNotAcceptableIT extends AdviceIT {
+public class ProblemTraitIT extends AdviceIT {
 
     @ControllerAdvice
-    private static class Advice implements MediaTypeNotAcceptable {
+    private static class Advice implements ProblemTrait {
 
     }
 
     @Override
-    protected MediaTypeNotAcceptable advice() {
+    protected ProblemTrait advice() {
         return new Advice();
     }
 
     @Test
-    public void notAcceptable() throws Exception {
-        mvc.perform(request(GET, URI_HANDLER_OK)
-                .accept(MediaType.parseMediaType("application/x.vnd.specific+json")))
-                .andExpect(status().isNotAcceptable())
-                .andExpect(content().contentType(MediaTypes.PROBLEM))
-                .andExpect(jsonPath("$.title", is(HttpStatus.NOT_ACCEPTABLE.getReasonPhrase())))
-                .andExpect(jsonPath("$.status", is(HttpStatus.NOT_ACCEPTABLE.value())))
-                .andExpect(jsonPath("$.detail", containsString("Could not find acceptable representation")));
-    }
-
-    @Test
-    public void notAcceptableNoProblem() throws Exception {
-        mvc.perform(request(GET, URI_HANDLER_OK)
-                .accept(MediaType.APPLICATION_ATOM_XML))
-                .andExpect(status().isNotAcceptable())
-                .andExpect(header().doesNotExist("Content-Type"));
+    public void throwableProblem() throws Exception {
+        mvc.perform(request(GET, URI_HANDLER_PROBLEM))
+                .andExpect(header().string("Content-Type", Matchers.is(MediaTypes.PROBLEM_VALUE)))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.title", is("expected")))
+                .andExpect(jsonPath("$.status", is(HttpStatus.CONFLICT.value())));
     }
 
 }

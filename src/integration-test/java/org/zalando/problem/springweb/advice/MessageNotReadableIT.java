@@ -25,7 +25,7 @@ import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.zalando.problem.springweb.MediaTypes;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
@@ -37,10 +37,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class MessageNotReadableIT extends AdviceIT {
 
+    @ControllerAdvice
+    private static class Advice implements MessageNotReadable {
+
+    }
+
     @Override
-    protected Object advice() {
-        return new MessageNotReadable() {
-        };
+    protected MessageNotReadable advice() {
+        return new Advice();
     }
 
     @Test

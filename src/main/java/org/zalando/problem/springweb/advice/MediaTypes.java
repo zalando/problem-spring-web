@@ -1,4 +1,4 @@
-package org.zalando.problem.springweb;
+package org.zalando.problem.springweb.advice;
 
 /*
  * #%L
@@ -33,20 +33,20 @@ import java.util.Optional;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 
-public interface MediaTypes {
+final class MediaTypes {
 
-    Logger LOG = LoggerFactory.getLogger(MediaTypes.class);
+    static final String PROBLEM_VALUE = "application/problem+json";
+    static final MediaType PROBLEM = MediaType.parseMediaType(PROBLEM_VALUE);
 
-    String PROBLEM_VALUE = "application/problem+json";
-    MediaType PROBLEM = MediaType.parseMediaType(PROBLEM_VALUE);
+    static final String X_PROBLEM_VALUE = "application/x.problem+json";
+    static final MediaType X_PROBLEM = MediaType.parseMediaType(X_PROBLEM_VALUE);
 
-    String X_PROBLEM_VALUE = "application/x.problem+json";
-    MediaType X_PROBLEM = MediaType.parseMediaType(X_PROBLEM_VALUE);
+    static final String WILDCARD_JSON_VALUE = "application/*+json";
+    static final MediaType WILDCARD_JSON = MediaType.parseMediaType(WILDCARD_JSON_VALUE);
 
-    String WILDCARD_JSON_VALUE = "application/*+json";
-    MediaType WILDCARD_JSON = MediaType.parseMediaType(WILDCARD_JSON_VALUE);
+    private static final Logger LOG = LoggerFactory.getLogger(MediaTypes.class);
 
-    HeaderContentNegotiationStrategy headerNegotiator = new HeaderContentNegotiationStrategy();
+    private static final HeaderContentNegotiationStrategy headerNegotiator = new HeaderContentNegotiationStrategy();
 
     static Optional<MediaType> determineContentType(final NativeWebRequest request) {
         try {

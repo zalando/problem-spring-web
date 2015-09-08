@@ -1,4 +1,4 @@
-package org.zalando.problem.springweb;
+package org.zalando.problem.springweb.advice;
 
 /*
  * #%L
@@ -31,34 +31,34 @@ import java.util.Optional;
 import java.util.function.Function;
 
 import static java.util.function.Function.identity;
-import static org.zalando.problem.springweb.MediaTypes.determineContentType;
-import static org.zalando.problem.springweb.StatusMapper.map;
+import static org.zalando.problem.springweb.advice.MediaTypes.determineContentType;
+import static org.zalando.problem.springweb.advice.StatusMapper.map;
 
-public interface EntityBuilder {
+final class Responses {
 
-    static ResponseEntity<Problem> buildEntity(final Response.StatusType status, final Throwable throwable,
+    static ResponseEntity<Problem> create(final Response.StatusType status, final Throwable throwable,
             final NativeWebRequest request,
             final Function<ResponseEntity.BodyBuilder, ResponseEntity.BodyBuilder> buildable) {
-        return buildEntity(status, throwable.getMessage(), request, buildable);
+        return create(status, throwable.getMessage(), request, buildable);
     }
 
-    static ResponseEntity<Problem> buildEntity(final Response.StatusType status, final Throwable throwable,
+    static ResponseEntity<Problem> create(final Response.StatusType status, final Throwable throwable,
             final NativeWebRequest request) {
-        return buildEntity(status, throwable, request, identity());
+        return create(status, throwable, request, identity());
     }
 
-    static ResponseEntity<Problem> buildEntity(final Response.StatusType status, final String message,
+    static ResponseEntity<Problem> create(final Response.StatusType status, final String message,
             final NativeWebRequest request,
             final Function<ResponseEntity.BodyBuilder, ResponseEntity.BodyBuilder> buildable) {
-        return buildEntity(Problem.valueOf(status, message), request, buildable);
+        return create(Problem.valueOf(status, message), request, buildable);
     }
 
-    static ResponseEntity<Problem> buildEntity(final Response.StatusType status, final String message,
+    static ResponseEntity<Problem> create(final Response.StatusType status, final String message,
             final NativeWebRequest request) {
-        return buildEntity(status, message, request, identity());
+        return create(status, message, request, identity());
     }
 
-    static ResponseEntity<Problem> buildEntity(final Problem problem, final NativeWebRequest request,
+    static ResponseEntity<Problem> create(final Problem problem, final NativeWebRequest request,
             final Function<ResponseEntity.BodyBuilder, ResponseEntity.BodyBuilder> buildable) {
         final HttpStatus status = map(problem.getStatus());
         final ResponseEntity.BodyBuilder builder = buildable.apply(ResponseEntity.status(status));
@@ -70,8 +70,8 @@ public interface EntityBuilder {
         return builder.body(null);
     }
 
-    static ResponseEntity<Problem> buildEntity(final Problem problem, final NativeWebRequest request) {
-        return buildEntity(problem, request, identity());
+    static ResponseEntity<Problem> create(final Problem problem, final NativeWebRequest request) {
+        return create(problem, request, identity());
     }
 
 }

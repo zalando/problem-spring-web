@@ -22,12 +22,17 @@ package org.zalando.problem.springweb.advice;
 
 
 import org.junit.Test;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 
 public class MethodArgumentNotValidIT extends AdviceIT {
 
+    @ControllerAdvice
+    private static class Advice implements MethodArgumentNotValid {
+    }
+
     @Override
-    protected Object advice() {
-        return (MethodArgumentNotValid) fieldName -> fieldName;
+    protected MethodArgumentNotValid advice() {
+        return new Advice();
     }
 
     @Test

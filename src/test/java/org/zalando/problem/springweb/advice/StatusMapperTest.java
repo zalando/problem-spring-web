@@ -1,4 +1,4 @@
-package org.zalando.problem.springweb;
+package org.zalando.problem.springweb.advice;
 
 /*
  * #%L
@@ -23,6 +23,7 @@ package org.zalando.problem.springweb;
 
 import org.junit.Test;
 import org.springframework.http.HttpStatus;
+import org.zalando.problem.springweb.advice.StatusMapper;
 
 import javax.ws.rs.core.Response;
 

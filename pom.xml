@@ -21,7 +21,7 @@
 
         <spring.version>4.2.0.RELEASE</spring.version>
         <problem.version>0.2.0</problem.version>
-        <jackson.version>2.6.0</jackson.version>
+        <jackson.version>2.6.1</jackson.version>
     </properties>
 
     <licenses>
@@ -37,6 +37,23 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
             <version>${spring.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.12</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>jcl-over-slf4j</artifactId>
+            <version>1.7.12</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.zalando</groupId>
@@ -47,11 +64,6 @@
             <groupId>org.zalando</groupId>
             <artifactId>jackson-datatype-problem</artifactId>
             <version>${problem.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>1.7.12</version>
         </dependency>
         <dependency>
             <groupId>com.google.code.findbugs</groupId>
@@ -81,6 +93,12 @@
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-jdk8</artifactId>
             <version>${jackson.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-nop</artifactId>
+            <version>1.7.12</version>
             <scope>test</scope>
         </dependency>
         <dependency>

@@ -20,37 +20,37 @@ package org.zalando.problem.springweb.advice;
  * #L%
  */
 
+import com.google.gag.annotation.remark.Facepalm;
+import com.google.gag.annotation.remark.WTF;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.zalando.problem.Problem;
 
-import javax.ws.rs.core.Response;
-import java.util.Set;
+import javax.annotation.Nullable;
+import javax.ws.rs.core.Response.Status;
 
-import static org.zalando.problem.springweb.EntityBuilder.buildEntity;
-
-@ControllerAdvice
 public interface RequestMethodNotSupported {
 
     @ExceptionHandler
     default ResponseEntity<Problem> handleRequestMethodNotSupportedException(
             final HttpRequestMethodNotSupportedException exception,
             final NativeWebRequest request) {
-        return buildEntity(Response.Status.METHOD_NOT_ALLOWED, exception, request, builder -> {
-            if (exception.getSupportedMethods() != null) {
-                final Set<HttpMethod> supportedMethods = exception.getSupportedHttpMethods();
-                if (!supportedMethods.isEmpty()) {
-                    final HttpHeaders headers = new HttpHeaders();
-                    headers.setAllow(supportedMethods);
-                    return builder.headers(headers);
-                }
-            }
-            return builder;
+
+        @WTF
+        @Facepalm("Nullable arrays... great work from Spring :/")
+        @Nullable final String[] methods = exception.getSupportedMethods();
+
+        if (methods == null || methods.length == 0) {
+            return Responses.create(Status.METHOD_NOT_ALLOWED, exception, request);
+        }
+
+        return Responses.create(Status.METHOD_NOT_ALLOWED, exception, request, builder -> {
+            final HttpHeaders headers = new HttpHeaders();
+            headers.setAllow(exception.getSupportedHttpMethods());
+            return builder.headers(headers);
         });
     }
 

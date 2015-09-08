@@ -25,8 +25,8 @@ import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.DispatcherServlet;
-import org.zalando.problem.springweb.MediaTypes;
 
 import java.lang.reflect.Field;
 
@@ -39,10 +39,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class NoHandlerFoundIT extends AdviceIT {
 
+    @ControllerAdvice
+    private static class Advice implements NoHandlerFound {
+
+    }
+
     @Override
-    protected Object advice() {
-        return new NoHandlerFound() {
-        };
+    protected NoHandlerFound advice() {
+        return new Advice();
     }
 
     @Test

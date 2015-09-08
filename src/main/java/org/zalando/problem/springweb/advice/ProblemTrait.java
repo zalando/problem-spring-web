@@ -1,8 +1,8 @@
-package org.zalando.problem.springweb;
+package org.zalando.problem.springweb.advice;
 
 /*
  * #%L
- * problem-handling
+ * problem-spring-web
  * %%
  * Copyright (C) 2015 Zalando SE
  * %%
@@ -20,15 +20,19 @@ package org.zalando.problem.springweb;
  * #L%
  */
 
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.context.request.NativeWebRequest;
+import org.zalando.problem.Problem;
+import org.zalando.problem.ThrowableProblem;
 
-import org.springframework.http.HttpStatus;
+public interface ProblemTrait {
 
-import javax.ws.rs.core.Response;
-
-interface StatusMapper {
-
-    static HttpStatus map(final Response.StatusType status) {
-        return HttpStatus.valueOf(status.getStatusCode());
+    @ExceptionHandler
+    default ResponseEntity<Problem> handleProblem(
+            final ThrowableProblem problem,
+            final NativeWebRequest request) {
+        return Responses.create(problem, request);
     }
 
 }

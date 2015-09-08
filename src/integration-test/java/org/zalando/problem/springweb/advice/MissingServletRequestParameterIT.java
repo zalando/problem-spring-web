@@ -23,6 +23,7 @@ package org.zalando.problem.springweb.advice;
 
 import org.junit.Test;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
@@ -33,18 +34,23 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class MissingServletRequestParameterIT extends AdviceIT {
 
+    @ControllerAdvice
+    private static class Advice implements MissingServletRequestParameter {
+
+    }
+
     @Override
-    protected Object advice() {
-        return new MissingServletRequestParameter() {
-        };
+    protected MissingServletRequestParameter advice() {
+        return new Advice();
     }
 
     @Test
     public void missingServletRequestParameter() throws Exception {
         mvc.perform(request(GET, URI_HANDLER_PARAMS))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.title", is(HttpStatus.BAD_REQUEST.getReasonPhrase())))
-                .andExpect(jsonPath("$.status", is(HttpStatus.BAD_REQUEST.value())))
+                // TODO expect type?!
+                .andExpect(jsonPath("$.title", is("Bad Request")))
+                .andExpect(jsonPath("$.status", is(400)))
                 .andExpect(jsonPath("$.detail", containsString("params1")));
     }
 

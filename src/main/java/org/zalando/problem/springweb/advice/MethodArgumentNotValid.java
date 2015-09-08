@@ -23,7 +23,6 @@ package org.zalando.problem.springweb.advice;
 import com.google.common.collect.ImmutableList;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.zalando.problem.Problem;
@@ -33,27 +32,30 @@ import org.zalando.problem.springweb.problem.Violation;
 import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toList;
-import static org.zalando.problem.springweb.EntityBuilder.buildEntity;
+import static org.zalando.problem.springweb.advice.Responses.create;
 
-@ControllerAdvice
 public interface MethodArgumentNotValid {
 
     /**
      * Format the name of a violating field (e.g. lower camel to snake case)
      */
-    String formatFieldName(final String fieldName);
+    default String formatFieldName(final String fieldName) {
+        return fieldName;
+    }
 
     @ExceptionHandler
     default ResponseEntity<Problem> handleMethodArgumentNotValid(
             final MethodArgumentNotValidException exception,
             final NativeWebRequest request) {
 
-        // TODO: formatting of field names
         final ImmutableList<Violation> violations = exception.getBindingResult().getFieldErrors().stream()
                 .map(error -> new Violation(formatFieldName(error.getField()), error.getDefaultMessage()))
                 .sorted(comparing(Violation::getField).thenComparing(Violation::getMessage))
                 .collect(collectingAndThen(toList(), ImmutableList::copyOf));
 
-        return buildEntity(new ConstraintViolationProblem(violations), request);
+        return create(new ConstraintViolationProblem(violations), request);
     }
+
+    // TODO ConstraintViolationException?
+
 }

@@ -21,36 +21,29 @@ package org.zalando.problem.springweb.advice;
  */
 
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.CollectionUtils;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.zalando.problem.Problem;
-import org.zalando.problem.springweb.EntityBuilder;
 
-import javax.ws.rs.core.Response;
-import java.util.List;
+import javax.ws.rs.core.Response.Status;
 
-@ControllerAdvice
 public interface MediaTypeNotSupported {
 
     @ExceptionHandler
     default ResponseEntity<Problem> handleMediaTypeNotSupportedException(
             final HttpMediaTypeNotSupportedException exception,
             final NativeWebRequest request) {
-        return EntityBuilder.buildEntity(Response.Status.UNSUPPORTED_MEDIA_TYPE, exception, request, builder -> {
-            final List<MediaType> mediaTypes = exception.getSupportedMediaTypes();
 
-            if (!CollectionUtils.isEmpty(mediaTypes)) {
-                final HttpHeaders headers = new HttpHeaders();
-                headers.setAccept(mediaTypes);
-                return builder.headers(headers);
-            }
-            return builder;
+        if (exception.getSupportedMediaTypes().isEmpty()) {
+            return Responses.create(Status.UNSUPPORTED_MEDIA_TYPE, exception, request);
+        }
 
+        return Responses.create(Status.UNSUPPORTED_MEDIA_TYPE, exception, request, builder -> {
+            final HttpHeaders headers = new HttpHeaders();
+            headers.setAccept(exception.getSupportedMediaTypes());
+            return builder.headers(headers);
         });
     }
 }

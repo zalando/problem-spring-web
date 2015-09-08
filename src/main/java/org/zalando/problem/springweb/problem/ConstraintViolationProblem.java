@@ -34,6 +34,7 @@ import java.util.Optional;
 @JsonTypeName(ConstraintViolationProblem.CONSTRAINT_VIOLATION_VALUE)
 public final class ConstraintViolationProblem implements Problem {
 
+    // TODO move this to a github wiki! (which one?!)
     public static final String CONSTRAINT_VIOLATION_VALUE = "https://docs.pennybags.zalan.do/problems/constraint-violation";
     public static final URI CONSTRAINT_VIOLATION = URI.create(CONSTRAINT_VIOLATION_VALUE);
 
