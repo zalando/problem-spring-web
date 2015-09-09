@@ -93,4 +93,9 @@ public class ExampleRestController {
         return ResponseEntity.ok().build();
     }
 
+    @RequestMapping(value = "/not-found", method = RequestMethod.GET)
+    public ResponseEntity<String> notFound() {
+        throw new NotFoundException("Unable to find entity");
+    }
+
 }

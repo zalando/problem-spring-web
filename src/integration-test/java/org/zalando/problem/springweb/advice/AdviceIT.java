@@ -30,6 +30,7 @@ import org.zalando.problem.springweb.advice.example.ExampleRestController;
 
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
+@Deprecated
 public abstract class AdviceIT {
 
     static final String URI_HANDLER_OK = "http://localhost/api/handler-ok";

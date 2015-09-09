@@ -29,7 +29,7 @@ import org.zalando.problem.Problem;
 
 import javax.ws.rs.core.Response.Status;
 
-public interface MediaTypeNotSupported {
+public interface MediaTypeNotSupported extends AdviceTrait {
 
     @ExceptionHandler
     default ResponseEntity<Problem> handleMediaTypeNotSupportedException(

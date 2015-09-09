@@ -36,12 +36,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class ProblemTraitIT extends AdviceIT {
 
     @ControllerAdvice
-    private static class Advice implements ProblemTrait {
+    private static class Advice implements ProblemAdviceTrait {
 
     }
 
     @Override
-    protected ProblemTrait advice() {
+    protected ProblemAdviceTrait advice() {
         return new Advice();
     }
 

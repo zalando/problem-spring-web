@@ -32,7 +32,7 @@ import org.zalando.problem.Problem;
 import javax.annotation.Nullable;
 import javax.ws.rs.core.Response.Status;
 
-public interface RequestMethodNotSupported {
+public interface RequestMethodNotSupported extends AdviceTrait {
 
     @ExceptionHandler
     default ResponseEntity<Problem> handleRequestMethodNotSupportedException(

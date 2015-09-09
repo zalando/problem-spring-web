@@ -26,10 +26,18 @@ import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.zalando.problem.Problem;
 
+import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.not;
+import static org.hamcrest.collection.IsMapContaining.hasEntry;
 import static org.hamcrest.collection.IsMapContaining.hasKey;
 import static org.mockito.Mockito.mock;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.http.MediaType.APPLICATION_XML;
+import static org.springframework.http.MediaType.APPLICATION_XML_VALUE;
+import static org.springframework.http.MediaType.TEXT_PLAIN;
 
 public class MediaTypeNotSupportedTest {
 
@@ -38,12 +46,20 @@ public class MediaTypeNotSupportedTest {
 
     @Test
     public void noAcceptHeaderIfNonSupported() {
-
         final ResponseEntity<Problem> entity = unit.handleMediaTypeNotSupportedException(
                 new HttpMediaTypeNotSupportedException("non supported"), mock(NativeWebRequest.class));
 
         assertThat(entity.getHeaders(), not(hasKey("Accept")));
+    }
 
+    @Test
+    public void acceptHeaderIfSupported() {
+        final ResponseEntity<Problem> entity = unit.handleMediaTypeNotSupportedException(
+                new HttpMediaTypeNotSupportedException(TEXT_PLAIN, asList(APPLICATION_JSON, APPLICATION_XML)),
+                mock(NativeWebRequest.class));
+
+        assertThat(entity.getHeaders(), hasEntry("Accept",
+                singletonList(APPLICATION_JSON_VALUE + ", " + APPLICATION_XML_VALUE)));
     }
 
 }

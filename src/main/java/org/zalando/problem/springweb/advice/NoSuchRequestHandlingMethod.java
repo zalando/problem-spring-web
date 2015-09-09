@@ -28,7 +28,7 @@ import org.zalando.problem.Problem;
 
 import javax.ws.rs.core.Response.Status;
 
-public interface NoSuchRequestHandlingMethod {
+public interface NoSuchRequestHandlingMethod extends AdviceTrait {
 
     @ExceptionHandler
     default ResponseEntity<Problem> handleNoSuchRequestHandlingMethod(

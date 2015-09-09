@@ -28,10 +28,10 @@ import org.zalando.problem.springweb.advice.MissingServletRequestParameter;
 import org.zalando.problem.springweb.advice.MissingServletRequestPart;
 import org.zalando.problem.springweb.advice.Multipart;
 import org.zalando.problem.springweb.advice.NoSuchRequestHandlingMethod;
-import org.zalando.problem.springweb.advice.ProblemTrait;
+import org.zalando.problem.springweb.advice.ProblemAdviceTrait;
 import org.zalando.problem.springweb.advice.RequestMethodNotSupported;
 import org.zalando.problem.springweb.advice.ServletRequestBinding;
-import org.zalando.problem.springweb.advice.ThrowableTrait;
+import org.zalando.problem.springweb.advice.ThrowableAdviceTrait;
 import org.zalando.problem.springweb.advice.TypeMistmatch;
 
 public interface ProblemHandling extends
@@ -43,9 +43,9 @@ public interface ProblemHandling extends
         MissingServletRequestPart,
         Multipart,
         NoSuchRequestHandlingMethod,
-        ProblemTrait,
+        ProblemAdviceTrait,
         RequestMethodNotSupported,
         ServletRequestBinding,
-        ThrowableTrait,
+        ThrowableAdviceTrait,
         TypeMistmatch {
 }

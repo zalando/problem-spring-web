@@ -31,7 +31,7 @@ import javax.ws.rs.core.Response.Status;
 
 import static org.zalando.problem.springweb.advice.Responses.create;
 
-public interface ThrowableTrait {
+public interface ThrowableAdviceTrait extends AdviceTrait {
 
     @ExceptionHandler
     default ResponseEntity<Problem> handleThrowable(

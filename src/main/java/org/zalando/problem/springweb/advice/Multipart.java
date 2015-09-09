@@ -28,7 +28,8 @@ import org.zalando.problem.Problem;
 
 import javax.ws.rs.core.Response.Status;
 
-public interface Multipart {
+// TODO find a better name
+public interface Multipart extends AdviceTrait {
 
     @ExceptionHandler
     default ResponseEntity<Problem> handleMultipart(

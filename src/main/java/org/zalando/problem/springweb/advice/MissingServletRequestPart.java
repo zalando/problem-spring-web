@@ -28,7 +28,7 @@ import org.zalando.problem.Problem;
 
 import javax.ws.rs.core.Response.Status;
 
-public interface MissingServletRequestPart {
+public interface MissingServletRequestPart extends AdviceTrait {
 
     @ExceptionHandler
     default ResponseEntity<Problem> handleMissingServletRequestPart(

@@ -24,15 +24,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.zalando.problem.Problem;
-import org.zalando.problem.ThrowableProblem;
 
-public interface ProblemTrait {
+import javax.ws.rs.core.Response.Status;
+
+// TODO should this be in a different package?
+public interface NotFoundAdviceTrait<N extends Exception> extends AdviceTrait {
 
     @ExceptionHandler
-    default ResponseEntity<Problem> handleProblem(
-            final ThrowableProblem problem,
+    default ResponseEntity<Problem> handleNotFound(
+            final N exception,
             final NativeWebRequest request) {
-        return Responses.create(problem, request);
+        return Responses.create(Status.NOT_FOUND, exception, request);
     }
 
 }

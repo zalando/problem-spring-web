@@ -2,7 +2,7 @@ package org.zalando.problem.springweb.advice;
 
 /*
  * #%L
- * problem-handling
+ * problem-spring-web
  * %%
  * Copyright (C) 2015 Zalando SE
  * %%
@@ -23,18 +23,16 @@ package org.zalando.problem.springweb.advice;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.NativeWebRequest;
-import org.springframework.web.servlet.NoHandlerFoundException;
 import org.zalando.problem.Problem;
+import org.zalando.problem.ThrowableProblem;
 
-import javax.ws.rs.core.Response.Status;
-
-public interface NoHandlerFound extends AdviceTrait {
+public interface ProblemAdviceTrait extends AdviceTrait {
 
     @ExceptionHandler
-    default ResponseEntity<Problem> handleNoHandlerFound(
-            final NoHandlerFoundException exception,
+    default ResponseEntity<Problem> handleProblem(
+            final ThrowableProblem problem,
             final NativeWebRequest request) {
-        return Responses.create(Status.NOT_FOUND, exception, request);
+        return Responses.create(problem, request);
     }
 
 }

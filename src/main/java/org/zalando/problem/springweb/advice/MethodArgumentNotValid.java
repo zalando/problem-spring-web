@@ -34,7 +34,7 @@ import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toList;
 import static org.zalando.problem.springweb.advice.Responses.create;
 
-public interface MethodArgumentNotValid {
+public interface MethodArgumentNotValid extends AdviceTrait {
 
     /**
      * Format the name of a violating field (e.g. lower camel to snake case)
