@@ -20,18 +20,16 @@ package org.zalando.problem.spring.web.advice.validation;
  * #L%
  */
 
-import com.google.common.collect.ImmutableList;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.zalando.problem.MoreStatus;
 import org.zalando.problem.Problem;
-import org.zalando.problem.spring.web.advice.Responses;
 
+import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
+import java.util.List;
 
-import static java.util.Comparator.comparing;
-import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -43,17 +41,20 @@ import static java.util.stream.Collectors.toList;
  */
 public interface ConstraintViolationAdviceTrait extends BaseValidationAdviceTrait {
 
+    default Violation createViolation(final ConstraintViolation violation) {
+        return new Violation(formatFieldName(violation.getPropertyPath().toString()), violation.getMessage());
+    }
+
     @ExceptionHandler
     default ResponseEntity<Problem> handleConstraintViolation(
             final ConstraintViolationException exception,
             final NativeWebRequest request) {
 
-        final ImmutableList<Violation> violations = exception.getConstraintViolations().stream()
-                .map(error -> new Violation(formatFieldName(error.getPropertyPath().toString()), error.getMessage()))
-                .sorted(comparing(Violation::getField).thenComparing(Violation::getMessage))
-                .collect(collectingAndThen(toList(), ImmutableList::copyOf));
+        final List<Violation> violations = exception.getConstraintViolations().stream()
+                .map(this::createViolation)
+                .collect(toList());
 
-        return Responses.create(new ConstraintViolationProblem(violations), request);
+        return newConstraintViolationProblem(violations, request);
     }
 
 }

@@ -20,7 +20,18 @@ package org.zalando.problem.spring.web.advice.validation;
  * #L%
  */
 
+import com.google.common.collect.ImmutableList;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.context.request.NativeWebRequest;
+import org.zalando.problem.Problem;
 import org.zalando.problem.spring.web.advice.AdviceTrait;
+import org.zalando.problem.spring.web.advice.Responses;
+
+import java.util.Collection;
+
+import static java.util.Comparator.comparing;
+import static java.util.stream.Collectors.collectingAndThen;
+import static java.util.stream.Collectors.toList;
 
 interface BaseValidationAdviceTrait extends AdviceTrait {
 
@@ -30,4 +41,14 @@ interface BaseValidationAdviceTrait extends AdviceTrait {
     default String formatFieldName(String fieldName) {
         return fieldName;
     }
+    
+    default ResponseEntity<Problem> newConstraintViolationProblem(final Collection<Violation> stream, final NativeWebRequest request) {
+        final ImmutableList<Violation> violations = stream.stream()
+                // sorting to make tests deterministic
+                .sorted(comparing(Violation::getField).thenComparing(Violation::getMessage))
+                .collect(collectingAndThen(toList(), ImmutableList::copyOf));
+
+        return Responses.create(new ConstraintViolationProblem(violations), request);
+    }
+    
 }

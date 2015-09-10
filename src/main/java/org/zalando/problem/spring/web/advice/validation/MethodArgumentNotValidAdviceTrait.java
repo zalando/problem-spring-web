@@ -20,9 +20,7 @@ package org.zalando.problem.spring.web.advice.validation;
  * #L%
  */
 
-import com.google.common.collect.ImmutableList;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -30,13 +28,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.zalando.problem.MoreStatus;
 import org.zalando.problem.Problem;
-import org.zalando.problem.spring.web.advice.Responses;
 
-import java.util.function.Function;
+import java.util.List;
 import java.util.stream.Stream;
 
-import static java.util.Comparator.comparing;
-import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -48,26 +43,26 @@ import static java.util.stream.Collectors.toList;
  */
 public interface MethodArgumentNotValidAdviceTrait extends BaseValidationAdviceTrait {
 
+    default Violation createViolation(final FieldError error) {
+        final String fieldName = error.getObjectName() + "." + error.getField();
+        return new Violation(formatFieldName(fieldName), error.getDefaultMessage());
+    }
+    
+    default Violation createViolation(final ObjectError error) {
+        return new Violation(error.getObjectName(), error.getDefaultMessage());
+    }
+    
     @ExceptionHandler
     default ResponseEntity<Problem> handleMethodArgumentNotValid(
             final MethodArgumentNotValidException exception,
             final NativeWebRequest request) {
 
-        final BindingResult result = exception.getBindingResult();
-
-        final Function<FieldError, Violation> fieldErrorToViolation = error ->
-                new Violation(formatFieldName(error.getObjectName() + "." + error.getField()), error.getDefaultMessage());
-
-        final Function<ObjectError, Violation> globalErrorToViolation = error ->
-                new Violation(formatFieldName(error.getObjectName()), error.getDefaultMessage());
-
-        final ImmutableList<Violation> violations = Stream.concat(
-                result.getFieldErrors().stream().map(fieldErrorToViolation),
-                result.getGlobalErrors().stream().map(globalErrorToViolation))
-                .sorted(comparing(Violation::getField).thenComparing(Violation::getMessage))
-                .collect(collectingAndThen(toList(), ImmutableList::copyOf));
-
-        return Responses.create(new ConstraintViolationProblem(violations), request);
+        final List<Violation> violations = Stream.concat(
+                exception.getBindingResult().getFieldErrors().stream().map(this::createViolation),
+                exception.getBindingResult().getGlobalErrors().stream().map(this::createViolation))
+                .collect(toList());
+        
+        return newConstraintViolationProblem(violations, request);
     }
 
 }

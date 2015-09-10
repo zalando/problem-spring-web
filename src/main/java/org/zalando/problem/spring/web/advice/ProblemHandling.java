@@ -47,7 +47,6 @@ import org.zalando.problem.spring.web.advice.validation.ValidationAdviceTrait;
  * @see ValidationAdviceTrait
  */
 public interface ProblemHandling extends
-        CustomAdviceTrait,
         GeneralAdviceTrait,
         HttpAdviceTrait,
         IOAdviceTrait,
