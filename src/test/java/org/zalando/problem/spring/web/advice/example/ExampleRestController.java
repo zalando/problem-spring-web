@@ -23,6 +23,9 @@ package org.zalando.problem.spring.web.advice.example;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.gag.annotation.remark.Facepalm;
+import com.google.gag.annotation.remark.Hack;
+import com.google.gag.annotation.remark.OhNoYouDidnt;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -41,10 +44,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Constraint;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import javax.validation.Payload;
 import javax.validation.ReportAsSingleViolation;
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
+import javax.validation.Validation;
+import javax.validation.Validator;
 import javax.validation.constraints.Size;
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -52,6 +58,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.time.OffsetDateTime;
+import java.util.Set;
 
 @Validated
 @RestController
@@ -116,9 +123,14 @@ public class ExampleRestController {
         throw new NotFoundException("Unable to find entity");
     }
 
-    @RequestMapping(value = "/handler-invalid-param", method = RequestMethod.GET)
-    public ResponseEntity<String> validRequestParam(@NotNull @RequestParam(required = false) String name) {
-        return ResponseEntity.ok("done");
+    @RequestMapping(value = "/handler-invalid-param", method = RequestMethod.POST)
+    public void validRequestParam(@RequestBody final User user) {
+        @Hack("I couldn't make Spring throw this implicitely using annotations...")
+        @Facepalm
+        @OhNoYouDidnt
+        final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
+        final Set<ConstraintViolation<User>> violations = validator.validate(user);
+        throw new ConstraintViolationException(violations);
     }
 
     @RequestMapping(value = "/handler-invalid-body", method = RequestMethod.POST)

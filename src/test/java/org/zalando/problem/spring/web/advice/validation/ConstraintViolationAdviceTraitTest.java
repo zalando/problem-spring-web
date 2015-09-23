@@ -20,15 +20,13 @@ package org.zalando.problem.spring.web.advice.validation;
  * #L%
  */
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.zalando.problem.spring.web.advice.AdviceTraitTest;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.startsWith;
-import static org.springframework.http.HttpMethod.GET;
+import static org.springframework.http.HttpMethod.POST;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.request;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -47,17 +45,18 @@ public final class ConstraintViolationAdviceTraitTest implements AdviceTraitTest
     }
 
     @Test
-    @Ignore // TODO looks like this isn't supported, not sure why it worked before (https://jira.spring.io/browse/SPR-6380)
     public void invalidRequestParam() throws Exception {
-        mvc().perform(request(GET, "http://localhost/api/handler-invalid-param"))
+        mvc().perform(request(POST, "http://localhost/api/handler-invalid-param")
+                .contentType("application/json")
+                .content("{\"name\":\"Bob\"}"))
                 .andExpect(status().isUnprocessableEntity())
                 .andExpect(header().string("Content-Type", is("application/problem+json")))
                 .andExpect(jsonPath("$.type", is("https://docs.pennybags.zalan.do/problems/constraint-violation")))
                 .andExpect(jsonPath("$.title", is("Constraint Violation")))
                 .andExpect(jsonPath("$.status", is(422)))
                 .andExpect(jsonPath("$.violations", hasSize(1)))
-                .andExpect(jsonPath("$.violations[0].field", is("name")))
-                .andExpect(jsonPath("$.violations[0].message", startsWith("may not be null")));
+                .andExpect(jsonPath("$.violations[0].field", is(""))) // field is not set when validation manually
+                .andExpect(jsonPath("$.violations[0].message", is("must not be called Bob")));
     }
 
 }
