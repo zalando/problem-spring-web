@@ -21,6 +21,54 @@ Spring Web MVC application to an
 </dependency>
 ```
 
+## Usage
+
+**Before** you start using this library, make sure you read and understood [Exception Handling in Spring MVC](https://spring.io/blog/2013/11/01/exception-handling-in-spring-mvc).
+
+What *Problem Spring Web* offers is a bunch of *Advice Traits* that you can use to create your own *Controller Advice*. Advice traits are small, reusable `@ExceptionHandler` methods that are implemented as [*default methods*](https://docs.oracle.com/javase/tutorial/java/IandI/defaultmethods.html) and placed in single-method interfaces:
+
+```java
+public interface NotAcceptableAdviceTrait extends AdviceTrait {
+
+    @ExceptionHandler
+    default ResponseEntity<Problem> handleMediaTypeNotAcceptable(
+            final HttpMediaTypeNotAcceptableException exception,
+            final NativeWebRequest request) {
+        return Responses.create(Status.NOT_ACCEPTABLE, exception, request);
+    }
+
+}
+```
+
+This allows them to be picked and combined *à la carte*:
+
+```java
+@ControllerAdvice
+class ExceptionHandling implements MethodNotAllowedAdviceTrait, NotAcceptableAdviceTrait {
+
+}
+```
+
+There are ~15 different advice traits provided by *Problem Spring Web*. They are grouped into aggregate advice traits, e.g. the `HttpAdviceTrait` includes `NotAcceptableAdviceTrait`, `UnsupportedMediaTypeAdviceTrait` and `MethodNotAllowedAdviceTrait`.
+
+```java
+public interface HttpAdviceTrait extends
+        NotAcceptableAdviceTrait,
+        UnsupportedMediaTypeAdviceTrait,
+        MethodNotAllowedAdviceTrait {
+
+}
+```
+
+Future versions of this library may add additional traits to those aggregates and in case you want to have all of them, just use `ProblemHandling`:
+
+```java
+@ControllerAdvice
+class ExceptionHandling implements ProblemHandling {
+
+}
+```
+
 ## License
 
 Copyright [2015] Zalando SE
