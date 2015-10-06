@@ -13,5 +13,5 @@ mvn scm:tag
 
 # next development version
 mvn versions:set
-git add pom.xml */pom.xml
+git add pom.xml
 git commit
