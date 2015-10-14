@@ -24,7 +24,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.google.common.collect.ImmutableList;
 import org.zalando.problem.MoreStatus;
-import org.zalando.problem.Problem;
+import org.zalando.problem.ThrowableProblem;
 
 import javax.annotation.concurrent.Immutable;
 import java.net.URI;
@@ -32,7 +32,7 @@ import java.util.Optional;
 
 @Immutable
 @JsonTypeName(ConstraintViolationProblem.CONSTRAINT_VIOLATION_VALUE)
-public final class ConstraintViolationProblem implements Problem {
+public final class ConstraintViolationProblem extends ThrowableProblem {
 
     public static final String CONSTRAINT_VIOLATION_VALUE = "https://github.com/zalando/problem/wiki/constraint-violation";
     public static final URI CONSTRAINT_VIOLATION = URI.create(CONSTRAINT_VIOLATION_VALUE);
