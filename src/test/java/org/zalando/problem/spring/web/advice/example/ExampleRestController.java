@@ -137,6 +137,11 @@ public class ExampleRestController {
     public ResponseEntity<String> validRequestBody(@Valid @RequestBody final User user) {
         return ResponseEntity.ok("done");
     }
+    
+    @RequestMapping("/not-implemented")
+    public void notImplemented() {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
 
     @Documented
     @Constraint(validatedBy = NotBobConstraintValidator.class)

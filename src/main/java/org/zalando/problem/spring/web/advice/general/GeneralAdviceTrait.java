@@ -27,5 +27,6 @@ import org.zalando.problem.spring.web.advice.AdviceTrait;
  */
 public interface GeneralAdviceTrait extends
         ProblemAdviceTrait,
-        ThrowableAdviceTrait {
+        ThrowableAdviceTrait,
+        UnsupportedOperationAdviceTrait {
 }
