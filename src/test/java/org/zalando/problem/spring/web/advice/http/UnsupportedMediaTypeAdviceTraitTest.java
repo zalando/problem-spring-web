@@ -23,7 +23,6 @@ package org.zalando.problem.spring.web.advice.http;
 import org.junit.Test;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.zalando.problem.Problem;
 import org.zalando.problem.spring.web.advice.AdviceTraitTest;
@@ -32,11 +31,14 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.emptyOrNullString;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.collection.IsMapContaining.hasEntry;
 import static org.hamcrest.collection.IsMapContaining.hasKey;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.PUT;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.http.MediaType.APPLICATION_XML;
@@ -46,17 +48,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public final class UnsupportedMediaTypeAdviceTraitTest implements AdviceTraitTest<UnsupportedMediaTypeAdviceTrait> {
-
-    @ControllerAdvice
-    private static class Advice implements UnsupportedMediaTypeAdviceTrait {
-
-    }
-
-    @Override
-    public UnsupportedMediaTypeAdviceTrait unit() {
-        return new Advice();
-    }
+public final class UnsupportedMediaTypeAdviceTraitTest implements AdviceTraitTest {
 
     @Test
     public void unsupportedMediaType() throws Exception {
@@ -72,20 +64,12 @@ public final class UnsupportedMediaTypeAdviceTraitTest implements AdviceTraitTes
     }
 
     @Test
-    public void noAcceptHeaderIfNonSupported() {
-        final ResponseEntity<Problem> entity = unit().handleMediaTypeNotSupportedException(
-                new HttpMediaTypeNotSupportedException("non supported"), mock(NativeWebRequest.class));
-
-        assertThat(entity.getHeaders(), not(hasKey("Accept")));
-    }
-
-    @Test
-    public void acceptHeaderIfSupported() {
-        final ResponseEntity<Problem> entity = unit().handleMediaTypeNotSupportedException(
-                new HttpMediaTypeNotSupportedException(TEXT_PLAIN, asList(APPLICATION_JSON, APPLICATION_XML)),
-                mock(NativeWebRequest.class));
-
-        assertThat(entity.getHeaders(), hasEntry("Accept", singletonList("application/json, application/xml")));
+    public void acceptHeaderIfSupported() throws Exception {
+        mvc().perform(request(PUT, "http://localhost/api/handler-put")
+                .contentType("application/atom+xml"))
+                .andExpect(status().isUnsupportedMediaType())
+                .andExpect(header().string("Accept", containsString("application/json")))
+                .andExpect(header().string("Accept", containsString("application/xml")));
     }
 
 }

@@ -22,7 +22,6 @@ package org.zalando.problem.spring.web.advice.general;
 
 
 import org.junit.Test;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.zalando.problem.spring.web.advice.AdviceTraitTest;
 
 import static org.hamcrest.Matchers.containsString;
@@ -33,17 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public final class ThrowableAdviceTraitTest implements AdviceTraitTest<ThrowableAdviceTrait> {
-
-    @ControllerAdvice
-    private static class Advice implements ThrowableAdviceTrait {
-
-    }
-
-    @Override
-    public ThrowableAdviceTrait unit() {
-        return new Advice();
-    }
+public final class ThrowableAdviceTraitTest implements AdviceTraitTest {
 
     @Test
     public void throwable() throws Exception {

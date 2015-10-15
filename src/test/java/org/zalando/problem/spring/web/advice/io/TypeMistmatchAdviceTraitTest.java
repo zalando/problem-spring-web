@@ -22,7 +22,6 @@ package org.zalando.problem.spring.web.advice.io;
 
 
 import org.junit.Test;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.zalando.problem.spring.web.advice.AdviceTraitTest;
 
 import static org.hamcrest.Matchers.containsString;
@@ -33,17 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public final class TypeMistmatchAdviceTraitTest implements AdviceTraitTest<TypeMistmatchAdviceTrait> {
-
-    @ControllerAdvice
-    private static class Advice implements TypeMistmatchAdviceTrait {
-
-    }
-
-    @Override
-    public TypeMistmatchAdviceTrait unit() {
-        return new Advice();
-    }
+public final class TypeMistmatchAdviceTraitTest implements AdviceTraitTest {
 
     @Test
     public void typeMismatch() throws Exception {

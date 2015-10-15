@@ -21,8 +21,6 @@ package org.zalando.problem.spring.web.advice.general;
  */
 
 import org.junit.Test;
-import org.springframework.http.HttpMethod;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.zalando.problem.spring.web.advice.AdviceTraitTest;
 
 import static org.hamcrest.Matchers.is;
@@ -32,18 +30,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public final class UnsupportedOperationAdviceTraitTest implements AdviceTraitTest<UnsupportedOperationAdviceTrait> {
+public final class UnsupportedOperationAdviceTraitTest implements AdviceTraitTest {
 
-    @ControllerAdvice
-    private static class Advice implements UnsupportedOperationAdviceTrait {
-
-    }
-
-    @Override
-    public UnsupportedOperationAdviceTrait unit() {
-        return new Advice();
-    }
-    
     @Test
     public void unsupportedOperation() throws Exception {
         mvc().perform(request(GET, "http://localhost/api/not-implemented"))

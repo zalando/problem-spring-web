@@ -23,7 +23,6 @@ package org.zalando.problem.spring.web.advice.http;
 import org.junit.Test;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.zalando.problem.Problem;
 import org.zalando.problem.spring.web.advice.AdviceTraitTest;
@@ -34,23 +33,14 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.collection.IsMapContaining.hasKey;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 import static org.springframework.http.HttpMethod.POST;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.request;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public final class MethodNotAllowedAdviceTraitTest implements AdviceTraitTest<MethodNotAllowedAdviceTrait> {
-
-    @ControllerAdvice
-    private static class Advice implements MethodNotAllowedAdviceTrait {
-
-    }
-
-    @Override
-    public MethodNotAllowedAdviceTrait unit() {
-        return new Advice();
-    }
+public final class MethodNotAllowedAdviceTraitTest implements AdviceTraitTest {
 
     @Test
     public void methodNotAllowed() throws Exception {
@@ -67,7 +57,8 @@ public final class MethodNotAllowedAdviceTraitTest implements AdviceTraitTest<Me
 
     @Test
     public void noAllowIfNullAllowed() {
-        final ResponseEntity<Problem> entity = unit().handleRequestMethodNotSupportedException(
+        final MethodNotAllowedAdviceTrait unit = spy(MethodNotAllowedAdviceTrait.class);
+        final ResponseEntity<Problem> entity = unit.handleRequestMethodNotSupportedException(
                 new HttpRequestMethodNotSupportedException("non allowed"), mock(NativeWebRequest.class));
 
         assertThat(entity.getHeaders(), not(hasKey("Allow")));
@@ -75,7 +66,8 @@ public final class MethodNotAllowedAdviceTraitTest implements AdviceTraitTest<Me
 
     @Test
     public void noAllowIfNoneAllowed() {
-        final ResponseEntity<Problem> entity = unit().handleRequestMethodNotSupportedException(
+        final MethodNotAllowedAdviceTrait unit = spy(MethodNotAllowedAdviceTrait.class);
+        final ResponseEntity<Problem> entity = unit.handleRequestMethodNotSupportedException(
                 new HttpRequestMethodNotSupportedException("non allowed", new String[]{}), mock(NativeWebRequest.class));
 
         assertThat(entity.getHeaders(), not(hasKey("Allow")));
