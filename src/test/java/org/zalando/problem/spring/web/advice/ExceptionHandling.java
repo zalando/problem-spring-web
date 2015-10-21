@@ -1,8 +1,8 @@
-package org.zalando.problem.spring.web.advice.custom;
+package org.zalando.problem.spring.web.advice;
 
 /*
  * #%L
- * problem-spring-web
+ * Problem: Spring Web
  * %%
  * Copyright (C) 2015 Zalando SE
  * %%
@@ -20,10 +20,8 @@ package org.zalando.problem.spring.web.advice.custom;
  * #L%
  */
 
-public final class NotFoundException extends RuntimeException {
+import org.springframework.web.bind.annotation.ControllerAdvice;
 
-    public NotFoundException(String message) {
-        super(message);
-    }
-
+@ControllerAdvice
+public final class ExceptionHandling implements ProblemHandling {
 }

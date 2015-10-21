@@ -21,7 +21,6 @@ package org.zalando.problem.spring.web.advice.validation;
  */
 
 import org.junit.Test;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.zalando.problem.spring.web.advice.AdviceTraitTest;
 
 import static org.hamcrest.Matchers.hasSize;
@@ -32,17 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public final class ConstraintViolationAdviceTraitTest implements AdviceTraitTest<ConstraintViolationAdviceTrait> {
-
-    @ControllerAdvice
-    private static class Advice implements ConstraintViolationAdviceTrait {
-
-    }
-
-    @Override
-    public ConstraintViolationAdviceTrait unit() {
-        return new Advice();
-    }
+public final class ConstraintViolationAdviceTraitTest implements AdviceTraitTest {
 
     @Test
     public void invalidRequestParam() throws Exception {

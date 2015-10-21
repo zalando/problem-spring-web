@@ -1,8 +1,8 @@
-package org.zalando.problem.spring.web.advice.custom;
+package org.zalando.problem.spring.web.advice.general;
 
 /*
  * #%L
- * problem-spring-web
+ * Problem: Spring Web
  * %%
  * Copyright (C) 2015 Zalando SE
  * %%
@@ -24,18 +24,21 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.zalando.problem.Problem;
-import org.zalando.problem.spring.web.advice.AdviceTrait;
 import org.zalando.problem.spring.web.advice.Responses;
 
 import javax.ws.rs.core.Response.Status;
 
-public interface NotFoundAdviceTrait<N extends Exception> extends AdviceTrait {
+/**
+ * @see UnsupportedOperationException
+ * @see Status#NOT_IMPLEMENTED
+ */
+public interface UnsupportedOperationAdviceTrait {
 
     @ExceptionHandler
-    default ResponseEntity<Problem> handleNotFound(
-            final N exception,
+    default ResponseEntity<Problem> handleUnsupportedOperation(
+            final UnsupportedOperationException exception,
             final NativeWebRequest request) {
-        return Responses.create(Status.NOT_FOUND, exception, request);
+        return Responses.create(Status.NOT_IMPLEMENTED, exception, request);
     }
 
 }

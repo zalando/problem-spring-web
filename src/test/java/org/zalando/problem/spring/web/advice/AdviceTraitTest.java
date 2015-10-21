@@ -28,9 +28,11 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.zalando.problem.ProblemModule;
 import org.zalando.problem.spring.web.advice.example.ExampleRestController;
 
-public interface AdviceTraitTest<T> {
+public interface AdviceTraitTest {
 
-    T unit();
+    default Object unit() {
+        return new ExceptionHandling();
+    }
 
     default MockMvc mvc() {
         final ObjectMapper mapper = new ObjectMapper();

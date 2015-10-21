@@ -23,10 +23,8 @@ package org.zalando.problem.spring.web.advice.custom;
 import org.zalando.problem.spring.web.advice.AdviceTrait;
 
 /**
- *
- * @param <N> generic NotFoundException type
  * @see AdviceTrait
  */
-public interface CustomAdviceTrait<N extends Exception> extends
-        NotFoundAdviceTrait<N> {
+public interface CustomAdviceTrait {
+
 }

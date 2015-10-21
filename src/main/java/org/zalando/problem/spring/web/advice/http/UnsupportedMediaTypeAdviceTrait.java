@@ -42,14 +42,11 @@ public interface UnsupportedMediaTypeAdviceTrait extends AdviceTrait {
             final HttpMediaTypeNotSupportedException exception,
             final NativeWebRequest request) {
 
-        if (exception.getSupportedMediaTypes().isEmpty()) {
-            return Responses.create(Status.UNSUPPORTED_MEDIA_TYPE, exception, request);
-        }
-
         return Responses.create(Status.UNSUPPORTED_MEDIA_TYPE, exception, request, builder -> {
             final HttpHeaders headers = new HttpHeaders();
             headers.setAccept(exception.getSupportedMediaTypes());
             return builder.headers(headers);
         });
     }
+
 }

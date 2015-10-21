@@ -26,19 +26,16 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gag.annotation.remark.Facepalm;
 import com.google.gag.annotation.remark.Hack;
 import com.google.gag.annotation.remark.OhNoYouDidnt;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.multiaction.NoSuchRequestHandlingMethodException;
-import org.zalando.problem.spring.web.advice.custom.NotFoundException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Constraint;
@@ -60,70 +57,71 @@ import java.lang.annotation.Target;
 import java.time.OffsetDateTime;
 import java.util.Set;
 
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.http.MediaType.APPLICATION_XML_VALUE;
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
+import static org.springframework.web.bind.annotation.RequestMethod.PUT;
+
 @Validated
 @RestController
 @RequestMapping("/api")
 public class ExampleRestController {
 
-    @RequestMapping(value = "/handler-ok", method = RequestMethod.GET,
-            produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/handler-ok",
+            produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<String> ok() {
         return ResponseEntity.ok("ok");
     }
 
-    @RequestMapping(value = "/handler-throwable", method = RequestMethod.GET)
+    @RequestMapping(value = "/handler-throwable", method = GET)
     public ResponseEntity<String> throwable() {
         throw new RuntimeException("expected");
     }
 
-    @RequestMapping(value = "/handler-problem", method = RequestMethod.GET)
+    @RequestMapping(value = "/handler-problem", method = GET)
     public ResponseEntity<String> problem() {
         throw new ExpectedProblem("Nothing out of the ordinary");
     }
 
-    @RequestMapping(value = "/handler-put", method = RequestMethod.PUT)
+    @RequestMapping(value = "/handler-put", method = PUT, consumes = {APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE})
     public ResponseEntity<String> put(@RequestBody final String body) {
         return ResponseEntity.ok(body);
     }
 
-    @RequestMapping(value = "/noSuchRequestHandlingMethod", method = RequestMethod.GET)
+    @RequestMapping(value = "/noSuchRequestHandlingMethod", method = GET)
     public ResponseEntity<Void> noSuchRequestHandlingMethod(final HttpServletRequest request)
             throws NoSuchRequestHandlingMethodException {
         // I have no clue how to trigger this naturally
         throw new NoSuchRequestHandlingMethodException(request);
     }
 
-    @RequestMapping(value = "/handler-params", method = RequestMethod.GET)
+    @RequestMapping(value = "/handler-params", method = GET)
     public ResponseEntity<Void> params(
             @RequestParam("params1") final String[] params1,
             @RequestParam("params2") final String[] params2) {
         return ResponseEntity.ok().build();
     }
 
-    @RequestMapping(value = "/handler-headers", method = RequestMethod.GET)
+    @RequestMapping(value = "/handler-headers", method = GET)
     public ResponseEntity<Void> headers(
             @RequestHeader("X-Custom-Header") final String header1) {
         return ResponseEntity.ok().build();
     }
 
-    @RequestMapping(value = "/handler-conversion", method = RequestMethod.GET)
+    @RequestMapping(value = "/handler-conversion", method = GET)
     public ResponseEntity<Void> conversion(@RequestParam("dateTime") final OffsetDateTime dateTime) {
         return ResponseEntity.ok().build();
     }
 
-    @RequestMapping(value = "/handler-multipart", method = RequestMethod.POST)
+    @RequestMapping(value = "/handler-multipart", method = POST)
     public ResponseEntity<Void> conversion(
             @RequestPart("payload1") final MultipartFile payload1,
             @RequestPart("payload2") final MultipartFile payload2) {
         return ResponseEntity.ok().build();
     }
 
-    @RequestMapping(value = "/not-found", method = RequestMethod.GET)
-    public ResponseEntity<String> notFound() {
-        throw new NotFoundException("Unable to find entity");
-    }
-
-    @RequestMapping(value = "/handler-invalid-param", method = RequestMethod.POST)
+    @RequestMapping(value = "/handler-invalid-param", method = POST)
     public void validRequestParam(@RequestBody final User user) {
         @Hack("I couldn't make Spring throw this implicitely using annotations...")
         @Facepalm
@@ -133,9 +131,14 @@ public class ExampleRestController {
         throw new ConstraintViolationException(violations);
     }
 
-    @RequestMapping(value = "/handler-invalid-body", method = RequestMethod.POST)
+    @RequestMapping(value = "/handler-invalid-body", method = POST)
     public ResponseEntity<String> validRequestBody(@Valid @RequestBody final User user) {
         return ResponseEntity.ok("done");
+    }
+
+    @RequestMapping("/not-implemented")
+    public void notImplemented() {
+        throw new UnsupportedOperationException("Not yet implemented");
     }
 
     @Documented

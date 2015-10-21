@@ -1,8 +1,8 @@
-package org.zalando.problem.spring.web.advice.custom;
+package org.zalando.problem.spring.web.advice.general;
 
 /*
  * #%L
- * problem-spring-web
+ * Problem: Spring Web
  * %%
  * Copyright (C) 2015 Zalando SE
  * %%
@@ -21,10 +21,8 @@ package org.zalando.problem.spring.web.advice.custom;
  */
 
 import org.junit.Test;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.zalando.problem.spring.web.advice.AdviceTraitTest;
 
-import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.request;
@@ -32,27 +30,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public final class NotFoundAdviceTraitTest implements AdviceTraitTest<NotFoundAdviceTrait<NotFoundException>> {
-
-    @ControllerAdvice
-    private static class Advice implements NotFoundAdviceTrait<NotFoundException> {
-
-    }
-
-    @Override
-    public NotFoundAdviceTrait<NotFoundException> unit() {
-        return new Advice();
-    }
+public final class UnsupportedOperationAdviceTraitTest implements AdviceTraitTest {
 
     @Test
-    public void notFound() throws Exception {
-        mvc().perform(request(GET, "http://localhost/api/not-found"))
-                .andExpect(status().isNotFound())
+    public void unsupportedOperation() throws Exception {
+        mvc().perform(request(GET, "http://localhost/api/not-implemented"))
+                .andExpect(status().isNotImplemented())
                 .andExpect(header().string("Content-Type", is("application/problem+json")))
-                .andExpect(jsonPath("$.type", is("http://httpstatus.es/404")))
-                .andExpect(jsonPath("$.title", is("Not Found")))
-                .andExpect(jsonPath("$.status", is(404)))
-                .andExpect(jsonPath("$.detail", containsString("Unable to find entity")));
+                .andExpect(jsonPath("$.type", is("http://httpstatus.es/501")))
+                .andExpect(jsonPath("$.title", is("Not Implemented")))
+                .andExpect(jsonPath("$.status", is(501)))
+                .andExpect(jsonPath("$.detail", is("Not yet implemented")));
     }
 
 }
