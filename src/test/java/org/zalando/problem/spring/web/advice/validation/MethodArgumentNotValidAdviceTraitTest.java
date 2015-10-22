@@ -45,7 +45,7 @@ public final class MethodArgumentNotValidAdviceTraitTest implements AdviceTraitT
                 .andExpect(jsonPath("$.title", is("Constraint Violation")))
                 .andExpect(jsonPath("$.status", is(422)))
                 .andExpect(jsonPath("$.violations", hasSize(1)))
-                .andExpect(jsonPath("$.violations[0].field", is("user.name")))
+                .andExpect(jsonPath("$.violations[0].field", is("user_request.name")))
                 .andExpect(jsonPath("$.violations[0].message", startsWith("size must be between 3 and 10")));
     }
 
@@ -60,7 +60,7 @@ public final class MethodArgumentNotValidAdviceTraitTest implements AdviceTraitT
                 .andExpect(jsonPath("$.title", is("Constraint Violation")))
                 .andExpect(jsonPath("$.status", is(422)))
                 .andExpect(jsonPath("$.violations", hasSize(1)))
-                .andExpect(jsonPath("$.violations[0].field", is("user")))
+                .andExpect(jsonPath("$.violations[0].field", is("user_request")))
                 .andExpect(jsonPath("$.violations[0].message", is("must not be called Bob")));
     }
 

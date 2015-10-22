@@ -28,6 +28,7 @@ import com.google.gag.annotation.remark.Hack;
 import com.google.gag.annotation.remark.OhNoYouDidnt;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -122,17 +123,18 @@ public class ExampleRestController {
     }
 
     @RequestMapping(value = "/handler-invalid-param", method = POST)
-    public void validRequestParam(@RequestBody final User user) {
+    public void validRequestParam(@RequestBody final UserRequest user) {
         @Hack("I couldn't make Spring throw this implicitely using annotations...")
         @Facepalm
         @OhNoYouDidnt
         final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
-        final Set<ConstraintViolation<User>> violations = validator.validate(user);
+        final Set<ConstraintViolation<UserRequest>> violations = validator.validate(user);
         throw new ConstraintViolationException(violations);
     }
 
     @RequestMapping(value = "/handler-invalid-body", method = POST)
-    public ResponseEntity<String> validRequestBody(@Valid @RequestBody final User user) {
+    public ResponseEntity<String> validRequestBody(@Valid @RequestBody final UserRequest user) {
+        // TODO find a way to change the "object name" of the body, by default it's the lower-camel-cased class name
         return ResponseEntity.ok("done");
     }
 
@@ -156,7 +158,7 @@ public class ExampleRestController {
 
     }
 
-    public static final class NotBobConstraintValidator implements ConstraintValidator<NotBob, User> {
+    public static final class NotBobConstraintValidator implements ConstraintValidator<NotBob, UserRequest> {
 
         @Override
         public void initialize(NotBob constraintAnnotation) {
@@ -164,19 +166,19 @@ public class ExampleRestController {
         }
 
         @Override
-        public boolean isValid(User user, ConstraintValidatorContext context) {
+        public boolean isValid(UserRequest user, ConstraintValidatorContext context) {
             return !"Bob".equals(user.getName());
         }
 
     }
 
     @NotBob
-    public static final class User {
+    public static final class UserRequest {
 
         private final String name;
 
         @JsonCreator
-        public User(@JsonProperty("name") String name) {
+        public UserRequest(@JsonProperty("name") String name) {
             this.name = name;
         }
 
