@@ -49,7 +49,8 @@ public interface MethodArgumentNotValidAdviceTrait extends BaseValidationAdviceT
     }
     
     default Violation createViolation(final ObjectError error) {
-        return new Violation(error.getObjectName(), error.getDefaultMessage());
+        final String fieldName = formatFieldName(error.getObjectName());
+        return new Violation(fieldName, error.getDefaultMessage());
     }
     
     @ExceptionHandler

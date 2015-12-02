@@ -1,4 +1,4 @@
-package org.zalando.problem.spring.web.advice;
+package org.zalando.problem.spring.web.advice.validation;
 
 /*
  * #%L
@@ -20,15 +20,20 @@ package org.zalando.problem.spring.web.advice;
  * #L%
  */
 
-import com.google.common.base.CaseFormat;
-import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.junit.Test;
 
-@ControllerAdvice
-public final class ExceptionHandling implements ProblemHandling {
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 
-    @Override
-    public String formatFieldName(String fieldName) {
-        return CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, fieldName);
+public final class BaseValidationAdviceTraitTest {
+
+    @Test
+    public void formatFieldNameShouldntFormatByDefault() {
+        assertThat(new Unit().formatFieldName("user_name"), is("user_name"));
     }
 
+    private static class Unit implements BaseValidationAdviceTrait {
+        
+    }
+    
 }
