@@ -2,7 +2,7 @@ package org.zalando.problem.spring.web.advice;
 
 /*
  * #%L
- * problem-spring-web
+ * problem-handling
  * %%
  * Copyright (C) 2015 Zalando SE
  * %%
@@ -20,29 +20,123 @@ package org.zalando.problem.spring.web.advice;
  * #L%
  */
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.zalando.problem.ProblemModule;
-import org.zalando.problem.spring.web.advice.example.ExampleRestController;
 
-public interface AdviceTraitTest {
+import org.junit.Test;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.context.request.NativeWebRequest;
+import org.zalando.problem.Problem;
+import org.zalando.problem.ThrowableProblem;
 
-    default Object unit() {
-        return new ExceptionHandling();
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+import java.util.Optional;
+
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hobsoft.hamcrest.compose.ComposeMatchers.compose;
+import static org.hobsoft.hamcrest.compose.ComposeMatchers.hasFeature;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static org.springframework.http.HttpStatus.RESET_CONTENT;
+import static org.springframework.http.MediaType.APPLICATION_ATOM_XML_VALUE;
+import static org.zalando.problem.spring.web.advice.MediaTypes.PROBLEM;
+import static org.zalando.problem.spring.web.advice.MediaTypes.WILDCARD_JSON_VALUE;
+
+public class AdviceTraitTest {
+    
+    private final AdviceTrait unit = new AdviceTrait() {
+    };
+
+    @Test
+    public void buildsOnProblem() {
+        final ThrowableProblem problem = mock(ThrowableProblem.class);
+        when(problem.getStatus()).thenReturn(Status.RESET_CONTENT);
+
+        final ResponseEntity<Problem> result = unit.create(problem, request());
+
+        assertThat(result, hasFeature("Status", ResponseEntity::getStatusCode, is(RESET_CONTENT)));
+        assertThat(result.getHeaders(), hasFeature("Content-Type", HttpHeaders::getContentType, is(PROBLEM)));
+        assertThat(result.getBody(), hasFeature("Status", Problem::getStatus, is(Status.RESET_CONTENT)));
     }
 
-    default MockMvc mvc() {
-        final ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new Jdk8Module());
-        mapper.registerModule(new ProblemModule());
+    @Test
+    public void buildsOnThrowable() {
+        final String message = "Message";
+        final Throwable throwable = mock(Throwable.class);
+        when(throwable.getMessage()).thenReturn(message);
 
-        return MockMvcBuilders.standaloneSetup(new ExampleRestController())
-                .setControllerAdvice(unit())
-                .setMessageConverters(new MappingJackson2HttpMessageConverter(mapper))
-                .build();
+        final ResponseEntity<Problem> result = unit.create(Status.RESET_CONTENT, throwable, request());
+
+        assertThat(result, hasFeature("Status", ResponseEntity::getStatusCode, is(RESET_CONTENT)));
+        assertThat(result.getHeaders(), hasFeature("Content-Type", HttpHeaders::getContentType, is(PROBLEM)));
+        assertThat(result.getBody(), compose(hasFeature("Status", Problem::getStatus, is(Status.RESET_CONTENT)))
+                .and(hasFeature("Detail", Problem::getDetail, is(Optional.of(message)))));
+    }
+
+    @Test
+    public void buildsOnMessage() {
+        final String message = "Message";
+
+        final ResponseEntity<Problem> result = unit.create(Status.RESET_CONTENT, message, request());
+
+        assertThat(result, hasFeature("Status", ResponseEntity::getStatusCode, is(RESET_CONTENT)));
+        assertThat(result.getHeaders(), hasFeature("Content-Type", HttpHeaders::getContentType, is(PROBLEM)));
+        assertThat(result.getBody(), compose(hasFeature("Status", Problem::getStatus, is(Status.RESET_CONTENT)))
+                .and(hasFeature("Detail", Problem::getDetail, is(Optional.of(message)))));
+    }
+
+    @Test
+    public void buildsIfIncludes() {
+        final String message = "Message";
+
+        final ResponseEntity<Problem> result = unit.create(Status.RESET_CONTENT, message,
+                request(WILDCARD_JSON_VALUE));
+
+        assertThat(result, hasFeature("Status", ResponseEntity::getStatusCode, is(RESET_CONTENT)));
+        assertThat(result.getHeaders(), hasFeature("Content-Type", HttpHeaders::getContentType, is(PROBLEM)));
+        assertThat(result.getBody(), compose(hasFeature("Status", Problem::getStatus, is(Status.RESET_CONTENT)))
+                .and(hasFeature("Detail", Problem::getDetail, is(Optional.of(message)))));
+    }
+
+    @Test
+    public void buildsEmptyIfNotIncludes() {
+        final ResponseEntity<Problem> result = unit.create(Status.RESET_CONTENT, "",
+                request(APPLICATION_ATOM_XML_VALUE));
+
+        assertThat(result, hasFeature("Status", ResponseEntity::getStatusCode, is(RESET_CONTENT)));
+        assertThat(result.getHeaders().getContentType(), is(nullValue()));
+        assertThat(result.getBody(), is(nullValue()));
+    }
+
+    @Test
+    public void mapsStatus() {
+        final HttpStatus expected = HttpStatus.BAD_REQUEST;
+        final Response.StatusType input = Status.BAD_REQUEST;
+        final ResponseEntity<Problem> entity = unit.create(input, "Checkpoint", request());
+
+        assertThat(entity.getStatusCode(), is(expected));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void throwsOnUnknownStatus() {
+        final Response.StatusType input = mock(Response.StatusType.class);
+        when(input.getReasonPhrase()).thenReturn("L33t");
+        when(input.getStatusCode()).thenReturn(1337);
+
+        unit.create(input, "L33t", request());
+    }
+
+    private NativeWebRequest request(String acceptMediaType) {
+        final NativeWebRequest request = mock(NativeWebRequest.class);
+        when(request.getHeader("Accept")).thenReturn(acceptMediaType);
+        return request;
+    }
+
+    private NativeWebRequest request() {
+        return mock(NativeWebRequest.class);
     }
 
 }

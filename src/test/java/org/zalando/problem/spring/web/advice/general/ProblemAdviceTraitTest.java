@@ -22,7 +22,7 @@ package org.zalando.problem.spring.web.advice.general;
 
 
 import org.junit.Test;
-import org.zalando.problem.spring.web.advice.AdviceTraitTest;
+import org.zalando.problem.spring.web.advice.AdviceTraitTesting;
 
 import static org.hamcrest.Matchers.is;
 import static org.springframework.http.HttpMethod.GET;
@@ -31,7 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public final class ProblemAdviceTraitTest implements AdviceTraitTest {
+public final class ProblemAdviceTraitTest implements AdviceTraitTesting {
 
     @Test
     public void throwableProblem() throws Exception {

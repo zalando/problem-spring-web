@@ -23,7 +23,7 @@ package org.zalando.problem.spring.web.advice.routing;
 
 import org.junit.Test;
 import org.springframework.http.MediaType;
-import org.zalando.problem.spring.web.advice.AdviceTraitTest;
+import org.zalando.problem.spring.web.advice.AdviceTraitTesting;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
@@ -33,7 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public final class NoSuchRequestHandlingMethodAdviceTraitTest implements AdviceTraitTest {
+public final class NoSuchRequestHandlingMethodAdviceTraitTest implements AdviceTraitTesting {
 
     @Test
     public void noSuchRequestHandlingMethod() throws Exception {
