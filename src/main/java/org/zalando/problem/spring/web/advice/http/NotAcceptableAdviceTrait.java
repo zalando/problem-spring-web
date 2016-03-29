@@ -26,7 +26,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.zalando.problem.Problem;
 import org.zalando.problem.spring.web.advice.AdviceTrait;
-import org.zalando.problem.spring.web.advice.Responses;
 
 import javax.ws.rs.core.Response.Status;
 
@@ -40,7 +39,7 @@ public interface NotAcceptableAdviceTrait extends AdviceTrait {
     default ResponseEntity<Problem> handleMediaTypeNotAcceptable(
             final HttpMediaTypeNotAcceptableException exception,
             final NativeWebRequest request) {
-        return Responses.create(Status.NOT_ACCEPTABLE, exception, request);
+        return create(Status.NOT_ACCEPTABLE, exception, request);
     }
 
 }

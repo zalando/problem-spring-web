@@ -25,7 +25,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.zalando.problem.Problem;
-import org.zalando.problem.spring.web.advice.AdviceTraitTest;
+import org.zalando.problem.spring.web.advice.AdviceTraitTesting;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
@@ -40,7 +40,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public final class MethodNotAllowedAdviceTraitTest implements AdviceTraitTest {
+public final class MethodNotAllowedAdviceTraitTest implements AdviceTraitTesting {
 
     @Test
     public void methodNotAllowed() throws Exception {
@@ -57,7 +57,8 @@ public final class MethodNotAllowedAdviceTraitTest implements AdviceTraitTest {
 
     @Test
     public void noAllowIfNullAllowed() {
-        final MethodNotAllowedAdviceTrait unit = spy(MethodNotAllowedAdviceTrait.class);
+        final MethodNotAllowedAdviceTrait unit = new MethodNotAllowedAdviceTrait() {
+        };
         final ResponseEntity<Problem> entity = unit.handleRequestMethodNotSupportedException(
                 new HttpRequestMethodNotSupportedException("non allowed"), mock(NativeWebRequest.class));
 
@@ -66,7 +67,8 @@ public final class MethodNotAllowedAdviceTraitTest implements AdviceTraitTest {
 
     @Test
     public void noAllowIfNoneAllowed() {
-        final MethodNotAllowedAdviceTrait unit = spy(MethodNotAllowedAdviceTrait.class);
+        final MethodNotAllowedAdviceTrait unit = new MethodNotAllowedAdviceTrait() {
+        };
         final ResponseEntity<Problem> entity = unit.handleRequestMethodNotSupportedException(
                 new HttpRequestMethodNotSupportedException("non allowed", new String[]{}), mock(NativeWebRequest.class));
 

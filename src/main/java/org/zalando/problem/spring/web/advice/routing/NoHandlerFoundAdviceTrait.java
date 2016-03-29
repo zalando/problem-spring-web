@@ -27,7 +27,6 @@ import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.zalando.problem.Problem;
 import org.zalando.problem.spring.web.advice.AdviceTrait;
-import org.zalando.problem.spring.web.advice.Responses;
 
 import javax.ws.rs.core.Response.Status;
 
@@ -50,7 +49,7 @@ public interface NoHandlerFoundAdviceTrait extends AdviceTrait {
     default ResponseEntity<Problem> handleNoHandlerFound(
             final NoHandlerFoundException exception,
             final NativeWebRequest request) {
-        return Responses.create(Status.NOT_FOUND, exception, request);
+        return create(Status.NOT_FOUND, exception, request);
     }
 
 }

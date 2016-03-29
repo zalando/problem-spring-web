@@ -22,7 +22,7 @@ package org.zalando.problem.spring.web.advice.io;
 
 
 import org.junit.Test;
-import org.zalando.problem.spring.web.advice.AdviceTraitTest;
+import org.zalando.problem.spring.web.advice.AdviceTraitTesting;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
@@ -32,7 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public final class TypeMistmatchAdviceTraitTest implements AdviceTraitTest {
+public final class TypeMistmatchAdviceTraitTest implements AdviceTraitTesting {
 
     @Test
     public void typeMismatch() throws Exception {

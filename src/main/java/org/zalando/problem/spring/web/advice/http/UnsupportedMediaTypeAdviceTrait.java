@@ -27,7 +27,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.zalando.problem.Problem;
 import org.zalando.problem.spring.web.advice.AdviceTrait;
-import org.zalando.problem.spring.web.advice.Responses;
 
 import javax.ws.rs.core.Response.Status;
 
@@ -42,7 +41,7 @@ public interface UnsupportedMediaTypeAdviceTrait extends AdviceTrait {
             final HttpMediaTypeNotSupportedException exception,
             final NativeWebRequest request) {
 
-        return Responses.create(Status.UNSUPPORTED_MEDIA_TYPE, exception, request, builder -> {
+        return create(Status.UNSUPPORTED_MEDIA_TYPE, exception, request, builder -> {
             final HttpHeaders headers = new HttpHeaders();
             headers.setAccept(exception.getSupportedMediaTypes());
             return builder.headers(headers);

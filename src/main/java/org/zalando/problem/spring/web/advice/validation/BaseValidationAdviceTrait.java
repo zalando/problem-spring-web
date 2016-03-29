@@ -25,7 +25,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.zalando.problem.Problem;
 import org.zalando.problem.spring.web.advice.AdviceTrait;
-import org.zalando.problem.spring.web.advice.Responses;
 
 import java.util.Collection;
 
@@ -51,7 +50,7 @@ interface BaseValidationAdviceTrait extends AdviceTrait {
                 .sorted(comparing(Violation::getField).thenComparing(Violation::getMessage))
                 .collect(collectingAndThen(toList(), ImmutableList::copyOf));
 
-        return Responses.create(new ConstraintViolationProblem(violations), request);
+        return create(new ConstraintViolationProblem(violations), request);
     }
 
 }
