@@ -37,7 +37,7 @@ public final class UnsupportedOperationAdviceTraitTest implements AdviceTraitTes
         mvc().perform(request(GET, "http://localhost/api/not-implemented"))
                 .andExpect(status().isNotImplemented())
                 .andExpect(header().string("Content-Type", is("application/problem+json")))
-                .andExpect(jsonPath("$.type", is("http://httpstatus.es/501")))
+                .andExpect(jsonPath("$.type").doesNotExist())
                 .andExpect(jsonPath("$.title", is("Not Implemented")))
                 .andExpect(jsonPath("$.status", is(501)))
                 .andExpect(jsonPath("$.detail", is("Not yet implemented")));

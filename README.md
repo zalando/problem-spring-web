@@ -6,7 +6,7 @@
 [![Maven Central](https://img.shields.io/maven-central/v/org.zalando/problem-spring-web.svg)](https://maven-badges.herokuapp.com/maven-central/org.zalando/problem-spring-web)
 
 *Problem Spring Web* is a library that makes it easy to produce
-[`application/problem+json`](https://tools.ietf.org/html/draft-nottingham-http-problem-07) responses from a Spring
+[`application/problem+json`](http://tools.ietf.org/html/rfc7807) responses from a Spring
 application. It fills a niche, in that it connects the [Problem library](https://github.com/zalando/problem) and
 [Spring Web MVC's exception handling](https://spring.io/blog/2013/11/01/exception-handling-in-spring-mvc#using-controlleradvice-classes)
 so that they work seamlessly together, while requiring minimal additional developer effort. In doing so, it aims to
@@ -109,7 +109,6 @@ HTTP/1.1 406 Not Acceptable
 Content-Type: application/json
 
 {
-  "type": "https://httpstatus.es/406",
   "title": "Not Acceptable",
   "status": 406,
   "detail": "Could not find acceptable representation"
@@ -129,7 +128,6 @@ Allow: GET
 Content-Type: application/json
 
 {
-  "type": "https://httpstatus.es/405",
   "title": "Method Not Allowed",
   "status": 405,
   "detail": "POST not supported"
@@ -147,6 +145,6 @@ For more details check the [contribution guidelines](CONTRIBUTING.md).
 
 ## Credits and references
 
-- [Problem Details for HTTP APIs](https://tools.ietf.org/html/draft-nottingham-http-problem-07)
+- [Problem Details for HTTP APIs](http://tools.ietf.org/html/rfc7807)
 - [Problem library](https://github.com/zalando/problem)
 - [Exception Handling in Spring MVC](https://spring.io/blog/2013/11/01/exception-handling-in-spring-mvc#using-controlleradvice-classes)

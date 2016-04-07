@@ -41,7 +41,7 @@ public final class NotAcceptableAdviceTraitTest implements AdviceTraitTesting {
                 .accept("application/x.vnd.specific+json"))
                 .andExpect(status().isNotAcceptable())
                 .andExpect(content().contentType("application/problem+json"))
-                .andExpect(jsonPath("$.type", is("http://httpstatus.es/406")))
+                .andExpect(jsonPath("$.type").doesNotExist())
                 .andExpect(jsonPath("$.title", is("Not Acceptable")))
                 .andExpect(jsonPath("$.status", is(406)))
                 .andExpect(jsonPath("$.detail", containsString("Could not find acceptable representation")));

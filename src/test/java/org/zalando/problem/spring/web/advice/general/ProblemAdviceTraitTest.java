@@ -38,7 +38,7 @@ public final class ProblemAdviceTraitTest implements AdviceTraitTesting {
         mvc().perform(request(GET, "http://localhost/api/handler-problem"))
                 .andExpect(status().isConflict())
                 .andExpect(header().string("Content-Type", is("application/problem+json")))
-                .andExpect(jsonPath("$.type", is("about:blank")))
+                .andExpect(jsonPath("$.type").doesNotExist())
                 .andExpect(jsonPath("$.title", is("Expected")))
                 .andExpect(jsonPath("$.status", is(409)))
                 .andExpect(jsonPath("$.detail", is("Nothing out of the ordinary")));
