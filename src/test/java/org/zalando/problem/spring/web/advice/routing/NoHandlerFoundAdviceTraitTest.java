@@ -24,7 +24,7 @@ package org.zalando.problem.spring.web.advice.routing;
 import org.junit.Test;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.servlet.DispatcherServlet;
-import org.zalando.problem.spring.web.advice.AdviceTraitTest;
+import org.zalando.problem.spring.web.advice.AdviceTraitTesting;
 
 import java.lang.reflect.Field;
 
@@ -36,7 +36,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public final class NoHandlerFoundAdviceTraitTest implements AdviceTraitTest {
+public final class NoHandlerFoundAdviceTraitTest implements AdviceTraitTesting {
 
     @Test
     public void noHandlerInController() throws Exception {

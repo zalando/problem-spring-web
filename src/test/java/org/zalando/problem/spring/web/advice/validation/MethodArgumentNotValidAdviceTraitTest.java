@@ -21,7 +21,7 @@ package org.zalando.problem.spring.web.advice.validation;
  */
 
 import org.junit.Test;
-import org.zalando.problem.spring.web.advice.AdviceTraitTest;
+import org.zalando.problem.spring.web.advice.AdviceTraitTesting;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -32,7 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public final class MethodArgumentNotValidAdviceTraitTest implements AdviceTraitTest {
+public final class MethodArgumentNotValidAdviceTraitTest implements AdviceTraitTesting {
 
     @Test
     public void invalidRequestBodyField() throws Exception {

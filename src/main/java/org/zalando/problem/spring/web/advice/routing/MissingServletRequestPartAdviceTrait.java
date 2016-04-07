@@ -26,7 +26,6 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.multipart.support.MissingServletRequestPartException;
 import org.zalando.problem.Problem;
 import org.zalando.problem.spring.web.advice.AdviceTrait;
-import org.zalando.problem.spring.web.advice.Responses;
 
 import javax.ws.rs.core.Response.Status;
 
@@ -40,7 +39,7 @@ public interface MissingServletRequestPartAdviceTrait extends AdviceTrait {
     default ResponseEntity<Problem> handleMissingServletRequestPart(
             final MissingServletRequestPartException exception,
             final NativeWebRequest request) {
-        return Responses.create(Status.BAD_REQUEST, exception, request);
+        return create(Status.BAD_REQUEST, exception, request);
     }
 
 }

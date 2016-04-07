@@ -21,34 +21,23 @@ package org.zalando.problem.spring.web.advice.http;
  */
 
 import org.junit.Test;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.HttpMediaTypeNotSupportedException;
-import org.springframework.web.context.request.NativeWebRequest;
-import org.zalando.problem.Problem;
-import org.zalando.problem.spring.web.advice.AdviceTraitTest;
+import org.zalando.problem.spring.web.advice.AdviceTraitTesting;
 
-import static java.util.Arrays.asList;
-import static java.util.Collections.singletonList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.emptyOrNullString;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.collection.IsMapContaining.hasEntry;
 import static org.hamcrest.collection.IsMapContaining.hasKey;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
-import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.PUT;
-import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.http.MediaType.APPLICATION_XML;
-import static org.springframework.http.MediaType.TEXT_PLAIN;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.request;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public final class UnsupportedMediaTypeAdviceTraitTest implements AdviceTraitTest {
+public final class UnsupportedMediaTypeAdviceTraitTest implements AdviceTraitTesting {
 
     @Test
     public void unsupportedMediaType() throws Exception {

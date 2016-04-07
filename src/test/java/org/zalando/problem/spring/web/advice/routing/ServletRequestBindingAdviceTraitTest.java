@@ -22,7 +22,7 @@ package org.zalando.problem.spring.web.advice.routing;
 
 
 import org.junit.Test;
-import org.zalando.problem.spring.web.advice.AdviceTraitTest;
+import org.zalando.problem.spring.web.advice.AdviceTraitTesting;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
@@ -32,7 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public final class ServletRequestBindingAdviceTraitTest implements AdviceTraitTest {
+public final class ServletRequestBindingAdviceTraitTest implements AdviceTraitTesting {
 
     @Test
     public void servletRequestBinding() throws Exception {

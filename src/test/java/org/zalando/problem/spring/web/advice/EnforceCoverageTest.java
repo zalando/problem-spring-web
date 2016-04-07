@@ -33,9 +33,4 @@ public final class EnforceCoverageTest {
         new MediaTypes();
     }
 
-    @Test
-    public void shouldUseResponsesConstructor() {
-        new Responses();
-    }
-
 }

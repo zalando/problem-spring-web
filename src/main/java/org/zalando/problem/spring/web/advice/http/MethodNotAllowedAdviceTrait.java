@@ -29,7 +29,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.zalando.problem.Problem;
 import org.zalando.problem.spring.web.advice.AdviceTrait;
-import org.zalando.problem.spring.web.advice.Responses;
 
 import javax.annotation.Nullable;
 import javax.ws.rs.core.Response.Status;
@@ -46,10 +45,10 @@ public interface MethodNotAllowedAdviceTrait extends AdviceTrait {
         @Nullable final String[] methods = exception.getSupportedMethods();
 
         if (methods == null || methods.length == 0) {
-            return Responses.create(Status.METHOD_NOT_ALLOWED, exception, request);
+            return create(Status.METHOD_NOT_ALLOWED, exception, request);
         }
 
-        return Responses.create(Status.METHOD_NOT_ALLOWED, exception, request, builder -> {
+        return create(Status.METHOD_NOT_ALLOWED, exception, request, builder -> {
             final HttpHeaders headers = new HttpHeaders();
             headers.setAllow(exception.getSupportedHttpMethods());
             return builder.headers(headers);

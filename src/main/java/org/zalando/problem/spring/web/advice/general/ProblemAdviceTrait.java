@@ -26,7 +26,6 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.zalando.problem.Problem;
 import org.zalando.problem.ThrowableProblem;
 import org.zalando.problem.spring.web.advice.AdviceTrait;
-import org.zalando.problem.spring.web.advice.Responses;
 
 /**
  * @see Problem
@@ -38,7 +37,7 @@ public interface ProblemAdviceTrait extends AdviceTrait {
     default ResponseEntity<Problem> handleProblem(
             final ThrowableProblem problem,
             final NativeWebRequest request) {
-        return Responses.create(problem, request);
+        return create(problem, request);
     }
 
 }
