@@ -40,7 +40,7 @@ public final class MessageNotReadableAdviceTraitTest implements AdviceTraitTesti
                 .contentType("application/json"))
                 .andExpect(status().isBadRequest())
                 .andExpect(header().string("Content-Type", is("application/problem+json")))
-                .andExpect(jsonPath("$.type", is("http://httpstatus.es/400")))
+                .andExpect(jsonPath("$.type").doesNotExist())
                 .andExpect(jsonPath("$.title", is("Bad Request")))
                 .andExpect(jsonPath("$.status", is(400)))
                 .andExpect(jsonPath("$.detail", containsString("request body is missing")));

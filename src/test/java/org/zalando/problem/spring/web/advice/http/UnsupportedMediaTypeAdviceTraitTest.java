@@ -46,7 +46,7 @@ public final class UnsupportedMediaTypeAdviceTraitTest implements AdviceTraitTes
                 .andExpect(status().isUnsupportedMediaType())
                 .andExpect(header().string("Content-Type", is("application/problem+json")))
                 .andExpect(header().string("Accept", containsString("application/json")))
-                .andExpect(jsonPath("$.type", is("http://httpstatus.es/415")))
+                .andExpect(jsonPath("$.type").doesNotExist())
                 .andExpect(jsonPath("$.title", is("Unsupported Media Type")))
                 .andExpect(jsonPath("$.status", is(415)))
                 .andExpect(jsonPath("$.detail", containsString("application/atom+xml")));
