@@ -22,6 +22,7 @@ package org.zalando.problem.spring.web.advice.validation;
 
 import com.google.common.collect.ImmutableList;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.zalando.problem.Problem;
 import org.zalando.problem.spring.web.advice.AdviceTrait;
@@ -44,7 +45,8 @@ interface BaseValidationAdviceTrait extends AdviceTrait {
         return fieldName;
     }
 
-    default ResponseEntity<Problem> newConstraintViolationProblem(final Collection<Violation> stream, final NativeWebRequest request) {
+    default ResponseEntity<Problem> newConstraintViolationProblem(final Collection<Violation> stream,
+            final NativeWebRequest request) throws HttpMediaTypeNotAcceptableException {
         final ImmutableList<Violation> violations = stream.stream()
                 // sorting to make tests deterministic
                 .sorted(comparing(Violation::getField).thenComparing(Violation::getMessage))

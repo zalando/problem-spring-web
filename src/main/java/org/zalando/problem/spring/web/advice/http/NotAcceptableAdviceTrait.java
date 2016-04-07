@@ -38,7 +38,7 @@ public interface NotAcceptableAdviceTrait extends AdviceTrait {
     @ExceptionHandler
     default ResponseEntity<Problem> handleMediaTypeNotAcceptable(
             final HttpMediaTypeNotAcceptableException exception,
-            final NativeWebRequest request) {
+            final NativeWebRequest request) throws HttpMediaTypeNotAcceptableException {
         return create(Status.NOT_ACCEPTABLE, exception, request);
     }
 

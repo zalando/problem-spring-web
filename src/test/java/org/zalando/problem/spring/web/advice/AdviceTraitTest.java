@@ -25,6 +25,7 @@ import org.junit.Test;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.zalando.problem.Problem;
 import org.zalando.problem.ThrowableProblem;
@@ -51,7 +52,7 @@ public class AdviceTraitTest {
     };
 
     @Test
-    public void buildsOnProblem() {
+    public void buildsOnProblem() throws HttpMediaTypeNotAcceptableException {
         final ThrowableProblem problem = mock(ThrowableProblem.class);
         when(problem.getStatus()).thenReturn(Status.RESET_CONTENT);
 
@@ -63,7 +64,7 @@ public class AdviceTraitTest {
     }
 
     @Test
-    public void buildsOnThrowable() {
+    public void buildsOnThrowable() throws HttpMediaTypeNotAcceptableException {
         final String message = "Message";
         final Throwable throwable = mock(Throwable.class);
         when(throwable.getMessage()).thenReturn(message);
@@ -77,7 +78,7 @@ public class AdviceTraitTest {
     }
 
     @Test
-    public void buildsOnMessage() {
+    public void buildsOnMessage() throws HttpMediaTypeNotAcceptableException {
         final String message = "Message";
 
         final ResponseEntity<Problem> result = unit.create(Status.RESET_CONTENT, message, request());
@@ -89,7 +90,7 @@ public class AdviceTraitTest {
     }
 
     @Test
-    public void buildsIfIncludes() {
+    public void buildsIfIncludes() throws HttpMediaTypeNotAcceptableException {
         final String message = "Message";
 
         final ResponseEntity<Problem> result = unit.create(Status.RESET_CONTENT, message,
@@ -102,7 +103,7 @@ public class AdviceTraitTest {
     }
 
     @Test
-    public void buildsEmptyIfNotIncludes() {
+    public void buildsEmptyIfNotIncludes() throws HttpMediaTypeNotAcceptableException {
         final ResponseEntity<Problem> result = unit.create(Status.RESET_CONTENT, "",
                 request(APPLICATION_ATOM_XML_VALUE));
 
@@ -112,7 +113,7 @@ public class AdviceTraitTest {
     }
 
     @Test
-    public void mapsStatus() {
+    public void mapsStatus() throws HttpMediaTypeNotAcceptableException {
         final HttpStatus expected = HttpStatus.BAD_REQUEST;
         final Response.StatusType input = Status.BAD_REQUEST;
         final ResponseEntity<Problem> entity = unit.create(input, "Checkpoint", request());
@@ -121,7 +122,7 @@ public class AdviceTraitTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void throwsOnUnknownStatus() {
+    public void throwsOnUnknownStatus() throws HttpMediaTypeNotAcceptableException {
         final Response.StatusType input = mock(Response.StatusType.class);
         when(input.getReasonPhrase()).thenReturn("L33t");
         when(input.getStatusCode()).thenReturn(1337);
