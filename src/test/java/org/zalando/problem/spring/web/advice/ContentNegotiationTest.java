@@ -22,83 +22,63 @@ package org.zalando.problem.spring.web.advice;
 
 
 import org.junit.Test;
-import org.springframework.http.MediaType;
-import org.springframework.web.HttpMediaTypeNotAcceptableException;
-import org.springframework.web.context.request.NativeWebRequest;
 
-import java.util.Optional;
+import static org.springframework.http.HttpMethod.GET;
+import static org.springframework.http.HttpMethod.POST;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.request;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.core.Is.is;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-import static org.springframework.http.MediaType.APPLICATION_ATOM_XML;
-import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.zalando.problem.spring.web.advice.MediaTypes.PROBLEM;
-import static org.zalando.problem.spring.web.advice.MediaTypes.WILDCARD_JSON;
-import static org.zalando.problem.spring.web.advice.MediaTypes.X_PROBLEM;
+public final class ContentNegotiationTest implements AdviceTraitTesting {
 
-public final class ContentNegotiationTest {
-
-    private final AdviceTrait unit = new AdviceTrait() {
-    };
+    private final String url = "http://localhost/api/handler-problem";
 
     @Test
-    public void problemGivesProblem() throws HttpMediaTypeNotAcceptableException {
-        final Optional<MediaType> contentType = unit.negotiate(request(PROBLEM));
-        assertThat(contentType, is(not(Optional.empty())));
-        assertThat(contentType.get(), is(PROBLEM));
+    public void problemGivesProblem() throws Exception {
+        mvc().perform(request(GET, url)
+                .accept("application/problem+json"))
+                .andExpect(content().contentType(MediaTypes.PROBLEM));
     }
 
     @Test
-    public void xproblemGivesXProblem() throws HttpMediaTypeNotAcceptableException {
-        final Optional<MediaType> contentType = unit.negotiate(request(X_PROBLEM));
-        assertThat(contentType, is(not(Optional.empty())));
-        assertThat(contentType.get(), is(X_PROBLEM));
+    public void xproblemGivesXProblem() throws Exception {
+        mvc().perform(request(GET, url)
+                .accept("application/x.problem+json"))
+                .andExpect(content().contentType(MediaTypes.X_PROBLEM));
     }
 
     @Test
-    public void jsonGivesProblem() throws HttpMediaTypeNotAcceptableException {
-        final Optional<MediaType> contentType = unit.negotiate(request(APPLICATION_JSON));
-        assertThat(contentType, is(not(Optional.empty())));
-        assertThat(contentType.get(), is(PROBLEM));
+    public void jsonGivesProblem() throws Exception {
+        mvc().perform(request(GET, url)
+                .accept("application/json"))
+                .andExpect(content().contentType(MediaTypes.PROBLEM));
+    }
+
+    // TODO why isn't this working?
+    @Test
+    public void wildcardJsonGivesProblem() throws Exception {
+        mvc().perform(request(GET, url)
+                .accept("application/*+json"))
+                .andExpect(status().isConflict())
+                .andExpect(content().contentType(MediaTypes.PROBLEM));
     }
 
     @Test
-    public void wildcardJsonGivesProblem() throws HttpMediaTypeNotAcceptableException {
-        final Optional<MediaType> contentType = unit.negotiate(request(WILDCARD_JSON));
-        assertThat(contentType, is(not(Optional.empty())));
-        assertThat(contentType.get(), is(PROBLEM));
+    public void specificJsonGivesProblem() throws Exception {
+        mvc().perform(request(GET, url)
+                .accept("application/x.vendor.specific+json"))
+                .andExpect(content().contentType(MediaTypes.PROBLEM));
     }
 
+    // TODO shouldn't this produce a 406 Not Acceptable?
     @Test
-    public void specificJsonGivesProblem() throws HttpMediaTypeNotAcceptableException {
-        final MediaType customMediaType = MediaType.parseMediaType("application/x.vendor.specific+json");
-        final Optional<MediaType> contentType = unit.negotiate(request(customMediaType));
-        assertThat(contentType, is(not(Optional.empty())));
-        assertThat(contentType.get(), is(PROBLEM));
-    }
-
-    @Test
-    public void nonJsonGivesEmpty() throws HttpMediaTypeNotAcceptableException {
-        final Optional<MediaType> contentType = unit.negotiate(request(APPLICATION_ATOM_XML));
-        assertThat(contentType, is(Optional.empty()));
-    }
-
-    @Test(expected = HttpMediaTypeNotAcceptableException.class)
-    public void invalidAcceptHeaderThrows() throws HttpMediaTypeNotAcceptableException {
-        unit.negotiate(request("_|°|_"));
-    }
-
-    private NativeWebRequest request(final String acceptMediaType) {
-        final NativeWebRequest request = mock(NativeWebRequest.class);
-        when(request.getHeader("Accept")).thenReturn(acceptMediaType);
-        return request;
-    }
-
-    private NativeWebRequest request(MediaType acceptMediaType) {
-        return request(acceptMediaType.toString());
+    public void nonJsonGivesEmpty() throws Exception {
+        mvc().perform(request(GET, url)
+                .accept("application/atom+xml"))
+                .andExpect(status().isConflict())
+                .andExpect(content().string(""))
+                .andExpect(header().doesNotExist("Content-Type"));
     }
 
 }

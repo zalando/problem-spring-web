@@ -23,6 +23,7 @@ package org.zalando.problem.spring.web.advice;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.ResponseEntity.BodyBuilder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.accept.HeaderContentNegotiationStrategy;
@@ -42,8 +43,15 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
+import static java.util.Arrays.asList;
 import static java.util.function.Function.identity;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.zalando.problem.spring.web.advice.MediaTypes.PROBLEM;
+import static org.zalando.problem.spring.web.advice.MediaTypes.PROBLEM_VALUE;
+import static org.zalando.problem.spring.web.advice.MediaTypes.WILDCARD_JSON;
+import static org.zalando.problem.spring.web.advice.MediaTypes.X_PROBLEM;
+import static org.zalando.problem.spring.web.advice.MediaTypes.X_PROBLEM_VALUE;
 
 /**
  * <p>
@@ -75,20 +83,14 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 public interface AdviceTrait {
 
     default ResponseEntity<Problem> create(final Response.StatusType status, final Throwable throwable,
-            final NativeWebRequest request,
-            final Function<ResponseEntity.BodyBuilder, ResponseEntity.BodyBuilder> buildable) throws HttpMediaTypeNotAcceptableException {
-        return create(status, throwable.getMessage(), request, buildable);
-    }
-
-    default ResponseEntity<Problem> create(final Response.StatusType status, final Throwable throwable,
             final NativeWebRequest request) throws HttpMediaTypeNotAcceptableException {
         return create(status, throwable, request, identity());
     }
 
-    default ResponseEntity<Problem> create(final Response.StatusType status, final String message,
-            final NativeWebRequest request,
-            final Function<ResponseEntity.BodyBuilder, ResponseEntity.BodyBuilder> buildable) throws HttpMediaTypeNotAcceptableException {
-        return create(Problem.valueOf(status, message), request, buildable);
+    default ResponseEntity<Problem> create(final Response.StatusType status, final Throwable throwable,
+            final NativeWebRequest request, final Function<BodyBuilder, BodyBuilder> buildable)
+            throws HttpMediaTypeNotAcceptableException {
+        return create(status, throwable.getMessage(), request, buildable);
     }
 
     default ResponseEntity<Problem> create(final Response.StatusType status, final String message,
@@ -96,14 +98,21 @@ public interface AdviceTrait {
         return create(status, message, request, identity());
     }
 
-    default ResponseEntity<Problem> create(final Problem problem, final NativeWebRequest request) throws HttpMediaTypeNotAcceptableException {
+    default ResponseEntity<Problem> create(final Response.StatusType status, final String message,
+            final NativeWebRequest request, final Function<BodyBuilder, BodyBuilder> buildable)
+            throws HttpMediaTypeNotAcceptableException {
+        return create(Problem.valueOf(status, message), request, buildable);
+    }
+
+    default ResponseEntity<Problem> create(final Problem problem, final NativeWebRequest request)
+            throws HttpMediaTypeNotAcceptableException {
         return create(problem, request, identity());
     }
 
     default ResponseEntity<Problem> create(final Problem problem, final NativeWebRequest request,
-            final Function<ResponseEntity.BodyBuilder, ResponseEntity.BodyBuilder> buildable) throws HttpMediaTypeNotAcceptableException {
+            final Function<BodyBuilder, BodyBuilder> buildable) throws HttpMediaTypeNotAcceptableException {
         final HttpStatus status = HttpStatus.valueOf(problem.getStatus().getStatusCode());
-        final ResponseEntity.BodyBuilder builder = buildable.apply(ResponseEntity.status(status));
+        final BodyBuilder builder = buildable.apply(ResponseEntity.status(status));
 
         final Optional<MediaType> contentType = negotiate(request);
 
@@ -113,33 +122,32 @@ public interface AdviceTrait {
                     .body(problem);
         }
 
+        // TODO shouldn't we raise a HttpMediaTypeNotAcceptableException here?
         return builder.body(null);
     }
 
     default Optional<MediaType> negotiate(final NativeWebRequest request) throws HttpMediaTypeNotAcceptableException {
         final HeaderContentNegotiationStrategy negotiator = new HeaderContentNegotiationStrategy();
+        final List<MediaType> mediaTypes = negotiator.resolveMediaTypes(request);
 
-            final List<MediaType> acceptedMediaTypes = negotiator.resolveMediaTypes(request);
+        if (mediaTypes.isEmpty()) {
+            return Optional.of(PROBLEM);
+        }
 
-            if (acceptedMediaTypes.isEmpty()) {
-                return Optional.of(MediaTypes.PROBLEM);
+        for (final MediaType mediaType : mediaTypes) {
+            switch (mediaType.toString()) {
+                case APPLICATION_JSON_VALUE:
+                    return Optional.of(PROBLEM);
+                case PROBLEM_VALUE:
+                    return Optional.of(PROBLEM);
+                case X_PROBLEM_VALUE:
+                    return Optional.of(X_PROBLEM);
             }
 
-            if (acceptedMediaTypes.stream().anyMatch(MediaTypes.PROBLEM::isCompatibleWith)) {
-                return Optional.of(MediaTypes.PROBLEM);
+            if (WILDCARD_JSON.includes(mediaType)) {
+                return Optional.of(PROBLEM);
             }
-
-            if (acceptedMediaTypes.stream().anyMatch(MediaTypes.X_PROBLEM::isCompatibleWith)) {
-                return Optional.of(MediaTypes.X_PROBLEM);
-            }
-
-            if (acceptedMediaTypes.stream().anyMatch(MediaTypes.WILDCARD_JSON::isCompatibleWith)) {
-                return Optional.of(MediaTypes.PROBLEM);
-            }
-
-            if (acceptedMediaTypes.stream().anyMatch(APPLICATION_JSON::isCompatibleWith)) {
-                return Optional.of(MediaTypes.PROBLEM);
-            }
+        }
 
         return Optional.empty();
     }
