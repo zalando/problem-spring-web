@@ -43,15 +43,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
-import static java.util.Arrays.asList;
 import static java.util.function.Function.identity;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.zalando.problem.spring.web.advice.MediaTypes.PROBLEM;
-import static org.zalando.problem.spring.web.advice.MediaTypes.PROBLEM_VALUE;
 import static org.zalando.problem.spring.web.advice.MediaTypes.WILDCARD_JSON;
 import static org.zalando.problem.spring.web.advice.MediaTypes.X_PROBLEM;
-import static org.zalando.problem.spring.web.advice.MediaTypes.X_PROBLEM_VALUE;
 
 /**
  * <p>
@@ -122,8 +118,8 @@ public interface AdviceTrait {
                     .body(problem);
         }
 
-        // TODO shouldn't we raise a HttpMediaTypeNotAcceptableException here?
-        return builder.body(null);
+        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE)
+                .body(null);
     }
 
     default Optional<MediaType> negotiate(final NativeWebRequest request) throws HttpMediaTypeNotAcceptableException {
@@ -135,16 +131,13 @@ public interface AdviceTrait {
         }
 
         for (final MediaType mediaType : mediaTypes) {
-            switch (mediaType.toString()) {
-                case APPLICATION_JSON_VALUE:
-                    return Optional.of(PROBLEM);
-                case PROBLEM_VALUE:
-                    return Optional.of(PROBLEM);
-                case X_PROBLEM_VALUE:
-                    return Optional.of(X_PROBLEM);
-            }
-
-            if (WILDCARD_JSON.includes(mediaType)) {
+            if (APPLICATION_JSON.isCompatibleWith(mediaType)) {
+                return Optional.of(PROBLEM);
+            } else if (PROBLEM.isCompatibleWith(mediaType)) {
+                return Optional.of(PROBLEM);
+            } else if (X_PROBLEM.isCompatibleWith(mediaType)) {
+                return Optional.of(X_PROBLEM);
+            } else if (WILDCARD_JSON.isCompatibleWith(mediaType)) {
                 return Optional.of(PROBLEM);
             }
         }
