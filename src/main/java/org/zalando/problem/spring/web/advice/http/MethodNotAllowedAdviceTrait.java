@@ -48,12 +48,11 @@ public interface MethodNotAllowedAdviceTrait extends AdviceTrait {
         if (methods == null || methods.length == 0) {
             return create(Status.METHOD_NOT_ALLOWED, exception, request);
         }
+        
+        final HttpHeaders headers = new HttpHeaders();
+        headers.setAllow(exception.getSupportedHttpMethods());
 
-        return create(Status.METHOD_NOT_ALLOWED, exception, request, builder -> {
-            final HttpHeaders headers = new HttpHeaders();
-            headers.setAllow(exception.getSupportedHttpMethods());
-            return builder.headers(headers);
-        });
+        return create(Status.METHOD_NOT_ALLOWED, exception, request, headers);
     }
 
 }

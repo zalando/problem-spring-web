@@ -20,10 +20,10 @@ package org.zalando.problem.spring.web.advice;
  * #L%
  */
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.ResponseEntity.BodyBuilder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.accept.HeaderContentNegotiationStrategy;
@@ -31,6 +31,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.zalando.problem.Problem;
+import org.zalando.problem.ThrowableProblem;
 import org.zalando.problem.spring.web.advice.custom.CustomAdviceTrait;
 import org.zalando.problem.spring.web.advice.general.GeneralAdviceTrait;
 import org.zalando.problem.spring.web.advice.http.HttpAdviceTrait;
@@ -41,9 +42,7 @@ import org.zalando.problem.spring.web.advice.validation.ValidationAdviceTrait;
 import javax.ws.rs.core.Response;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
 
-import static java.util.function.Function.identity;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.zalando.problem.spring.web.advice.MediaTypes.PROBLEM;
 import static org.zalando.problem.spring.web.advice.MediaTypes.WILDCARD_JSON;
@@ -77,49 +76,40 @@ import static org.zalando.problem.spring.web.advice.MediaTypes.X_PROBLEM;
  * @see ValidationAdviceTrait
  */
 public interface AdviceTrait {
+    
+    ResponseEntity<Problem> NOT_ACCEPTABLE = ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(null);
 
     default ResponseEntity<Problem> create(final Response.StatusType status, final Throwable throwable,
             final NativeWebRequest request) throws HttpMediaTypeNotAcceptableException {
-        return create(status, throwable, request, identity());
+        return create(status, throwable, request, new HttpHeaders());
     }
 
     default ResponseEntity<Problem> create(final Response.StatusType status, final Throwable throwable,
-            final NativeWebRequest request, final Function<BodyBuilder, BodyBuilder> buildable)
+            final NativeWebRequest request, final HttpHeaders headers)
             throws HttpMediaTypeNotAcceptableException {
-        return create(status, throwable.getMessage(), request, buildable);
-    }
 
-    default ResponseEntity<Problem> create(final Response.StatusType status, final String message,
-            final NativeWebRequest request) throws HttpMediaTypeNotAcceptableException {
-        return create(status, message, request, identity());
-    }
-
-    default ResponseEntity<Problem> create(final Response.StatusType status, final String message,
-            final NativeWebRequest request, final Function<BodyBuilder, BodyBuilder> buildable)
-            throws HttpMediaTypeNotAcceptableException {
-        return create(Problem.valueOf(status, message), request, buildable);
+        final String detail = throwable.getMessage();
+        final ThrowableProblem problem = Problem.valueOf(status, detail);
+        return create(problem, request, headers);
     }
 
     default ResponseEntity<Problem> create(final Problem problem, final NativeWebRequest request)
             throws HttpMediaTypeNotAcceptableException {
-        return create(problem, request, identity());
+        return create(problem, request, new HttpHeaders());
     }
 
     default ResponseEntity<Problem> create(final Problem problem, final NativeWebRequest request,
-            final Function<BodyBuilder, BodyBuilder> buildable) throws HttpMediaTypeNotAcceptableException {
-        final HttpStatus status = HttpStatus.valueOf(problem.getStatus().getStatusCode());
-        final BodyBuilder builder = buildable.apply(ResponseEntity.status(status));
+            final HttpHeaders headers) throws HttpMediaTypeNotAcceptableException {
 
-        final Optional<MediaType> contentType = negotiate(request);
-
-        if (contentType.isPresent()) {
-            return builder
-                    .contentType(contentType.get())
+        return negotiate(request).map(contentType -> {
+            final int statusCode = problem.getStatus().getStatusCode();
+            final HttpStatus status = HttpStatus.valueOf(statusCode);
+            
+            return ResponseEntity.status(status)
+                    .headers(headers)
+                    .contentType(contentType)
                     .body(problem);
-        }
-
-        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE)
-                .body(null);
+        }).orElse(NOT_ACCEPTABLE);
     }
 
     default Optional<MediaType> negotiate(final NativeWebRequest request) throws HttpMediaTypeNotAcceptableException {
