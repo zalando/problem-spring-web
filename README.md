@@ -37,6 +37,17 @@ Add the following dependency to your project:
 
 ## Configuration
 
+Make sure you register the required modules with your ObjectMapper:
+
+```java
+@Bean
+public ObjectMapper objectMapper() {
+    return new ObjectMapper()
+            .registerModule(new Jdk8Module())
+            .registerModule(new ProblemModule());
+}
+```
+
 The following table shows all built-in advice traits: 
 
 | Advice Trait                                                                                                                                                       | Produces                                                  |
