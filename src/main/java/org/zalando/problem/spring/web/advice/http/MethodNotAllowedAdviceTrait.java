@@ -24,6 +24,7 @@ import com.google.gag.annotation.remark.Facepalm;
 import com.google.gag.annotation.remark.WTF;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -38,7 +39,7 @@ public interface MethodNotAllowedAdviceTrait extends AdviceTrait {
     @ExceptionHandler
     default ResponseEntity<Problem> handleRequestMethodNotSupportedException(
             final HttpRequestMethodNotSupportedException exception,
-            final NativeWebRequest request) {
+            final NativeWebRequest request) throws HttpMediaTypeNotAcceptableException {
 
         @WTF
         @Facepalm("Nullable arrays... great work from Spring :/")
@@ -47,12 +48,11 @@ public interface MethodNotAllowedAdviceTrait extends AdviceTrait {
         if (methods == null || methods.length == 0) {
             return create(Status.METHOD_NOT_ALLOWED, exception, request);
         }
+        
+        final HttpHeaders headers = new HttpHeaders();
+        headers.setAllow(exception.getSupportedHttpMethods());
 
-        return create(Status.METHOD_NOT_ALLOWED, exception, request, builder -> {
-            final HttpHeaders headers = new HttpHeaders();
-            headers.setAllow(exception.getSupportedHttpMethods());
-            return builder.headers(headers);
-        });
+        return create(Status.METHOD_NOT_ALLOWED, exception, request, headers);
     }
 
 }

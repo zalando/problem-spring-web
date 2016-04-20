@@ -25,6 +25,7 @@ import org.junit.Test;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.zalando.problem.Problem;
 import org.zalando.problem.ThrowableProblem;
@@ -33,15 +34,13 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import java.util.Optional;
 
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.hobsoft.hamcrest.compose.ComposeMatchers.compose;
 import static org.hobsoft.hamcrest.compose.ComposeMatchers.hasFeature;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.HttpStatus.RESET_CONTENT;
-import static org.springframework.http.MediaType.APPLICATION_ATOM_XML_VALUE;
 import static org.zalando.problem.spring.web.advice.MediaTypes.PROBLEM;
 import static org.zalando.problem.spring.web.advice.MediaTypes.WILDCARD_JSON_VALUE;
 
@@ -51,7 +50,7 @@ public class AdviceTraitTest {
     };
 
     @Test
-    public void buildsOnProblem() {
+    public void buildsOnProblem() throws HttpMediaTypeNotAcceptableException {
         final ThrowableProblem problem = mock(ThrowableProblem.class);
         when(problem.getStatus()).thenReturn(Status.RESET_CONTENT);
 
@@ -63,36 +62,33 @@ public class AdviceTraitTest {
     }
 
     @Test
-    public void buildsOnThrowable() {
-        final String message = "Message";
-        final Throwable throwable = mock(Throwable.class);
-        when(throwable.getMessage()).thenReturn(message);
-
-        final ResponseEntity<Problem> result = unit.create(Status.RESET_CONTENT, throwable, request());
+    public void buildsOnThrowable() throws HttpMediaTypeNotAcceptableException {
+        final ResponseEntity<Problem> result = unit.create(Status.RESET_CONTENT, 
+                new IllegalStateException("Message"), request());
 
         assertThat(result, hasFeature("Status", ResponseEntity::getStatusCode, is(RESET_CONTENT)));
         assertThat(result.getHeaders(), hasFeature("Content-Type", HttpHeaders::getContentType, is(PROBLEM)));
         assertThat(result.getBody(), compose(hasFeature("Status", Problem::getStatus, is(Status.RESET_CONTENT)))
-                .and(hasFeature("Detail", Problem::getDetail, is(Optional.of(message)))));
+                .and(hasFeature("Detail", Problem::getDetail, is(Optional.of("Message")))));
     }
 
     @Test
-    public void buildsOnMessage() {
-        final String message = "Message";
-
-        final ResponseEntity<Problem> result = unit.create(Status.RESET_CONTENT, message, request());
+    public void buildsOnMessage() throws HttpMediaTypeNotAcceptableException {
+        final ResponseEntity<Problem> result = unit.create(Status.RESET_CONTENT, 
+                new IllegalStateException("Message"), request());
 
         assertThat(result, hasFeature("Status", ResponseEntity::getStatusCode, is(RESET_CONTENT)));
         assertThat(result.getHeaders(), hasFeature("Content-Type", HttpHeaders::getContentType, is(PROBLEM)));
         assertThat(result.getBody(), compose(hasFeature("Status", Problem::getStatus, is(Status.RESET_CONTENT)))
-                .and(hasFeature("Detail", Problem::getDetail, is(Optional.of(message)))));
+                .and(hasFeature("Detail", Problem::getDetail, is(Optional.of("Message")))));
     }
 
     @Test
-    public void buildsIfIncludes() {
+    public void buildsIfIncludes() throws HttpMediaTypeNotAcceptableException {
         final String message = "Message";
 
-        final ResponseEntity<Problem> result = unit.create(Status.RESET_CONTENT, message,
+        final ResponseEntity<Problem> result = unit.create(Status.RESET_CONTENT,
+                new IllegalStateException(message),
                 request(WILDCARD_JSON_VALUE));
 
         assertThat(result, hasFeature("Status", ResponseEntity::getStatusCode, is(RESET_CONTENT)));
@@ -102,31 +98,22 @@ public class AdviceTraitTest {
     }
 
     @Test
-    public void buildsEmptyIfNotIncludes() {
-        final ResponseEntity<Problem> result = unit.create(Status.RESET_CONTENT, "",
-                request(APPLICATION_ATOM_XML_VALUE));
-
-        assertThat(result, hasFeature("Status", ResponseEntity::getStatusCode, is(RESET_CONTENT)));
-        assertThat(result.getHeaders().getContentType(), is(nullValue()));
-        assertThat(result.getBody(), is(nullValue()));
-    }
-
-    @Test
-    public void mapsStatus() {
+    public void mapsStatus() throws HttpMediaTypeNotAcceptableException {
         final HttpStatus expected = HttpStatus.BAD_REQUEST;
         final Response.StatusType input = Status.BAD_REQUEST;
-        final ResponseEntity<Problem> entity = unit.create(input, "Checkpoint", request());
+        final ResponseEntity<Problem> entity = unit.create(input, 
+                new IllegalStateException("Checkpoint"), request());
 
         assertThat(entity.getStatusCode(), is(expected));
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void throwsOnUnknownStatus() {
+    public void throwsOnUnknownStatus() throws HttpMediaTypeNotAcceptableException {
         final Response.StatusType input = mock(Response.StatusType.class);
         when(input.getReasonPhrase()).thenReturn("L33t");
         when(input.getStatusCode()).thenReturn(1337);
 
-        unit.create(input, "L33t", request());
+        unit.create(input, new IllegalStateException("L33t"), request());
     }
 
     private NativeWebRequest request(String acceptMediaType) {

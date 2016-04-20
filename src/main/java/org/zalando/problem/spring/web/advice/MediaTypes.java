@@ -21,17 +21,7 @@ package org.zalando.problem.spring.web.advice;
  */
 
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
-import org.springframework.web.HttpMediaTypeNotAcceptableException;
-import org.springframework.web.accept.HeaderContentNegotiationStrategy;
-import org.springframework.web.context.request.NativeWebRequest;
-
-import java.util.List;
-import java.util.Optional;
-
-import static org.springframework.http.MediaType.APPLICATION_JSON;
 
 final class MediaTypes {
 
@@ -44,41 +34,8 @@ final class MediaTypes {
     static final String WILDCARD_JSON_VALUE = "application/*+json";
     static final MediaType WILDCARD_JSON = MediaType.parseMediaType(WILDCARD_JSON_VALUE);
 
-    private static final Logger LOG = LoggerFactory.getLogger(MediaTypes.class);
-
-    private static final HeaderContentNegotiationStrategy headerNegotiator = new HeaderContentNegotiationStrategy();
-
     MediaTypes() {
         // package private so we can trick code coverage
     }
 
-    static Optional<MediaType> determineContentType(final NativeWebRequest request) {
-        try {
-            final List<MediaType> acceptedMediaTypes = headerNegotiator.resolveMediaTypes(request);
-
-            if (acceptedMediaTypes.isEmpty()) {
-                return Optional.of(PROBLEM);
-            }
-
-            if (acceptedMediaTypes.stream().anyMatch(PROBLEM::isCompatibleWith)) {
-                return Optional.of(PROBLEM);
-            }
-
-            if (acceptedMediaTypes.stream().anyMatch(X_PROBLEM::isCompatibleWith)) {
-                return Optional.of(X_PROBLEM);
-            }
-
-            if (acceptedMediaTypes.stream().anyMatch(WILDCARD_JSON::isCompatibleWith)) {
-                return Optional.of(PROBLEM);
-            }
-
-            if (acceptedMediaTypes.stream().anyMatch(APPLICATION_JSON::isCompatibleWith)) {
-                return Optional.of(PROBLEM);
-            }
-
-        } catch (final HttpMediaTypeNotAcceptableException exception) {
-            LOG.info("Unable to determine content type due to error during parsing Accept header: [{}]", exception);
-        }
-        return Optional.empty();
-    }
 }
