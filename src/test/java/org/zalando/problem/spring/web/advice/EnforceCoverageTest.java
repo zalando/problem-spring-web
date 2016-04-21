@@ -27,6 +27,11 @@ import org.junit.Test;
 @Hack
 @OhNoYouDidnt
 public final class EnforceCoverageTest {
+    
+    @Test
+    public void shouldUseListsConstructor() {
+        new Lists();
+    }
 
     @Test
     public void shouldUseMediaTypesConstructor() {

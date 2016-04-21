@@ -31,6 +31,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.zalando.problem.Problem;
+import org.zalando.problem.ProblemBuilder;
 import org.zalando.problem.ThrowableProblem;
 import org.zalando.problem.spring.web.advice.custom.CustomAdviceTrait;
 import org.zalando.problem.spring.web.advice.general.GeneralAdviceTrait;
@@ -39,11 +40,14 @@ import org.zalando.problem.spring.web.advice.io.IOAdviceTrait;
 import org.zalando.problem.spring.web.advice.routing.RoutingAdviceTrait;
 import org.zalando.problem.spring.web.advice.validation.ValidationAdviceTrait;
 
-import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.StatusType;
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
+import static java.util.Arrays.asList;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.zalando.problem.spring.web.advice.Lists.lengthOfTrailingPartialSubList;
 import static org.zalando.problem.spring.web.advice.MediaTypes.PROBLEM;
 import static org.zalando.problem.spring.web.advice.MediaTypes.WILDCARD_JSON;
 import static org.zalando.problem.spring.web.advice.MediaTypes.X_PROBLEM;
@@ -76,35 +80,67 @@ import static org.zalando.problem.spring.web.advice.MediaTypes.X_PROBLEM;
  * @see ValidationAdviceTrait
  */
 public interface AdviceTrait {
-    
+
     ResponseEntity<Problem> NOT_ACCEPTABLE = ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(null);
 
-    default ResponseEntity<Problem> create(final Response.StatusType status, final Throwable throwable,
+    default ResponseEntity<Problem> create(final StatusType status, final Throwable throwable,
             final NativeWebRequest request) throws HttpMediaTypeNotAcceptableException {
         return create(status, throwable, request, new HttpHeaders());
     }
 
-    default ResponseEntity<Problem> create(final Response.StatusType status, final Throwable throwable,
+    default ResponseEntity<Problem> create(final StatusType status, final Throwable throwable,
             final NativeWebRequest request, final HttpHeaders headers)
             throws HttpMediaTypeNotAcceptableException {
 
-        final String detail = throwable.getMessage();
-        final ThrowableProblem problem = Problem.valueOf(status, detail);
-        return create(problem, request, headers);
+        final ThrowableProblem problem = toProblem(throwable, status);
+        return entity(problem, request, headers);
+    }
+    
+    default ThrowableProblem toProblem(final Throwable throwable, final StatusType status) {
+        final Throwable cause = throwable.getCause();
+
+        final ProblemBuilder builder = Problem.builder()
+                .withType(URI.create("about:blank"))
+                .withTitle(status.getReasonPhrase())
+                .withStatus(status)
+                .withDetail(throwable.getMessage());
+
+        final StackTraceElement[] stackTrace;
+        
+        if (cause == null || !isCausalChainsEnabled()) {
+            stackTrace = throwable.getStackTrace();
+        } else {
+            builder.withCause(toProblem(cause, status));
+
+            final StackTraceElement[] next = cause.getStackTrace();
+            final StackTraceElement[] current = throwable.getStackTrace();
+
+            final int length = current.length - lengthOfTrailingPartialSubList(asList(next), asList(current));
+            stackTrace = new StackTraceElement[length];
+            System.arraycopy(current, 0, stackTrace, 0, length);
+        }
+        
+        final ThrowableProblem problem = builder.build();
+        problem.setStackTrace(stackTrace);
+        return problem;
+    }
+    
+    default boolean isCausalChainsEnabled() {
+        return false;
     }
 
-    default ResponseEntity<Problem> create(final Problem problem, final NativeWebRequest request)
+    default ResponseEntity<Problem> entity(final Problem problem, final NativeWebRequest request)
             throws HttpMediaTypeNotAcceptableException {
-        return create(problem, request, new HttpHeaders());
+        return entity(problem, request, new HttpHeaders());
     }
 
-    default ResponseEntity<Problem> create(final Problem problem, final NativeWebRequest request,
+    default ResponseEntity<Problem> entity(final Problem problem, final NativeWebRequest request,
             final HttpHeaders headers) throws HttpMediaTypeNotAcceptableException {
 
         return negotiate(request).map(contentType -> {
             final int statusCode = problem.getStatus().getStatusCode();
             final HttpStatus status = HttpStatus.valueOf(statusCode);
-            
+
             return ResponseEntity.status(status)
                     .headers(headers)
                     .contentType(contentType)

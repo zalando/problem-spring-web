@@ -35,14 +35,19 @@ public interface AdviceTraitTesting {
     }
 
     default MockMvc mvc() {
-        final ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new Jdk8Module());
-        mapper.registerModule(new ProblemModule());
+        final ObjectMapper mapper = mapper();
 
         return MockMvcBuilders.standaloneSetup(new ExampleRestController())
                 .setControllerAdvice(unit())
                 .setMessageConverters(new MappingJackson2HttpMessageConverter(mapper))
                 .build();
+    }
+
+    default ObjectMapper mapper() {
+        final ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new Jdk8Module());
+        mapper.registerModule(new ProblemModule());
+        return mapper;
     }
 
 }
