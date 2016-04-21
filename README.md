@@ -157,7 +157,7 @@ In case you want to enable stacktraces, please configure your `ProblemModule` as
 ObjectMapper mapper = new ObjectMapper()
     .registerModule(new Jdk8Module())
     .registerModule(new ProblemModule().withStacktraces());
-```java
+```
 
 Causal chains of problems are **disabled by default**, but can be overridden if desired:
 
