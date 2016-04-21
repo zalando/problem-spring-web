@@ -59,7 +59,6 @@ import static org.zalando.problem.spring.web.advice.MediaTypes.X_PROBLEM;
  * {@link Controller Controllers} and/or in a {@link ControllerAdvice}. Clients can choose which traits they what to
  * use à la carte.
  * </p>
- * <p/>
  * <p>
  * Advice traits are grouped in packages, based on they use cases. Every package has a composite advice trait that
  * bundles all traits of that package. Additionally there is one {@link ProblemHandling major composite advice trait}
