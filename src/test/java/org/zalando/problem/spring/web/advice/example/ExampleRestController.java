@@ -28,7 +28,6 @@ import com.google.gag.annotation.remark.Hack;
 import com.google.gag.annotation.remark.OhNoYouDidnt;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -77,7 +76,32 @@ public class ExampleRestController {
 
     @RequestMapping(value = "/handler-throwable", method = GET)
     public ResponseEntity<String> throwable() {
-        throw new RuntimeException("expected");
+        throw new RuntimeException("expected", new IllegalStateException());
+    }
+
+    @RequestMapping(value = "/nested-throwable", method = GET)
+    public ResponseEntity<String> nestedThrowable() {
+        try {
+            try {
+                throw newNullPointer();
+            } catch (NullPointerException e) {
+                throw newIllegalArgument(e);
+            }
+        } catch (IllegalArgumentException e) {
+            throw newIllegalState(e);
+        }
+    }
+
+    private IllegalStateException newIllegalState(IllegalArgumentException e) {
+        throw new IllegalStateException("Illegal State", e);
+    }
+
+    private IllegalArgumentException newIllegalArgument(NullPointerException e) {
+        throw new IllegalArgumentException("Illegal Argument", e);
+    }
+
+    private NullPointerException newNullPointer() {
+        throw new NullPointerException("Null Pointer");
     }
 
     @RequestMapping(value = "/handler-problem", method = GET)

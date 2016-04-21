@@ -52,7 +52,7 @@ interface BaseValidationAdviceTrait extends AdviceTrait {
                 .sorted(comparing(Violation::getField).thenComparing(Violation::getMessage))
                 .collect(collectingAndThen(toList(), ImmutableList::copyOf));
 
-        return create(new ConstraintViolationProblem(violations), request);
+        return entity(new ConstraintViolationProblem(violations), request);
     }
 
 }

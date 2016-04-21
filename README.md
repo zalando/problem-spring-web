@@ -48,7 +48,7 @@ public ObjectMapper objectMapper() {
 }
 ```
 
-The following table shows all built-in advice traits: 
+The following table shows all built-in advice traits:
 
 | Advice Trait                                                                                                                                                       | Produces                                                  |
 |--------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------|
@@ -98,13 +98,13 @@ class ProductsResource {
     public Product getProduct(String productId) {
         return ..;
     }
-    
+
     @RequestMapping(method = PUT, value = "/{productId}", consumes = APPLICATION_JSON_VALUE}
     public Product updateProduct(String productId, Product product) {
         // TODO implement
         throw new UnsupportedOperationException();
     }
-    
+
 }
 ```
 
@@ -142,6 +142,90 @@ Content-Type: application/json
   "title": "Method Not Allowed",
   "status": 405,
   "detail": "POST not supported"
+}
+```
+
+### Stacktraces and causal chains
+
+**Before you continue** please read the section about [*Stacktraces and causal chains*]
+(https://github.com/zalando/problem#stacktraces-and-causal-chains) in [zalando/problem]
+(https://github.com/zalando/problem).
+
+In case you want to enable stacktraces, please configure your `ProblemModule` as follows.
+
+```java
+ObjectMapper mapper = new ObjectMapper()
+    .registerModule(new Jdk8Module())
+    .registerModule(new ProblemModule().withStacktraces());
+```java
+
+Causal chains of problems are **disabled by default**, but can be overridden if desired:
+
+```java
+@ControllerAdvice
+class ExceptionHandling implements ProblemHandling {
+
+    @Override
+    public boolean isCausalChainsEnabled() {
+        return true;
+    }
+
+}
+```
+
+**Note** Since you have full access to the application context at that point, you can externalize the
+configuration to your `application.yml` and even decide to reuse Spring's `server.error.include-stacktrace` property.
+
+Enabling both features, causal chains and stacktraces, will yield:
+
+```yaml
+{
+  "title": "Internal Server Error",
+  "status": 500,
+  "detail": "Illegal State",
+  "stacktrace": [
+    "org.example.ExampleRestController.newIllegalState(ExampleRestController.java:96)",
+    "org.example.ExampleRestController.nestedThrowable(ExampleRestController.java:91)"
+  ],
+  "cause": {
+    "title": "Internal Server Error",
+    "status": 500,
+    "detail": "Illegal Argument",
+    "stacktrace": [
+      "org.example.ExampleRestController.newIllegalArgument(ExampleRestController.java:100)",
+      "org.example.ExampleRestController.nestedThrowable(ExampleRestController.java:88)"
+    ],
+    "cause": {
+      "title": "Internal Server Error",
+      "status": 500,
+      "detail": "Null Pointer",
+      "stacktrace": [
+        "org.example.ExampleRestController.newNullPointer(ExampleRestController.java:104)",
+        "org.example.ExampleRestController.nestedThrowable(ExampleRestController.java:86)",
+        "sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)",
+        "sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)",
+        "sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)",
+        "java.lang.reflect.Method.invoke(Method.java:483)",
+        "org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)",
+        "org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)",
+        "org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)",
+        "org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)",
+        "org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)",
+        "org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)",
+        "org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)",
+        "org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)",
+        "org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)",
+        "org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)",
+        "org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)",
+        "org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)",
+        "org.junit.runners.ParentRunner.run(ParentRunner.java:363)",
+        "org.junit.runner.JUnitCore.run(JUnitCore.java:137)",
+        "com.intellij.junit4.JUnit4IdeaTestRunner.startRunnerWithArgs(JUnit4IdeaTestRunner.java:117)",
+        "com.intellij.rt.execution.junit.JUnitStarter.prepareStreamsAndStart(JUnitStarter.java:234)",
+        "com.intellij.rt.execution.junit.JUnitStarter.main(JUnitStarter.java:74)"
+      ]
+    }
+  }
 }
 ```
 
