@@ -41,6 +41,7 @@ import org.zalando.problem.spring.web.advice.routing.RoutingAdviceTrait;
 import org.zalando.problem.spring.web.advice.validation.ValidationAdviceTrait;
 
 import javax.ws.rs.core.Response.StatusType;
+
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
@@ -87,7 +88,20 @@ public interface AdviceTrait {
         return create(status, throwable, request, new HttpHeaders());
     }
 
+    default ResponseEntity<Problem> create (final HttpStatus status, final Throwable throwable,
+            final NativeWebRequest request) throws HttpMediaTypeNotAcceptableException {
+        return create(status, throwable, request, new HttpHeaders());
+    }
+
     default ResponseEntity<Problem> create(final StatusType status, final Throwable throwable,
+            final NativeWebRequest request, final HttpHeaders headers)
+            throws HttpMediaTypeNotAcceptableException {
+
+        final ThrowableProblem problem = toProblem(throwable, status);
+        return entity(problem, request, headers);
+    }
+
+    default ResponseEntity<Problem> create(final HttpStatus status, final Throwable throwable,
             final NativeWebRequest request, final HttpHeaders headers)
             throws HttpMediaTypeNotAcceptableException {
 
@@ -122,6 +136,10 @@ public interface AdviceTrait {
         final ThrowableProblem problem = builder.build();
         problem.setStackTrace(stackTrace);
         return problem;
+    }
+
+    default ThrowableProblem toProblem(final Throwable throwable, final HttpStatus status) {
+        return toProblem(throwable, new HttpStatusToStatusTypeConverter().convert(status));
     }
     
     default boolean isCausalChainsEnabled() {

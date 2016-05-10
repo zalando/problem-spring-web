@@ -22,8 +22,6 @@ package org.zalando.problem.spring.web.advice;
 
 import org.junit.Test;
 
-import java.util.Collections;
-
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static org.hamcrest.Matchers.equalTo;

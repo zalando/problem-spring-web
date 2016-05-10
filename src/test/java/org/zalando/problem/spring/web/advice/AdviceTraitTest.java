@@ -48,6 +48,7 @@ import static org.hobsoft.hamcrest.compose.ComposeMatchers.compose;
 import static org.hobsoft.hamcrest.compose.ComposeMatchers.hasFeature;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.springframework.http.HttpStatus.METHOD_FAILURE;
 import static org.springframework.http.HttpStatus.RESET_CONTENT;
 import static org.zalando.problem.spring.web.advice.MediaTypes.PROBLEM;
 import static org.zalando.problem.spring.web.advice.MediaTypes.WILDCARD_JSON_VALUE;
@@ -73,6 +74,17 @@ public class AdviceTraitTest {
     public void buildsOnThrowable() throws HttpMediaTypeNotAcceptableException {
         final ResponseEntity<Problem> result = unit.create(Status.RESET_CONTENT, 
                 new IllegalStateException("Message"), request());
+
+        assertThat(result, hasFeature("Status", ResponseEntity::getStatusCode, is(RESET_CONTENT)));
+        assertThat(result.getHeaders(), hasFeature("Content-Type", HttpHeaders::getContentType, is(PROBLEM)));
+        assertThat(result.getBody(), compose(hasFeature("Status", Problem::getStatus, is(Status.RESET_CONTENT)))
+                .and(hasFeature("Detail", Problem::getDetail, is(Optional.of("Message")))));
+    }
+
+    @Test
+    public void buildsOnThrowableUsingHttpStatus() throws HttpMediaTypeNotAcceptableException {
+        final ResponseEntity<Problem> result = unit.create(HttpStatus.RESET_CONTENT,
+                                                           new IllegalStateException("Message"), request());
 
         assertThat(result, hasFeature("Status", ResponseEntity::getStatusCode, is(RESET_CONTENT)));
         assertThat(result.getHeaders(), hasFeature("Content-Type", HttpHeaders::getContentType, is(PROBLEM)));
@@ -199,6 +211,11 @@ public class AdviceTraitTest {
         when(input.getStatusCode()).thenReturn(1337);
 
         unit.create(input, new IllegalStateException("L33t"), request());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void throwsOnUnsupportedHttpStatus() throws HttpMediaTypeNotAcceptableException {
+        unit.create(METHOD_FAILURE, new IllegalStateException("L33t"), request());
     }
 
     private NativeWebRequest request(String acceptMediaType) {
