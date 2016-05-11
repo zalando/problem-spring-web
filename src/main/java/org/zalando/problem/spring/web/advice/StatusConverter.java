@@ -60,7 +60,9 @@ public interface StatusConverter {
     ImmutableMap<Integer, Response.StatusType> INDEX = Arrays.asList(Status.class, MoreStatus.class)
             .stream()
             .map(Class::getEnumConstants)
-            .<StatusType>flatMap(Arrays::stream)
+            // voluntary unused of static method Arrays::stream to avoid compilation error with jdk1.8.0_31.
+            // Indeed (at least) jdk1.8.0_31 has regression on type inference, we must force type casting as workaround
+            .flatMap(statuses -> Arrays.stream((StatusType[]) statuses))
             .collect(collectingAndThen(toMap(StatusType::getStatusCode, identity()), ImmutableMap::copyOf));
 
     default StatusType convert(final HttpStatus httpStatus) {
