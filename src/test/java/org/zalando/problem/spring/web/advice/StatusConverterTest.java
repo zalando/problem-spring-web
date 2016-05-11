@@ -21,49 +21,42 @@ package org.zalando.problem.spring.web.advice;
  */
 
 import org.junit.Test;
-import org.springframework.core.convert.converter.Converter;
 import org.springframework.http.HttpStatus;
 
 import javax.ws.rs.core.Response.StatusType;
 
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 
+import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertThat;
 import static org.springframework.http.HttpStatus.*;
 
-public final class HttpStatusToStatusTypeConverterTest {
+public final class StatusConverterTest {
 
-    private static final Converter<HttpStatus, StatusType> CONVERTER = new HttpStatusToStatusTypeConverter();
-
-    private static final Set<HttpStatus> UNSUPPORTED_STATUSES = new HashSet<HttpStatus>() {{
-        add(INSUFFICIENT_SPACE_ON_RESOURCE);
-        add(METHOD_FAILURE);
-        add(DESTINATION_LOCKED);
-    }};
+    private final StatusConverter unit = new StatusConverter() {
+    };
 
     @Test
     public void shouldConvertHttpStatusToStatusType() {
         HttpStatus[] httpStatuses = HttpStatus.values();
         Arrays.stream(httpStatuses)
-              .filter(s -> !UNSUPPORTED_STATUSES.contains(s))
               .forEach(s -> {
-                  StatusType statusType = CONVERTER.convert(s);
+                  StatusType statusType = unit.convert(s);
                   assertThat(statusType.getStatusCode(), is(s.value()));
               });
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void shouldThrowExceptionIfUnableToConvert() {
-        CONVERTER.convert(UNSUPPORTED_STATUSES.iterator().next());
+    @Test
+    public void shouldConvertUnsupportedHttpStatusToUnknownStatus() {
+        StatusType statusType = unit.convert(INSUFFICIENT_SPACE_ON_RESOURCE);
+        assertThat(statusType, instanceOf(UnknownStatus.class));
     }
 
     @Test
     public void shouldAlwaysPreferStatusTypeReasonPhrase() {
-        StatusType statusType = CONVERTER.convert(MOVED_TEMPORARILY);
+        StatusType statusType = unit.convert(MOVED_TEMPORARILY);
         assertThat(statusType.getReasonPhrase(), not(MOVED_PERMANENTLY.getReasonPhrase()));
     }
 }

@@ -20,14 +20,20 @@ package org.zalando.problem.spring.web.advice;
  * #L%
  */
 
-import org.springframework.core.convert.converter.Converter;
+import com.google.common.collect.ImmutableMap;
 import org.springframework.http.HttpStatus;
 import org.zalando.problem.MoreStatus;
 
+import javax.annotation.Nullable;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.StatusType;
 
 import java.util.Arrays;
+
+import static java.util.function.Function.identity;
+import static java.util.stream.Collectors.collectingAndThen;
+import static java.util.stream.Collectors.toMap;
+import static javax.ws.rs.core.Response.Status;
+import static javax.ws.rs.core.Response.StatusType;
 
 /**
  * Converts from Spring {@link HttpStatus} to Jax-RS {@link StatusType}.
@@ -41,32 +47,26 @@ import java.util.Arrays;
  * <p>
  * Example: {@link HttpStatus#MOVED_TEMPORARILY} will be converted to {@link Response.Status#FOUND}.
  * <p>
- * For unmappable {@link HttpStatus} converter will throw an {@link IllegalArgumentException}.
+ * For unmappable {@link HttpStatus} an instance of {@link UnknownStatus} will be created.
  *
  * @see HttpStatus
  * @see StatusType
  * @see Response.Status
  * @see MoreStatus
+ * @see UnknownStatus
  */
-final class HttpStatusToStatusTypeConverter implements Converter<HttpStatus, StatusType> {
+interface StatusConverter {
 
-    /**
-     * @throws IllegalArgumentException for unmappable {@code httpStatus}.
-     */
-    @Override
-    public StatusType convert(HttpStatus httpStatus) {
-        StatusType statusType;
-        statusType = Response.Status.fromStatusCode(httpStatus.value());
-        if (statusType == null) {
-            statusType = Arrays.stream(MoreStatus.values())
-                               .filter(s -> s.getStatusCode() == httpStatus.value())
-                               .findFirst()
-                               .orElseThrow(() -> {
-                                   return new IllegalArgumentException(
-                                           "Unable to convert " + HttpStatus.class.getName() + " \""
-                                           + httpStatus.getReasonPhrase() + "\" to " + StatusType.class.getName());
-                               });
-        }
-        return statusType;
+    ImmutableMap<Integer, Response.StatusType> INDEX = Arrays.asList(Status.class, MoreStatus.class)
+            .stream()
+            .map(Class::getEnumConstants)
+            .<StatusType>flatMap(Arrays::stream)
+            .collect(collectingAndThen(toMap(StatusType::getStatusCode, identity()), ImmutableMap::copyOf));
+
+    default StatusType convert(final HttpStatus httpStatus) {
+        final int statusCode = httpStatus.value();
+        @Nullable final StatusType statusType = INDEX.get(statusCode);
+        return statusType == null ? new UnknownStatus(statusCode) : statusType;
     }
+
 }
