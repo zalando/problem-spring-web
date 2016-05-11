@@ -55,7 +55,7 @@ import static javax.ws.rs.core.Response.StatusType;
  * @see MoreStatus
  * @see UnknownStatus
  */
-interface StatusConverter {
+public interface StatusConverter {
 
     ImmutableMap<Integer, Response.StatusType> INDEX = Arrays.asList(Status.class, MoreStatus.class)
             .stream()

@@ -79,7 +79,7 @@ import static org.zalando.problem.spring.web.advice.MediaTypes.X_PROBLEM;
  * @see RoutingAdviceTrait
  * @see ValidationAdviceTrait
  */
-public interface AdviceTrait extends StatusConverter {
+public interface AdviceTrait {
 
     ResponseEntity<Problem> NOT_ACCEPTABLE = ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(null);
 

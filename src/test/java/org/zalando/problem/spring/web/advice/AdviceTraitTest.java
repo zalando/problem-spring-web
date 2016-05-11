@@ -202,17 +202,6 @@ public class AdviceTraitTest {
         unit.create(input, new IllegalStateException("L33t"), request());
     }
 
-    @Test
-    public void convertAndBuildsOnThrowable() throws HttpMediaTypeNotAcceptableException {
-        final ResponseEntity<Problem> result = unit.create(unit.convert(HttpStatus.RESET_CONTENT),
-                new IllegalStateException("Message"), request());
-
-        assertThat(result, hasFeature("Status", ResponseEntity::getStatusCode, is(RESET_CONTENT)));
-        assertThat(result.getHeaders(), hasFeature("Content-Type", HttpHeaders::getContentType, is(PROBLEM)));
-        assertThat(result.getBody(), compose(hasFeature("Status", Problem::getStatus, is(Status.RESET_CONTENT)))
-                .and(hasFeature("Detail", Problem::getDetail, is(Optional.of("Message")))));
-    }
-
     private NativeWebRequest request(String acceptMediaType) {
         final NativeWebRequest request = mock(NativeWebRequest.class);
         when(request.getHeader("Accept")).thenReturn(acceptMediaType);
