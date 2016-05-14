@@ -47,13 +47,12 @@ import static javax.ws.rs.core.Response.StatusType;
  * <p>
  * Example: {@link HttpStatus#MOVED_TEMPORARILY} will be converted to {@link Response.Status#FOUND}.
  * <p>
- * For unmappable {@link HttpStatus} an instance of {@link UnknownStatus} will be created.
+ * For unmappable {@link HttpStatus} an anonymous implementation of {@link StatusType} will be created.
  *
  * @see HttpStatus
  * @see StatusType
  * @see Response.Status
  * @see MoreStatus
- * @see UnknownStatus
  */
 public interface StatusConverter {
 
@@ -68,7 +67,22 @@ public interface StatusConverter {
     default StatusType convert(final HttpStatus httpStatus) {
         final int statusCode = httpStatus.value();
         @Nullable final StatusType statusType = INDEX.get(statusCode);
-        return statusType == null ? new UnknownStatus(statusCode) : statusType;
+        return statusType != null ? statusType : new StatusType() {
+            @Override
+            public int getStatusCode() {
+                return httpStatus.value();
+            }
+
+            @Override
+            public Status.Family getFamily() {
+                return Status.Family.familyOf(httpStatus.value());
+            }
+
+            @Override
+            public String getReasonPhrase() {
+                return httpStatus.getReasonPhrase();
+            }
+        };
     }
 
 }

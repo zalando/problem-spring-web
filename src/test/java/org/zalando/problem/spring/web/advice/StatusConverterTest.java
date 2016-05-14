@@ -23,11 +23,11 @@ package org.zalando.problem.spring.web.advice;
 import org.junit.Test;
 import org.springframework.http.HttpStatus;
 
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.StatusType;
 
 import java.util.Arrays;
 
-import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertThat;
@@ -49,9 +49,11 @@ public final class StatusConverterTest {
     }
 
     @Test
-    public void shouldConvertUnsupportedHttpStatusToUnknownStatus() {
+    public void shouldSuccessfullyConvertNonStandardStatus() {
         StatusType statusType = unit.convert(INSUFFICIENT_SPACE_ON_RESOURCE);
-        assertThat(statusType, instanceOf(UnknownStatus.class));
+        assertThat(statusType.getStatusCode(), is(INSUFFICIENT_SPACE_ON_RESOURCE.value()));
+        assertThat(statusType.getReasonPhrase(), is(INSUFFICIENT_SPACE_ON_RESOURCE.getReasonPhrase()));
+        assertThat(statusType.getFamily(), is(Response.Status.Family.familyOf(INSUFFICIENT_SPACE_ON_RESOURCE.value())));
     }
 
     @Test
