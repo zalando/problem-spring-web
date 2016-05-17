@@ -41,7 +41,6 @@ import org.zalando.problem.spring.web.advice.routing.RoutingAdviceTrait;
 import org.zalando.problem.spring.web.advice.validation.ValidationAdviceTrait;
 
 import javax.ws.rs.core.Response.StatusType;
-
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;

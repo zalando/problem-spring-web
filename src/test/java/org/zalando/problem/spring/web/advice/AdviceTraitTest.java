@@ -32,7 +32,6 @@ import org.zalando.problem.ThrowableProblem;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
