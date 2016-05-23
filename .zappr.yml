@@ -1,7 +1,0 @@
-approvals:
-  pattern: "^(:\+1:|👍|[Ll][Gg][Tt][Mm])$"
-  minimum: 1
-  from:
-    orgs:
-      - zalando
-    collaborators: true
