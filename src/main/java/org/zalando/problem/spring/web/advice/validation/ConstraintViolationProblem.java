@@ -22,12 +22,13 @@ package org.zalando.problem.spring.web.advice.validation;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.google.common.collect.ImmutableList;
 import org.zalando.problem.MoreStatus;
 import org.zalando.problem.ThrowableProblem;
 
 import javax.annotation.concurrent.Immutable;
 import java.net.URI;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 @Immutable
@@ -38,16 +39,16 @@ public final class ConstraintViolationProblem extends ThrowableProblem {
     public static final URI CONSTRAINT_VIOLATION = URI.create(CONSTRAINT_VIOLATION_VALUE);
 
     private final Optional<String> detail;
-    private final ImmutableList<Violation> violations;
+    private final List<Violation> violations;
 
-    public ConstraintViolationProblem(final ImmutableList<Violation> violations) {
+    public ConstraintViolationProblem(final List<Violation> violations) {
         this(Optional.empty(), violations);
     }
 
     @JsonCreator
-    private ConstraintViolationProblem(final Optional<String> detail, final ImmutableList<Violation> violations) {
+    private ConstraintViolationProblem(final Optional<String> detail, final List<Violation> violations) {
         this.detail = detail;
-        this.violations = violations;
+        this.violations = Collections.unmodifiableList(violations);
     }
 
     @Override
@@ -70,7 +71,7 @@ public final class ConstraintViolationProblem extends ThrowableProblem {
         return detail;
     }
 
-    public ImmutableList<Violation> getViolations() {
+    public List<Violation> getViolations() {
         return violations;
     }
 

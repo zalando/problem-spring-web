@@ -20,7 +20,7 @@ package org.zalando.problem.spring.web.advice;
  * #L%
  */
 
-import com.google.common.base.Objects;
+import java.util.Objects;
 import org.springframework.http.HttpStatus;
 
 import javax.ws.rs.core.Response;
