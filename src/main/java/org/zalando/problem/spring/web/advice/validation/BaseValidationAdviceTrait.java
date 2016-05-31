@@ -28,6 +28,7 @@ import org.zalando.problem.spring.web.advice.AdviceTrait;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.toList;
@@ -51,7 +52,7 @@ interface BaseValidationAdviceTrait extends AdviceTrait {
                 .sorted(comparing(Violation::getField).thenComparing(Violation::getMessage))
                 .collect(toList());
 
-        return entity(new ConstraintViolationProblem(violations), request);
+        return entity(new ConstraintViolationProblem(Optional.empty(), violations), request);
     }
 
 }

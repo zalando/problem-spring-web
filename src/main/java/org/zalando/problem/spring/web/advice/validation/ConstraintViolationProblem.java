@@ -27,6 +27,7 @@ import org.zalando.problem.ThrowableProblem;
 
 import javax.annotation.concurrent.Immutable;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -42,11 +43,11 @@ public final class ConstraintViolationProblem extends ThrowableProblem {
     private final List<Violation> violations;
 
     public ConstraintViolationProblem(final List<Violation> violations) {
-        this(Optional.empty(), violations);
+        this(Optional.empty(), new ArrayList<>(violations));
     }
 
     @JsonCreator
-    private ConstraintViolationProblem(final Optional<String> detail, final List<Violation> violations) {
+    ConstraintViolationProblem(final Optional<String> detail, final List<Violation> violations) {
         this.detail = detail;
         this.violations = Collections.unmodifiableList(violations);
     }
