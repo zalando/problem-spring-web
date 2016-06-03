@@ -38,7 +38,7 @@ public interface ProblemAdviceTrait extends AdviceTrait {
     default ResponseEntity<Problem> handleProblem(
             final ThrowableProblem problem,
             final NativeWebRequest request) throws HttpMediaTypeNotAcceptableException {
-        return entity(problem, request);
+        return create(problem, request);
     }
 
 }

@@ -21,16 +21,10 @@ package org.zalando.problem.spring.web.advice.general;
  */
 
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import org.junit.Test;
-import org.zalando.problem.ProblemModule;
 import org.zalando.problem.spring.web.advice.AdviceTraitTesting;
 
-import java.util.List;
-
 import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.request;
@@ -52,5 +46,5 @@ public final class ThrowableAdviceTraitTest implements AdviceTraitTesting {
                 .andExpect(jsonPath("$.stacktrace").doesNotExist())
                 .andExpect(jsonPath("$.cause").doesNotExist());
     }
-    
+
 }

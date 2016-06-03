@@ -45,14 +45,15 @@ interface BaseValidationAdviceTrait extends AdviceTrait {
         return fieldName;
     }
 
-    default ResponseEntity<Problem> newConstraintViolationProblem(final Collection<Violation> stream,
-            final NativeWebRequest request) throws HttpMediaTypeNotAcceptableException {
+    default ResponseEntity<Problem> newConstraintViolationProblem(final Throwable throwable,
+            final Collection<Violation> stream, final NativeWebRequest request)
+            throws HttpMediaTypeNotAcceptableException {
         final ImmutableList<Violation> violations = stream.stream()
                 // sorting to make tests deterministic
                 .sorted(comparing(Violation::getField).thenComparing(Violation::getMessage))
                 .collect(collectingAndThen(toList(), ImmutableList::copyOf));
 
-        return entity(new ConstraintViolationProblem(violations), request);
+        return create(throwable, new ConstraintViolationProblem(violations), request);
     }
 
 }

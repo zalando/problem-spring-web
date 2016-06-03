@@ -1,4 +1,5 @@
-@ParametersAreNonnullByDefault package org.zalando.problem.spring.web.advice.routing;
+@ParametersAreNonnullByDefault
+package org.zalando.problem.spring.web.advice.routing;
 
 /*
  * #%L

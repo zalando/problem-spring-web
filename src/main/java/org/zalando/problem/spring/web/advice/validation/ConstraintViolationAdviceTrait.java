@@ -55,7 +55,7 @@ public interface ConstraintViolationAdviceTrait extends BaseValidationAdviceTrai
                 .map(this::createViolation)
                 .collect(toList());
 
-        return newConstraintViolationProblem(violations, request);
+        return newConstraintViolationProblem(exception, violations, request);
     }
 
 }
