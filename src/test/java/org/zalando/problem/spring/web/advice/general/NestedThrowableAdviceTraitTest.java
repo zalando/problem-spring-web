@@ -66,7 +66,7 @@ public final class NestedThrowableAdviceTraitTest implements AdviceTraitTesting 
                 .andExpect(jsonPath("$.detail", containsString("expected")))
                 .andExpect(jsonPath("$.cause").exists());
     }
-    
+
     @Test
     public void nestedThrowable() throws Exception {
         mvc().perform(request(GET, "http://localhost/api/nested-throwable"))

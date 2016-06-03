@@ -28,7 +28,6 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.zalando.problem.Problem;
 import org.zalando.problem.ThrowableProblem;
 
-import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.StatusType;
 
 /**
@@ -45,7 +44,7 @@ public interface SpringAdviceTrait extends AdviceTrait {
     }
 
     default ResponseEntity<Problem> create(final HttpStatus status, final Throwable throwable,
-                                           final NativeWebRequest request, final HttpHeaders headers)
+            final NativeWebRequest request, final HttpHeaders headers)
             throws HttpMediaTypeNotAcceptableException {
         return create(toStatus(status), throwable, request, headers);
     }

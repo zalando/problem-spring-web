@@ -1,4 +1,5 @@
-@ParametersAreNonnullByDefault package org.zalando.problem.spring.web.advice.general;
+@ParametersAreNonnullByDefault
+package org.zalando.problem.spring.web.advice.general;
 
 /*
  * #%L

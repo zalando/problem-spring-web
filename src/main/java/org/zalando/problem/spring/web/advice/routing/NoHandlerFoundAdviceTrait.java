@@ -34,10 +34,10 @@ import javax.ws.rs.core.Response.Status;
 /**
  * Transforms {@link NoHandlerFoundException NoHandlerFoundExceptions} into {@link Status#NOT_FOUND not-found}
  * {@link Problem problems}.
- *
  * <p>
- *   <strong>Note</strong>: This requires {@link DispatcherServlet#setThrowExceptionIfNoHandlerFound(boolean)} being set
- *   to true.
+ * <p>
+ * <strong>Note</strong>: This requires {@link DispatcherServlet#setThrowExceptionIfNoHandlerFound(boolean)} being set
+ * to true.
  * </p>
  *
  * @see NoHandlerFoundException

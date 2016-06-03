@@ -48,12 +48,12 @@ public interface MethodArgumentNotValidAdviceTrait extends BaseValidationAdviceT
         final String fieldName = error.getObjectName() + "." + error.getField();
         return new Violation(formatFieldName(fieldName), error.getDefaultMessage());
     }
-    
+
     default Violation createViolation(final ObjectError error) {
         final String fieldName = formatFieldName(error.getObjectName());
         return new Violation(fieldName, error.getDefaultMessage());
     }
-    
+
     @ExceptionHandler
     default ResponseEntity<Problem> handleMethodArgumentNotValid(
             final MethodArgumentNotValidException exception,
@@ -63,8 +63,8 @@ public interface MethodArgumentNotValidAdviceTrait extends BaseValidationAdviceT
                 exception.getBindingResult().getFieldErrors().stream().map(this::createViolation),
                 exception.getBindingResult().getGlobalErrors().stream().map(this::createViolation))
                 .collect(toList());
-        
-        return newConstraintViolationProblem(violations, request);
+
+        return newConstraintViolationProblem(exception, violations, request);
     }
 
 }
