@@ -70,5 +70,5 @@ public final class ListsTest {
 
         assertThat(length, is(equalTo(0)));
     }
-    
+
 }

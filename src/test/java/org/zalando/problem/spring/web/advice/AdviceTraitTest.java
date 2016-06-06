@@ -53,7 +53,7 @@ import static org.zalando.problem.spring.web.advice.MediaTypes.PROBLEM;
 import static org.zalando.problem.spring.web.advice.MediaTypes.WILDCARD_JSON_VALUE;
 
 public class AdviceTraitTest {
-    
+
     private final AdviceTrait unit = new AdviceTrait() {
     };
 
@@ -62,7 +62,7 @@ public class AdviceTraitTest {
         final ThrowableProblem problem = mock(ThrowableProblem.class);
         when(problem.getStatus()).thenReturn(Status.RESET_CONTENT);
 
-        final ResponseEntity<Problem> result = unit.entity(problem, request());
+        final ResponseEntity<Problem> result = unit.create(problem, request());
 
         assertThat(result, hasFeature("Status", ResponseEntity::getStatusCode, is(RESET_CONTENT)));
         assertThat(result.getHeaders(), hasFeature("Content-Type", HttpHeaders::getContentType, is(PROBLEM)));
@@ -71,7 +71,7 @@ public class AdviceTraitTest {
 
     @Test
     public void buildsOnThrowable() throws HttpMediaTypeNotAcceptableException {
-        final ResponseEntity<Problem> result = unit.create(Status.RESET_CONTENT, 
+        final ResponseEntity<Problem> result = unit.create(Status.RESET_CONTENT,
                 new IllegalStateException("Message"), request());
 
         assertThat(result, hasFeature("Status", ResponseEntity::getStatusCode, is(RESET_CONTENT)));
@@ -82,7 +82,7 @@ public class AdviceTraitTest {
 
     @Test
     public void buildsOnMessage() throws HttpMediaTypeNotAcceptableException {
-        final ResponseEntity<Problem> result = unit.create(Status.RESET_CONTENT, 
+        final ResponseEntity<Problem> result = unit.create(Status.RESET_CONTENT,
                 new IllegalStateException("Message"), request());
 
         assertThat(result, hasFeature("Status", ResponseEntity::getStatusCode, is(RESET_CONTENT)));
@@ -104,11 +104,11 @@ public class AdviceTraitTest {
         assertThat(result.getBody(), compose(hasFeature("Status", Problem::getStatus, is(Status.RESET_CONTENT)))
                 .and(hasFeature("Detail", Problem::getDetail, is(Optional.of(message)))));
     }
-    
+
     @Test
     public void buildsStacktrace() throws HttpMediaTypeNotAcceptableException {
         final Throwable throwable;
-        
+
         try {
             try {
                 try {
@@ -129,16 +129,16 @@ public class AdviceTraitTest {
                 return true;
             }
         }.create(Status.INTERNAL_SERVER_ERROR, throwable, request());
-        
+
         assertThat(entity.getBody(), is(instanceOf(ThrowableProblem.class)));
-        
+
         final ThrowableProblem illegalState = (ThrowableProblem) entity.getBody();
         assertThat(illegalState.getType(), hasToString("about:blank"));
         assertThat(illegalState.getTitle(), is("Internal Server Error"));
         assertThat(illegalState.getStatus(), is(Status.INTERNAL_SERVER_ERROR));
         assertThat(illegalState.getDetail().orElse(null), is("Illegal State"));
         assertThat(stacktraceAsString(illegalState).get(0), startsWith(method("newIllegalState")));
-        assertThat(stacktraceAsString(illegalState).get(1),  startsWith(method("buildsStacktrace")));
+        assertThat(stacktraceAsString(illegalState).get(1), startsWith(method("buildsStacktrace")));
         assertThat(illegalState.getCause(), is(notNullValue()));
 
         final ThrowableProblem illegalArgument = illegalState.getCause();
@@ -166,8 +166,8 @@ public class AdviceTraitTest {
 
     private List<String> stacktraceAsString(final Throwable throwable) {
         return Stream.of(throwable.getStackTrace())
-                    .map(Object::toString)
-                    .collect(toList());
+                .map(Object::toString)
+                .collect(toList());
     }
 
     private IllegalStateException newIllegalState(IllegalArgumentException e) {
@@ -186,7 +186,7 @@ public class AdviceTraitTest {
     public void mapsStatus() throws HttpMediaTypeNotAcceptableException {
         final HttpStatus expected = HttpStatus.BAD_REQUEST;
         final Response.StatusType input = Status.BAD_REQUEST;
-        final ResponseEntity<Problem> entity = unit.create(input, 
+        final ResponseEntity<Problem> entity = unit.create(input,
                 new IllegalStateException("Checkpoint"), request());
 
         assertThat(entity.getStatusCode(), is(expected));

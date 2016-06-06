@@ -46,7 +46,9 @@ import java.util.List;
 import java.util.Optional;
 
 import static java.util.Arrays.asList;
+import static javax.servlet.RequestDispatcher.ERROR_EXCEPTION;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.web.context.request.RequestAttributes.SCOPE_REQUEST;
 import static org.zalando.problem.spring.web.advice.Lists.lengthOfTrailingPartialSubList;
 import static org.zalando.problem.spring.web.advice.MediaTypes.PROBLEM;
 import static org.zalando.problem.spring.web.advice.MediaTypes.WILDCARD_JSON;
@@ -80,8 +82,6 @@ import static org.zalando.problem.spring.web.advice.MediaTypes.X_PROBLEM;
  */
 public interface AdviceTrait {
 
-    ResponseEntity<Problem> NOT_ACCEPTABLE = ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(null);
-
     default ResponseEntity<Problem> create(final StatusType status, final Throwable throwable,
             final NativeWebRequest request) throws HttpMediaTypeNotAcceptableException {
         return create(status, throwable, request, new HttpHeaders());
@@ -90,11 +90,9 @@ public interface AdviceTrait {
     default ResponseEntity<Problem> create(final StatusType status, final Throwable throwable,
             final NativeWebRequest request, final HttpHeaders headers)
             throws HttpMediaTypeNotAcceptableException {
-
-        final ThrowableProblem problem = toProblem(throwable, status);
-        return entity(problem, request, headers);
+        return create(throwable, toProblem(throwable, status), request, headers);
     }
-    
+
     default ThrowableProblem toProblem(final Throwable throwable, final StatusType status) {
         final Throwable cause = throwable.getCause();
 
@@ -105,7 +103,7 @@ public interface AdviceTrait {
                 .withDetail(throwable.getMessage());
 
         final StackTraceElement[] stackTrace;
-        
+
         if (cause == null || !isCausalChainsEnabled()) {
             stackTrace = throwable.getStackTrace();
         } else {
@@ -118,25 +116,40 @@ public interface AdviceTrait {
             stackTrace = new StackTraceElement[length];
             System.arraycopy(current, 0, stackTrace, 0, length);
         }
-        
+
         final ThrowableProblem problem = builder.build();
         problem.setStackTrace(stackTrace);
         return problem;
     }
-    
+
     default boolean isCausalChainsEnabled() {
         return false;
     }
 
-    default ResponseEntity<Problem> entity(final Problem problem, final NativeWebRequest request)
+    default ResponseEntity<Problem> create(final ThrowableProblem problem, final NativeWebRequest request)
             throws HttpMediaTypeNotAcceptableException {
-        return entity(problem, request, new HttpHeaders());
+        return create(problem, request, new HttpHeaders());
     }
 
-    default ResponseEntity<Problem> entity(final Problem problem, final NativeWebRequest request,
+    default ResponseEntity<Problem> create(final ThrowableProblem problem, final NativeWebRequest request,
             final HttpHeaders headers) throws HttpMediaTypeNotAcceptableException {
+        return create(problem, problem, request, headers);
+    }
 
-        return negotiate(request).map(contentType -> {
+    default ResponseEntity<Problem> create(final Throwable throwable, final Problem problem,
+            final NativeWebRequest request) throws HttpMediaTypeNotAcceptableException {
+        return create(throwable, problem, request, new HttpHeaders());
+    }
+
+    default ResponseEntity<Problem> create(final Throwable throwable, final Problem problem,
+            final NativeWebRequest request, final HttpHeaders headers) throws HttpMediaTypeNotAcceptableException {
+
+        // TODO magic! always?
+        if (problem.getStatus().getStatusCode() == 500) {
+            request.setAttribute(ERROR_EXCEPTION, throwable, SCOPE_REQUEST);
+        }
+
+        return process(negotiate(request).map(contentType -> {
             final int statusCode = problem.getStatus().getStatusCode();
             final HttpStatus status = HttpStatus.valueOf(statusCode);
 
@@ -144,7 +157,9 @@ public interface AdviceTrait {
                     .headers(headers)
                     .contentType(contentType)
                     .body(problem);
-        }).orElse(NOT_ACCEPTABLE);
+        }).orElseGet(() ->
+                ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(null)));
+
     }
 
     default Optional<MediaType> negotiate(final NativeWebRequest request) throws HttpMediaTypeNotAcceptableException {
@@ -168,6 +183,10 @@ public interface AdviceTrait {
         }
 
         return Optional.empty();
+    }
+
+    default ResponseEntity<Problem> process(final ResponseEntity<Problem> entity) {
+        return entity;
     }
 
 }

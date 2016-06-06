@@ -28,7 +28,6 @@ import org.zalando.problem.spring.web.advice.AdviceTrait;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 
 import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.toList;
@@ -45,14 +44,16 @@ interface BaseValidationAdviceTrait extends AdviceTrait {
         return fieldName;
     }
 
-    default ResponseEntity<Problem> newConstraintViolationProblem(final Collection<Violation> stream,
-            final NativeWebRequest request) throws HttpMediaTypeNotAcceptableException {
-        final List<Violation> violations = stream.stream()
-                // sorting to make tests deterministic
-                .sorted(comparing(Violation::getField).thenComparing(Violation::getMessage))
-                .collect(toList());
+    default ResponseEntity<Problem> newConstraintViolationProblem(final Throwable throwable,
+        final Collection<Violation> stream, final NativeWebRequest request)
+        throws HttpMediaTypeNotAcceptableException {
 
-        return entity(new ConstraintViolationProblem(Optional.empty(), violations), request);
+        final List<Violation> violations = stream.stream()
+            // sorting to make tests deterministic
+            .sorted(comparing(Violation::getField).thenComparing(Violation::getMessage))
+            .collect(toList());
+
+        return create(throwable, new ConstraintViolationProblem(violations), request);
     }
 
 }

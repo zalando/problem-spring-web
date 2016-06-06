@@ -23,14 +23,8 @@ package org.zalando.problem.spring.web.advice.http;
 import org.junit.Test;
 import org.zalando.problem.spring.web.advice.AdviceTraitTesting;
 
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.collection.IsMapContaining.hasEntry;
-import static org.hamcrest.collection.IsMapContaining.hasKey;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
 import static org.springframework.http.HttpMethod.PUT;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.request;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;

@@ -33,7 +33,7 @@ public final class BaseValidationAdviceTraitTest {
     }
 
     private static class Unit implements BaseValidationAdviceTrait {
-        
+
     }
-    
+
 }

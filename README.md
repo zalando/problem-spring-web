@@ -19,9 +19,9 @@ class for your [`@ControllerAdvice`](http://docs.spring.io/spring/docs/current/j
 
 ## Features
 
-- let's you choose traits *à la carte*
+- lets you choose traits *à la carte*
 - favors composition over inheritance
-- 15+ useful advice traits built in
+- +15 useful advice traits built in
 
 ## Installation
 
@@ -75,8 +75,7 @@ The following table shows all built-in advice traits:
 | `    ├──`[`ConstraintViolationAdviceTrait`](src/main/java/org/zalando/problem/spring/web/advice/validation/ConstraintViolationAdviceTrait.java)                    | [`422 Unprocessable Entity`](https://httpstatus.es/422)   |
 | `    └──`[`MethodArgumentNotValidAdviceTrait`](src/main/java/org/zalando/problem/spring/web/advice/validation/MethodArgumentNotValidAdviceTrait.java)              | [`422 Unprocessable Entity`](https://httpstatus.es/422)   |
 
-You're free to use them individually or in groups. Future versions of this library may add additional traits to groups.
-A typical usage would look like this:
+You're free to use them either individually or in groups. Future versions of this library may add additional traits to groups. A typical usage would look like this:
 
 ```java
 @ControllerAdvice
@@ -147,11 +146,11 @@ Content-Type: application/json
 
 ### Stacktraces and causal chains
 
-**Before you continue** please read the section about [*Stacktraces and causal chains*]
+**Before you continue**, please read the section about [*Stacktraces and causal chains*]
 (https://github.com/zalando/problem#stacktraces-and-causal-chains) in [zalando/problem]
 (https://github.com/zalando/problem).
 
-In case you want to enable stacktraces, please configure your `ProblemModule` as follows.
+In case you want to enable stacktraces, please configure your `ProblemModule` as follows:
 
 ```java
 ObjectMapper mapper = new ObjectMapper()
@@ -231,12 +230,12 @@ Enabling both features, causal chains and stacktraces, will yield:
 
 ## Getting help
 
-If you have questions, concerns, bug reports, etc, please file an issue in this repository's Issue Tracker.
+If you have questions, concerns, bug reports, etc., please file an issue in this repository's Issue Tracker.
 
 ## Getting involved
 
 To contribute, simply make a pull request and add a brief description (1-2 sentences) of your addition or change.
-For more details check the [contribution guidelines](CONTRIBUTING.md).
+For more details, check the [contribution guidelines](CONTRIBUTING.md).
 
 ## Credits and references
 
