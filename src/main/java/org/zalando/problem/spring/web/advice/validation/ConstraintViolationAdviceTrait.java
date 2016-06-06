@@ -37,7 +37,7 @@ import static java.util.stream.Collectors.toList;
  * @see ConstraintViolationException
  * @see Violation
  * @see ConstraintViolationProblem
- * @see ConstraintViolationProblem#CONSTRAINT_VIOLATION_VALUE
+ * @see ConstraintViolationProblem#TYPE_VALUE
  * @see MoreStatus#UNPROCESSABLE_ENTITY
  */
 public interface ConstraintViolationAdviceTrait extends BaseValidationAdviceTrait {

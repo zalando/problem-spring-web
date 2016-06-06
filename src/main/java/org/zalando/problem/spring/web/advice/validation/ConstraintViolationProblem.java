@@ -33,11 +33,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Immutable
-@JsonTypeName(ConstraintViolationProblem.CONSTRAINT_VIOLATION_VALUE)
+@JsonTypeName(ConstraintViolationProblem.TYPE_VALUE)
 public final class ConstraintViolationProblem extends ThrowableProblem {
 
-    public static final String CONSTRAINT_VIOLATION_VALUE = "https://github.com/zalando/problem/wiki/constraint-violation";
-    public static final URI CONSTRAINT_VIOLATION = URI.create(CONSTRAINT_VIOLATION_VALUE);
+    public static final String TYPE_VALUE = "https://zalando.github.io/problem/constraint-violation";
+    public static final URI TYPE = URI.create(TYPE_VALUE);
 
     private final Optional<String> detail;
     private final List<Violation> violations;
@@ -54,7 +54,7 @@ public final class ConstraintViolationProblem extends ThrowableProblem {
 
     @Override
     public URI getType() {
-        return CONSTRAINT_VIOLATION;
+        return TYPE;
     }
 
     @Override
