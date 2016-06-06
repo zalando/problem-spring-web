@@ -40,7 +40,7 @@ public final class ConstraintViolationAdviceTraitTest implements AdviceTraitTest
                 .content("{\"name\":\"Bob\"}"))
                 .andExpect(status().isUnprocessableEntity())
                 .andExpect(header().string("Content-Type", is("application/problem+json")))
-                .andExpect(jsonPath("$.type", is("https://github.com/zalando/problem/wiki/constraint-violation")))
+                .andExpect(jsonPath("$.type", is("https://zalando.github.io/problem/constraint-violation")))
                 .andExpect(jsonPath("$.title", is("Constraint Violation")))
                 .andExpect(jsonPath("$.status", is(422)))
                 .andExpect(jsonPath("$.violations", hasSize(1)))

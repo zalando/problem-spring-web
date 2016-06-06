@@ -39,7 +39,7 @@ import static java.util.stream.Collectors.toList;
  * @see MethodArgumentNotValidException
  * @see Violation
  * @see ConstraintViolationProblem
- * @see ConstraintViolationProblem#CONSTRAINT_VIOLATION_VALUE
+ * @see ConstraintViolationProblem#TYPE_VALUE
  * @see MoreStatus#UNPROCESSABLE_ENTITY
  */
 public interface MethodArgumentNotValidAdviceTrait extends BaseValidationAdviceTrait {
