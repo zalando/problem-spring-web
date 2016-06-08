@@ -29,11 +29,11 @@ import javax.ws.rs.core.Response.Status.Family;
 /**
  * An implementation of {@link javax.ws.rs.core.Response.StatusType} to map {@link HttpStatus}.
  */
-class HttpStatusAdapter implements Response.StatusType {
+public class HttpStatusAdapter implements Response.StatusType {
 
     private final HttpStatus status;
 
-    HttpStatusAdapter(HttpStatus status) {
+    public HttpStatusAdapter(HttpStatus status) {
         this.status = status;
     }
 
