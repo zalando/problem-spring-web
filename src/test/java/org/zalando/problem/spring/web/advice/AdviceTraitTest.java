@@ -160,7 +160,7 @@ public class AdviceTraitTest {
         assertThat(nullPointer.getCause(), is(nullValue()));
     }
 
-    public String method(String s) {
+    private String method(String s) {
         return "org.zalando.problem.spring.web.advice.AdviceTraitTest." + s;
     }
 
