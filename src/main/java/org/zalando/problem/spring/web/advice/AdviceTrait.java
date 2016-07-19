@@ -157,9 +157,13 @@ public interface AdviceTrait {
                     .headers(headers)
                     .contentType(contentType)
                     .body(problem);
-        }).orElseGet(() ->
-                ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(null)));
+        }).orElseGet(() -> fallback(throwable, problem, request, headers)));
 
+    }
+
+    default ResponseEntity<Problem> fallback(final Throwable throwable, final Problem problem,
+                                             final NativeWebRequest request, final HttpHeaders headers) {
+        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(null);
     }
 
     default Optional<MediaType> negotiate(final NativeWebRequest request) throws HttpMediaTypeNotAcceptableException {
