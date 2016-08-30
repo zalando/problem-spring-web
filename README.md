@@ -5,6 +5,7 @@
 [![Javadoc](https://javadoc-emblem.rhcloud.com/doc/org.zalando/problem-spring-web/badge.svg)](http://www.javadoc.io/doc/org.zalando/problem-spring-web)
 [![Release](https://img.shields.io/github/release/zalando/problem-spring-web.svg)](https://github.com/zalando/problem-spring-web/releases)
 [![Maven Central](https://img.shields.io/maven-central/v/org.zalando/problem-spring-web.svg)](https://maven-badges.herokuapp.com/maven-central/org.zalando/problem-spring-web)
+[![License](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://raw.githubusercontent.com/zalando/problem-spring-web/master/LICENSE)
 
 *Problem Spring Web* is a library that makes it easy to produce
 [`application/problem+json`](http://tools.ietf.org/html/rfc7807) responses from a Spring
