@@ -25,12 +25,12 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import org.zalando.problem.MoreStatus;
 import org.zalando.problem.ThrowableProblem;
 
+import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 @Immutable
 @JsonTypeName(ConstraintViolationProblem.TYPE_VALUE)
@@ -39,15 +39,15 @@ public final class ConstraintViolationProblem extends ThrowableProblem {
     public static final String TYPE_VALUE = "https://zalando.github.io/problem/constraint-violation";
     public static final URI TYPE = URI.create(TYPE_VALUE);
 
-    private final Optional<String> detail;
+    private final String detail;
     private final List<Violation> violations;
 
     public ConstraintViolationProblem(final List<Violation> violations) {
-        this(Optional.empty(), new ArrayList<>(violations));
+        this(null, new ArrayList<>(violations));
     }
 
     @JsonCreator
-    ConstraintViolationProblem(final Optional<String> detail, final List<Violation> violations) {
+    ConstraintViolationProblem(@Nullable final String detail, final List<Violation> violations) {
         this.detail = detail;
         this.violations = Collections.unmodifiableList(violations);
     }
@@ -68,7 +68,7 @@ public final class ConstraintViolationProblem extends ThrowableProblem {
     }
 
     @Override
-    public Optional<String> getDetail() {
+    public String getDetail() {
         return detail;
     }
 

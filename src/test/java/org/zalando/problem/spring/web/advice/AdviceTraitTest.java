@@ -77,7 +77,7 @@ public class AdviceTraitTest {
         assertThat(result, hasFeature("Status", ResponseEntity::getStatusCode, is(RESET_CONTENT)));
         assertThat(result.getHeaders(), hasFeature("Content-Type", HttpHeaders::getContentType, is(PROBLEM)));
         assertThat(result.getBody(), compose(hasFeature("Status", Problem::getStatus, is(Status.RESET_CONTENT)))
-                .and(hasFeature("Detail", Problem::getDetail, is(Optional.of("Message")))));
+                .and(hasFeature("Detail", Problem::getDetail, is("Message"))));
     }
 
     @Test
@@ -88,7 +88,7 @@ public class AdviceTraitTest {
         assertThat(result, hasFeature("Status", ResponseEntity::getStatusCode, is(RESET_CONTENT)));
         assertThat(result.getHeaders(), hasFeature("Content-Type", HttpHeaders::getContentType, is(PROBLEM)));
         assertThat(result.getBody(), compose(hasFeature("Status", Problem::getStatus, is(Status.RESET_CONTENT)))
-                .and(hasFeature("Detail", Problem::getDetail, is(Optional.of("Message")))));
+                .and(hasFeature("Detail", Problem::getDetail, is("Message"))));
     }
 
     @Test
@@ -102,7 +102,7 @@ public class AdviceTraitTest {
         assertThat(result, hasFeature("Status", ResponseEntity::getStatusCode, is(RESET_CONTENT)));
         assertThat(result.getHeaders(), hasFeature("Content-Type", HttpHeaders::getContentType, is(PROBLEM)));
         assertThat(result.getBody(), compose(hasFeature("Status", Problem::getStatus, is(Status.RESET_CONTENT)))
-                .and(hasFeature("Detail", Problem::getDetail, is(Optional.of(message)))));
+                .and(hasFeature("Detail", Problem::getDetail, is(message))));
     }
 
     @Test
@@ -136,7 +136,7 @@ public class AdviceTraitTest {
         assertThat(illegalState.getType(), hasToString("about:blank"));
         assertThat(illegalState.getTitle(), is("Internal Server Error"));
         assertThat(illegalState.getStatus(), is(Status.INTERNAL_SERVER_ERROR));
-        assertThat(illegalState.getDetail().orElse(null), is("Illegal State"));
+        assertThat(illegalState.getDetail(), is("Illegal State"));
         assertThat(stacktraceAsString(illegalState).get(0), startsWith(method("newIllegalState")));
         assertThat(stacktraceAsString(illegalState).get(1), startsWith(method("buildsStacktrace")));
         assertThat(illegalState.getCause(), is(notNullValue()));
@@ -145,7 +145,7 @@ public class AdviceTraitTest {
         assertThat(illegalArgument.getType(), hasToString("about:blank"));
         assertThat(illegalArgument.getTitle(), is("Internal Server Error"));
         assertThat(illegalArgument.getStatus(), is(Status.INTERNAL_SERVER_ERROR));
-        assertThat(illegalArgument.getDetail().orElse(null), is("Illegal Argument"));
+        assertThat(illegalArgument.getDetail(), is("Illegal Argument"));
         assertThat(stacktraceAsString(illegalArgument).get(0), startsWith(method("newIllegalArgument")));
         assertThat(stacktraceAsString(illegalArgument).get(1), startsWith(method("buildsStacktrace")));
         assertThat(illegalArgument.getCause(), is(notNullValue()));
@@ -154,7 +154,7 @@ public class AdviceTraitTest {
         assertThat(nullPointer.getType(), hasToString("about:blank"));
         assertThat(nullPointer.getTitle(), is("Internal Server Error"));
         assertThat(nullPointer.getStatus(), is(Status.INTERNAL_SERVER_ERROR));
-        assertThat(nullPointer.getDetail().orElse(null), is("Null Pointer"));
+        assertThat(nullPointer.getDetail(), is("Null Pointer"));
         assertThat(stacktraceAsString(nullPointer).get(0), startsWith(method("newNullPointer")));
         assertThat(stacktraceAsString(nullPointer).get(1), startsWith(method("buildsStacktrace")));
         assertThat(nullPointer.getCause(), is(nullValue()));

@@ -51,7 +51,7 @@ public final class NestedThrowableAdviceTraitTest implements AdviceTraitTesting 
     public ObjectMapper mapper() {
         final ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new Jdk8Module());
-        mapper.registerModule(new ProblemModule().withStacktraces());
+        mapper.registerModule(new ProblemModule().withStackTraces());
         return mapper;
     }
 
