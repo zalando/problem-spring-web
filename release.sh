@@ -1,17 +1,17 @@
-#!/usr/bin/env bash
+#!/bin/sh -e
 
-set -e
+: ${2?"Usage: $0 <release-version> <next-version>"}
 
 mvn scm:check-local-modification
 
 # release
-mvn versions:set
+mvn versions:set -D newVersion=$1
 git add pom.xml
-git commit
+git commit -m "Release $1"
 mvn clean deploy -P release
 mvn scm:tag
 
 # next development version
-mvn versions:set
+mvn versions:set -D newVersion=$2-SNAPSHOT
 git add pom.xml
-git commit
+git commit -m "Development $2-SNAPSHOT"
