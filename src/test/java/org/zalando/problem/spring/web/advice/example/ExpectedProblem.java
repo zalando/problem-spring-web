@@ -26,14 +26,13 @@ import org.zalando.problem.ThrowableProblem;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import java.net.URI;
-import java.util.Optional;
 
 public class ExpectedProblem extends ThrowableProblem {
 
-    private final Optional<String> detail;
+    private final String detail;
 
     public ExpectedProblem(final String detail) {
-        this.detail = Optional.of(detail);
+        this.detail = detail;
     }
 
     @Override
@@ -52,7 +51,7 @@ public class ExpectedProblem extends ThrowableProblem {
     }
 
     @Override
-    public Optional<String> getDetail() {
+    public String getDetail() {
         return detail;
     }
 

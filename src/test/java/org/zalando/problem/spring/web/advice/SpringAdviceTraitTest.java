@@ -58,7 +58,7 @@ public final class SpringAdviceTraitTest {
         assertThat(result, hasFeature("Status", ResponseEntity::getStatusCode, is(RESET_CONTENT)));
         assertThat(result.getHeaders(), hasFeature("Content-Type", HttpHeaders::getContentType, is(PROBLEM)));
         assertThat(result.getBody(), compose(hasFeature("Status", Problem::getStatus, is(adapter)))
-                .and(hasFeature("Detail", Problem::getDetail, is(Optional.of("Message")))));
+                .and(hasFeature("Detail", Problem::getDetail, is("Message"))));
     }
 
     @Test
