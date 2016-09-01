@@ -15,9 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.multiaction.NoSuchRequestHandlingMethodException;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Constraint;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -92,13 +90,6 @@ public class ExampleRestController {
     @RequestMapping(value = "/handler-put", method = PUT, consumes = {APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE})
     public ResponseEntity<String> put(@RequestBody final String body) {
         return ResponseEntity.ok(body);
-    }
-
-    @RequestMapping(value = "/noSuchRequestHandlingMethod", method = GET)
-    public ResponseEntity<Void> noSuchRequestHandlingMethod(final HttpServletRequest request)
-            throws NoSuchRequestHandlingMethodException {
-        // I have no clue how to trigger this naturally
-        throw new NoSuchRequestHandlingMethodException(request);
     }
 
     @RequestMapping(value = "/handler-params", method = GET)

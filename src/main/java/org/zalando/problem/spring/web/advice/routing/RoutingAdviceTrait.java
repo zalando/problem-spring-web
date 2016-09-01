@@ -9,6 +9,5 @@ public interface RoutingAdviceTrait extends
         MissingServletRequestParameterAdviceTrait,
         MissingServletRequestPartAdviceTrait,
         NoHandlerFoundAdviceTrait,
-        NoSuchRequestHandlingMethodAdviceTrait,
         ServletRequestBindingAdviceTrait {
 }
