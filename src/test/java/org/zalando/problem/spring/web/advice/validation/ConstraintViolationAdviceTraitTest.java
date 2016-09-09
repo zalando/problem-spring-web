@@ -18,11 +18,11 @@ public final class ConstraintViolationAdviceTraitTest implements AdviceTraitTest
         mvc().perform(request(POST, "http://localhost/api/handler-invalid-param")
                 .contentType("application/json")
                 .content("{\"name\":\"Bob\"}"))
-                .andExpect(status().isUnprocessableEntity())
+                .andExpect(status().isBadRequest())
                 .andExpect(header().string("Content-Type", is("application/problem+json")))
                 .andExpect(jsonPath("$.type", is("https://zalando.github.io/problem/constraint-violation")))
                 .andExpect(jsonPath("$.title", is("Constraint Violation")))
-                .andExpect(jsonPath("$.status", is(422)))
+                .andExpect(jsonPath("$.status", is(400)))
                 .andExpect(jsonPath("$.violations", hasSize(1)))
                 .andExpect(jsonPath("$.violations[0].field", is(""))) // field is not set when validation manually
                 .andExpect(jsonPath("$.violations[0].message", is("must not be called Bob")));
