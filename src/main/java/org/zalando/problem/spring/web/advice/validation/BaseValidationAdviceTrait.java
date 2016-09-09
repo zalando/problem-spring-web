@@ -6,13 +6,19 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.zalando.problem.Problem;
 import org.zalando.problem.spring.web.advice.AdviceTrait;
 
+import javax.ws.rs.core.Response.StatusType;
 import java.util.Collection;
 import java.util.List;
 
 import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.toList;
+import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
 
 interface BaseValidationAdviceTrait extends AdviceTrait {
+
+    default StatusType defaultConstraintViolationStatus() {
+        return BAD_REQUEST;
+    }
 
     /**
      * Format the name of a violating field (e.g. lower camel to snake case)
@@ -28,12 +34,13 @@ interface BaseValidationAdviceTrait extends AdviceTrait {
         final Collection<Violation> stream, final NativeWebRequest request)
         throws HttpMediaTypeNotAcceptableException {
 
+        final StatusType status = defaultConstraintViolationStatus();
         final List<Violation> violations = stream.stream()
             // sorting to make tests deterministic
             .sorted(comparing(Violation::getField).thenComparing(Violation::getMessage))
             .collect(toList());
 
-        return create(throwable, new ConstraintViolationProblem(violations), request);
+        return create(throwable, new ConstraintViolationProblem(status, violations), request);
     }
 
 }

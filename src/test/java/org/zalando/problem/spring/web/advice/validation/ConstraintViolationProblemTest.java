@@ -1,12 +1,14 @@
 package org.zalando.problem.spring.web.advice.validation;
 
-import java.util.ArrayList;
-import java.util.List;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 public class ConstraintViolationProblemTest {
 
@@ -15,12 +17,12 @@ public class ConstraintViolationProblemTest {
         final List<Violation> violations = new ArrayList<>();
         violations.add(new Violation("x", "y"));
 
-        final ConstraintViolationProblem p = new ConstraintViolationProblem(violations);
+        final ConstraintViolationProblem problem = new ConstraintViolationProblem(BAD_REQUEST, violations);
 
         violations.clear();
 
-        assertThat(p.getViolations(), hasSize(1));
-        assertThat(p.getViolations().get(0).getField(), is("x"));
-        assertThat(p.getViolations().get(0).getMessage(), is("y"));
+        assertThat(problem.getViolations(), hasSize(1));
+        assertThat(problem.getViolations().get(0).getField(), is("x"));
+        assertThat(problem.getViolations().get(0).getMessage(), is("y"));
     }
 }

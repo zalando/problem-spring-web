@@ -2,11 +2,11 @@ package org.zalando.problem.spring.web.advice.validation;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import org.zalando.problem.MoreStatus;
 import org.zalando.problem.ThrowableProblem;
 
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
+import javax.ws.rs.core.Response.StatusType;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -19,15 +19,17 @@ public final class ConstraintViolationProblem extends ThrowableProblem {
     public static final String TYPE_VALUE = "https://zalando.github.io/problem/constraint-violation";
     public static final URI TYPE = URI.create(TYPE_VALUE);
 
+    private final StatusType status;
     private final String detail;
     private final List<Violation> violations;
 
-    public ConstraintViolationProblem(final List<Violation> violations) {
-        this(null, new ArrayList<>(violations));
+    public ConstraintViolationProblem(final StatusType status, final List<Violation> violations) {
+        this(status, null, new ArrayList<>(violations));
     }
 
     @JsonCreator
-    ConstraintViolationProblem(@Nullable final String detail, final List<Violation> violations) {
+    ConstraintViolationProblem(final StatusType status, @Nullable final String detail, final List<Violation> violations) {
+        this.status = status;
         this.detail = detail;
         this.violations = Collections.unmodifiableList(violations);
     }
@@ -43,8 +45,8 @@ public final class ConstraintViolationProblem extends ThrowableProblem {
     }
 
     @Override
-    public MoreStatus getStatus() {
-        return MoreStatus.UNPROCESSABLE_ENTITY;
+    public StatusType getStatus() {
+        return status;
     }
 
     @Override
