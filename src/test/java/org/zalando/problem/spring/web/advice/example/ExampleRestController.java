@@ -33,6 +33,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.time.OffsetDateTime;
+import java.util.Map;
 import java.util.Set;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -92,6 +93,11 @@ public class ExampleRestController {
         return ResponseEntity.ok(body);
     }
 
+    @RequestMapping(path = "/json-object")
+    public void jsonObject(@RequestBody final Map<String, Object> body) {
+
+    }
+
     @RequestMapping(path = "/handler-params", method = GET)
     public ResponseEntity<Void> params(
             @RequestParam("params1") final String[] params1,
@@ -119,7 +125,7 @@ public class ExampleRestController {
 
     @RequestMapping(path = "/handler-invalid-param", method = POST)
     public void validRequestParam(@RequestBody final UserRequest user) {
-        @Hack("I couldn't make Spring throw this implicitely using annotations...")
+        @Hack("I couldn't make Spring throw this implicitly using annotations...")
         @Facepalm
         @OhNoYouDidnt
         final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();

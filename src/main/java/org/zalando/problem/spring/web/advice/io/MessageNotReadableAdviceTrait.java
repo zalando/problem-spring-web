@@ -11,8 +11,6 @@ import org.zalando.problem.spring.web.advice.AdviceTrait;
 import javax.ws.rs.core.Response.Status;
 
 /**
- * TODO support for different causes
- *
  * @see HttpMessageNotReadableException
  * @see Status#BAD_REQUEST
  */
