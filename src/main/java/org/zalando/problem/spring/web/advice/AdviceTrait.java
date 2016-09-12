@@ -77,7 +77,6 @@ public interface AdviceTrait {
         final Throwable cause = throwable.getCause();
 
         final ProblemBuilder builder = Problem.builder()
-                .withType(URI.create("about:blank"))
                 .withTitle(status.getReasonPhrase())
                 .withStatus(status)
                 .withDetail(throwable.getMessage());
@@ -142,7 +141,7 @@ public interface AdviceTrait {
     }
 
     default ResponseEntity<Problem> fallback(final Throwable throwable, final Problem problem,
-                                             final NativeWebRequest request, final HttpHeaders headers) {
+            final NativeWebRequest request, final HttpHeaders headers) {
         return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(null);
     }
 

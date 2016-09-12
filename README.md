@@ -25,6 +25,14 @@ class for your [`@ControllerAdvice`](http://docs.spring.io/spring/docs/current/j
 - favors composition over inheritance
 - +15 useful advice traits built in
 
+## Dependencies
+
+- Java 8
+- Any build tool using Maven Central, or direct download
+- Servlet Container
+- Spring
+- Spring Security
+
 ## Installation
 
 Add the following dependency to your project:
@@ -82,6 +90,25 @@ You're free to use them either individually or in groups. Future versions of thi
 ```java
 @ControllerAdvice
 class ExceptionHandling implements ProblemHandling {
+
+}
+```
+
+### Security
+
+The Spring Security integration requires an additional step:
+
+```java
+@Import(ProblemAuthenticationEntryPoint.class)
+public static class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    private ProblemAuthenticationEntryPoint entryPoint;
+
+    @Override
+    public void configure(final HttpSecurity http) throws Exception {
+        http.exceptionHandling().authenticationEntryPoint(entryPoint);
+    }
 
 }
 ```

@@ -30,7 +30,7 @@ public final class SpringAdviceTraitTest {
 
     @Test
     public void buildsOnThrowable() throws HttpMediaTypeNotAcceptableException {
-        HttpStatusAdapter adapter = new HttpStatusAdapter(RESET_CONTENT);
+        final HttpStatusAdapter adapter = new HttpStatusAdapter(RESET_CONTENT);
 
         final ResponseEntity<Problem> result = unit.create(HttpStatus.RESET_CONTENT,
                 new IllegalStateException("Message"), mock(NativeWebRequest.class));

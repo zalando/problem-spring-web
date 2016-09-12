@@ -2,7 +2,6 @@ package org.zalando.problem.spring.web.advice.general;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import org.junit.Test;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.zalando.problem.ProblemModule;
@@ -30,7 +29,6 @@ public final class NestedThrowableAdviceTraitTest implements AdviceTraitTesting 
     @Override
     public ObjectMapper mapper() {
         final ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new Jdk8Module());
         mapper.registerModule(new ProblemModule().withStackTraces());
         return mapper;
     }

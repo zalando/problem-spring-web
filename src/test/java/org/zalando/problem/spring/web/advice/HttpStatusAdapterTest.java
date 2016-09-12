@@ -12,7 +12,7 @@ public final class HttpStatusAdapterTest {
 
     @Test
     public void shouldMapHttpStatusProperties() {
-        HttpStatusAdapter adapter = new HttpStatusAdapter(HttpStatus.I_AM_A_TEAPOT);
+        final HttpStatusAdapter adapter = new HttpStatusAdapter(HttpStatus.I_AM_A_TEAPOT);
 
         assertThat(adapter.getStatusCode(), is(418));
         assertThat(adapter.getFamily(), is(Family.CLIENT_ERROR));
@@ -21,8 +21,8 @@ public final class HttpStatusAdapterTest {
 
     @Test
     public void shouldUseHttpStatusEqualsAndHashCode() {
-        HttpStatus status = HttpStatus.I_AM_A_TEAPOT;
-        HttpStatusAdapter adapter = new HttpStatusAdapter(HttpStatus.I_AM_A_TEAPOT);
+        final HttpStatus status = HttpStatus.I_AM_A_TEAPOT;
+        final HttpStatusAdapter adapter = new HttpStatusAdapter(HttpStatus.I_AM_A_TEAPOT);
 
         assertThat(adapter, is(adapter));
         assertThat(adapter, is(new HttpStatusAdapter(status)));
