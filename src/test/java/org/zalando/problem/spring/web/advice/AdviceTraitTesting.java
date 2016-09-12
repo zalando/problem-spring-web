@@ -1,7 +1,6 @@
 package org.zalando.problem.spring.web.advice;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -24,10 +23,7 @@ public interface AdviceTraitTesting {
     }
 
     default ObjectMapper mapper() {
-        final ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new Jdk8Module());
-        mapper.registerModule(new ProblemModule());
-        return mapper;
+        return new ObjectMapper().registerModule(new ProblemModule());
     }
 
 }

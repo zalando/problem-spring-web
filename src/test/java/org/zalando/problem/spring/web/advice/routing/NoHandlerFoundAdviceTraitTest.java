@@ -46,7 +46,7 @@ public final class NoHandlerFoundAdviceTraitTest implements AdviceTraitTesting {
                 .andExpect(jsonPath("$.detail", containsString("No handler found")));
     }
 
-    private void throwExceptionIfNoHandlerFound(MockMvc mvc) throws NoSuchFieldException, IllegalAccessException {
+    private void throwExceptionIfNoHandlerFound(final MockMvc mvc) throws NoSuchFieldException, IllegalAccessException {
         final Field field = MockMvc.class.getDeclaredField("servlet");
         field.setAccessible(true);
         final DispatcherServlet servlet = (DispatcherServlet) field.get(mvc);

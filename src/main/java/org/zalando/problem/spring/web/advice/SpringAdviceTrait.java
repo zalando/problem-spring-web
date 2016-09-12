@@ -33,7 +33,7 @@ public interface SpringAdviceTrait extends AdviceTrait {
         return toProblem(throwable, toStatus(status));
     }
 
-    default StatusType toStatus(HttpStatus status) {
+    default StatusType toStatus(final HttpStatus status) {
         return new HttpStatusAdapter(status);
     }
 

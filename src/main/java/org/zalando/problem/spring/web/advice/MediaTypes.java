@@ -3,10 +3,10 @@ package org.zalando.problem.spring.web.advice;
 
 import org.springframework.http.MediaType;
 
-final class MediaTypes {
+public final class MediaTypes {
 
-    static final String PROBLEM_VALUE = "application/problem+json";
-    static final MediaType PROBLEM = MediaType.parseMediaType(PROBLEM_VALUE);
+    public static final String PROBLEM_VALUE = "application/problem+json";
+    public static final MediaType PROBLEM = MediaType.parseMediaType(PROBLEM_VALUE);
 
     static final String X_PROBLEM_VALUE = "application/x.problem+json";
     static final MediaType X_PROBLEM = MediaType.parseMediaType(X_PROBLEM_VALUE);

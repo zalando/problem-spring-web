@@ -13,7 +13,7 @@ public class HttpStatusAdapter implements Response.StatusType {
 
     private final HttpStatus status;
 
-    public HttpStatusAdapter(HttpStatus status) {
+    public HttpStatusAdapter(final HttpStatus status) {
         this.status = status;
     }
 
@@ -33,14 +33,14 @@ public class HttpStatusAdapter implements Response.StatusType {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) {
             return true;
         }
         if (!(o instanceof HttpStatusAdapter)) {
             return false;
         }
-        HttpStatusAdapter that = (HttpStatusAdapter) o;
+        final HttpStatusAdapter that = (HttpStatusAdapter) o;
         return status == that.status;
     }
 

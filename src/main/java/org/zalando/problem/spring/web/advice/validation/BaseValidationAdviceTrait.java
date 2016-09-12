@@ -26,7 +26,7 @@ interface BaseValidationAdviceTrait extends AdviceTrait {
      * @param fieldName the field name to format
      * @return the formatted field name, defaults to the parameter, i.e. doesn't apply any transformation
      */
-    default String formatFieldName(String fieldName) {
+    default String formatFieldName(final String fieldName) {
         return fieldName;
     }
 

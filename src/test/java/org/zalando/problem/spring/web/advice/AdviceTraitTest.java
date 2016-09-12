@@ -93,13 +93,13 @@ public class AdviceTraitTest {
             try {
                 try {
                     throw newNullPointer();
-                } catch (NullPointerException e) {
+                } catch (final NullPointerException e) {
                     throw newIllegalArgument(e);
                 }
-            } catch (IllegalArgumentException e) {
+            } catch (final IllegalArgumentException e) {
                 throw newIllegalState(e);
             }
-        } catch (IllegalStateException e) {
+        } catch (final IllegalStateException e) {
             throwable = e;
         }
 
@@ -140,7 +140,7 @@ public class AdviceTraitTest {
         assertThat(nullPointer.getCause(), is(nullValue()));
     }
 
-    private String method(String s) {
+    private String method(final String s) {
         return "org.zalando.problem.spring.web.advice.AdviceTraitTest." + s;
     }
 
@@ -150,11 +150,11 @@ public class AdviceTraitTest {
                 .collect(toList());
     }
 
-    private IllegalStateException newIllegalState(IllegalArgumentException e) {
+    private IllegalStateException newIllegalState(final IllegalArgumentException e) {
         throw new IllegalStateException("Illegal State", e);
     }
 
-    private IllegalArgumentException newIllegalArgument(NullPointerException e) {
+    private IllegalArgumentException newIllegalArgument(final NullPointerException e) {
         throw new IllegalArgumentException("Illegal Argument", e);
     }
 
@@ -181,7 +181,7 @@ public class AdviceTraitTest {
         unit.create(input, new IllegalStateException("L33t"), request());
     }
 
-    private NativeWebRequest request(String acceptMediaType) {
+    private NativeWebRequest request(final String acceptMediaType) {
         final NativeWebRequest request = mock(NativeWebRequest.class);
         when(request.getHeader("Accept")).thenReturn(acceptMediaType);
         return request;

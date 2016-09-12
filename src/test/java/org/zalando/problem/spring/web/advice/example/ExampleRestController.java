@@ -46,35 +46,35 @@ import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 @RequestMapping("/api")
 public class ExampleRestController {
 
-    @RequestMapping(value = "/handler-ok",
+    @RequestMapping(path = "/handler-ok",
             produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<String> ok() {
         return ResponseEntity.ok("ok");
     }
 
-    @RequestMapping(value = "/handler-throwable", method = GET)
+    @RequestMapping(path = "/handler-throwable", method = GET)
     public ResponseEntity<String> throwable() {
         throw new RuntimeException("expected", new IllegalStateException());
     }
 
-    @RequestMapping(value = "/nested-throwable", method = GET)
+    @RequestMapping(path = "/nested-throwable", method = GET)
     public ResponseEntity<String> nestedThrowable() {
         try {
             try {
                 throw newNullPointer();
-            } catch (NullPointerException e) {
+            } catch (final NullPointerException e) {
                 throw newIllegalArgument(e);
             }
-        } catch (IllegalArgumentException e) {
+        } catch (final IllegalArgumentException e) {
             throw newIllegalState(e);
         }
     }
 
-    private IllegalStateException newIllegalState(IllegalArgumentException e) {
+    private IllegalStateException newIllegalState(final IllegalArgumentException e) {
         throw new IllegalStateException("Illegal State", e);
     }
 
-    private IllegalArgumentException newIllegalArgument(NullPointerException e) {
+    private IllegalArgumentException newIllegalArgument(final NullPointerException e) {
         throw new IllegalArgumentException("Illegal Argument", e);
     }
 
@@ -82,42 +82,42 @@ public class ExampleRestController {
         throw new NullPointerException("Null Pointer");
     }
 
-    @RequestMapping(value = "/handler-problem", method = GET)
+    @RequestMapping(path = "/handler-problem", method = GET)
     public ResponseEntity<String> problem() {
         throw new ExpectedProblem("Nothing out of the ordinary");
     }
 
-    @RequestMapping(value = "/handler-put", method = PUT, consumes = {APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE})
+    @RequestMapping(path = "/handler-put", method = PUT, consumes = {APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE})
     public ResponseEntity<String> put(@RequestBody final String body) {
         return ResponseEntity.ok(body);
     }
 
-    @RequestMapping(value = "/handler-params", method = GET)
+    @RequestMapping(path = "/handler-params", method = GET)
     public ResponseEntity<Void> params(
             @RequestParam("params1") final String[] params1,
             @RequestParam("params2") final String[] params2) {
         return ResponseEntity.ok().build();
     }
 
-    @RequestMapping(value = "/handler-headers", method = GET)
+    @RequestMapping(path = "/handler-headers", method = GET)
     public ResponseEntity<Void> headers(
             @RequestHeader("X-Custom-Header") final String header1) {
         return ResponseEntity.ok().build();
     }
 
-    @RequestMapping(value = "/handler-conversion", method = GET)
+    @RequestMapping(path = "/handler-conversion", method = GET)
     public ResponseEntity<Void> conversion(@RequestParam("dateTime") final OffsetDateTime dateTime) {
         return ResponseEntity.ok().build();
     }
 
-    @RequestMapping(value = "/handler-multipart", method = POST)
+    @RequestMapping(path = "/handler-multipart", method = POST)
     public ResponseEntity<Void> conversion(
             @RequestPart("payload1") final MultipartFile payload1,
             @RequestPart("payload2") final MultipartFile payload2) {
         return ResponseEntity.ok().build();
     }
 
-    @RequestMapping(value = "/handler-invalid-param", method = POST)
+    @RequestMapping(path = "/handler-invalid-param", method = POST)
     public void validRequestParam(@RequestBody final UserRequest user) {
         @Hack("I couldn't make Spring throw this implicitely using annotations...")
         @Facepalm
@@ -126,8 +126,13 @@ public class ExampleRestController {
         final Set<ConstraintViolation<UserRequest>> violations = validator.validate(user);
         throw new ConstraintViolationException(violations);
     }
+    
+    @RequestMapping("/handler-secured")
+    public void secured() {
+        
+    }
 
-    @RequestMapping(value = "/handler-invalid-body", method = POST)
+    @RequestMapping(path = "/handler-invalid-body", method = POST)
     public ResponseEntity<String> validRequestBody(@Valid @RequestBody final UserRequest user) {
         // TODO find a way to change the "object name" of the body, by default it's the lower-camel-cased class name
         return ResponseEntity.ok("done");
@@ -156,12 +161,12 @@ public class ExampleRestController {
     public static final class NotBobConstraintValidator implements ConstraintValidator<NotBob, UserRequest> {
 
         @Override
-        public void initialize(NotBob constraintAnnotation) {
+        public void initialize(final NotBob constraintAnnotation) {
 
         }
 
         @Override
-        public boolean isValid(UserRequest user, ConstraintValidatorContext context) {
+        public boolean isValid(final UserRequest user, final ConstraintValidatorContext context) {
             return !"Bob".equals(user.getName());
         }
 
@@ -173,7 +178,7 @@ public class ExampleRestController {
         private final String name;
 
         @JsonCreator
-        public UserRequest(@JsonProperty("name") String name) {
+        public UserRequest(@JsonProperty("name") final String name) {
             this.name = name;
         }
 

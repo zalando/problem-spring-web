@@ -5,6 +5,7 @@ import org.zalando.problem.spring.web.advice.general.GeneralAdviceTrait;
 import org.zalando.problem.spring.web.advice.http.HttpAdviceTrait;
 import org.zalando.problem.spring.web.advice.io.IOAdviceTrait;
 import org.zalando.problem.spring.web.advice.routing.RoutingAdviceTrait;
+import org.zalando.problem.spring.web.advice.security.SecurityAdviceTrait;
 import org.zalando.problem.spring.web.advice.validation.ValidationAdviceTrait;
 
 /**
@@ -24,6 +25,7 @@ import org.zalando.problem.spring.web.advice.validation.ValidationAdviceTrait;
  * @see HttpAdviceTrait
  * @see IOAdviceTrait
  * @see RoutingAdviceTrait
+ * @see SecurityAdviceTrait
  * @see ValidationAdviceTrait
  */
 public interface ProblemHandling extends
@@ -31,6 +33,7 @@ public interface ProblemHandling extends
         HttpAdviceTrait,
         IOAdviceTrait,
         RoutingAdviceTrait,
+        SecurityAdviceTrait,
         ValidationAdviceTrait {
 
 }
