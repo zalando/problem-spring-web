@@ -32,6 +32,7 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.Map;
 import java.util.Set;
@@ -95,6 +96,16 @@ public class ExampleRestController {
 
     @RequestMapping(path = "/json-object")
     public void jsonObject(@RequestBody final Map<String, Object> body) {
+
+    }
+
+    @RequestMapping(path = "/json-decimal")
+    public void bigDecimal(@RequestBody final BigDecimal bigDecimal) {
+
+    }
+
+    @RequestMapping(path = "/json-user")
+    public void user(@RequestBody final User user) {
 
     }
 
