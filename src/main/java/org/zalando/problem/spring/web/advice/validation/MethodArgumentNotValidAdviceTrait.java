@@ -3,7 +3,6 @@ package org.zalando.problem.spring.web.advice.validation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
-import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -37,7 +36,7 @@ public interface MethodArgumentNotValidAdviceTrait extends BaseValidationAdviceT
     @ExceptionHandler
     default ResponseEntity<Problem> handleMethodArgumentNotValid(
             final MethodArgumentNotValidException exception,
-            final NativeWebRequest request) throws HttpMediaTypeNotAcceptableException {
+            final NativeWebRequest request) {
 
         final List<Violation> violations = Stream.concat(
                 exception.getBindingResult().getFieldErrors().stream().map(this::createViolation),

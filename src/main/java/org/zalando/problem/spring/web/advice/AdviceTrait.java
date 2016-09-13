@@ -1,5 +1,6 @@
 package org.zalando.problem.spring.web.advice;
 
+import lombok.SneakyThrows;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -21,12 +22,14 @@ import org.zalando.problem.spring.web.advice.routing.RoutingAdviceTrait;
 import org.zalando.problem.spring.web.advice.validation.ValidationAdviceTrait;
 
 import javax.ws.rs.core.Response.StatusType;
-import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
+import static com.google.common.base.MoreObjects.firstNonNull;
 import static java.util.Arrays.asList;
 import static javax.servlet.RequestDispatcher.ERROR_EXCEPTION;
+import static javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR;
+import static org.springframework.http.HttpStatus.NOT_ACCEPTABLE;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.web.context.request.RequestAttributes.SCOPE_REQUEST;
 import static org.zalando.problem.spring.web.advice.Lists.lengthOfTrailingPartialSubList;
@@ -63,13 +66,12 @@ import static org.zalando.problem.spring.web.advice.MediaTypes.X_PROBLEM;
 public interface AdviceTrait {
 
     default ResponseEntity<Problem> create(final StatusType status, final Throwable throwable,
-            final NativeWebRequest request) throws HttpMediaTypeNotAcceptableException {
+            final NativeWebRequest request) {
         return create(status, throwable, request, new HttpHeaders());
     }
 
     default ResponseEntity<Problem> create(final StatusType status, final Throwable throwable,
-            final NativeWebRequest request, final HttpHeaders headers)
-            throws HttpMediaTypeNotAcceptableException {
+            final NativeWebRequest request, final HttpHeaders headers) {
         return create(throwable, toProblem(throwable, status), request, headers);
     }
 
@@ -105,48 +107,47 @@ public interface AdviceTrait {
         return false;
     }
 
-    default ResponseEntity<Problem> create(final ThrowableProblem problem, final NativeWebRequest request)
-            throws HttpMediaTypeNotAcceptableException {
+    default ResponseEntity<Problem> create(final ThrowableProblem problem, final NativeWebRequest request) {
         return create(problem, request, new HttpHeaders());
     }
 
     default ResponseEntity<Problem> create(final ThrowableProblem problem, final NativeWebRequest request,
-            final HttpHeaders headers) throws HttpMediaTypeNotAcceptableException {
+            final HttpHeaders headers) {
         return create(problem, problem, request, headers);
     }
 
     default ResponseEntity<Problem> create(final Throwable throwable, final Problem problem,
-            final NativeWebRequest request) throws HttpMediaTypeNotAcceptableException {
+            final NativeWebRequest request) {
         return create(throwable, problem, request, new HttpHeaders());
     }
 
     default ResponseEntity<Problem> create(final Throwable throwable, final Problem problem,
-            final NativeWebRequest request, final HttpHeaders headers) throws HttpMediaTypeNotAcceptableException {
+            final NativeWebRequest request, final HttpHeaders headers) {
 
-        // TODO magic! always?
-        if (problem.getStatus().getStatusCode() == 500) {
+        final HttpStatus status = HttpStatus.valueOf(firstNonNull(
+                problem.getStatus(), INTERNAL_SERVER_ERROR).getStatusCode());
+
+        if (status == HttpStatus.INTERNAL_SERVER_ERROR) {
             request.setAttribute(ERROR_EXCEPTION, throwable, SCOPE_REQUEST);
         }
 
-        return process(negotiate(request).map(contentType -> {
-            final int statusCode = problem.getStatus().getStatusCode();
-            final HttpStatus status = HttpStatus.valueOf(statusCode);
-
-            return ResponseEntity.status(status)
-                    .headers(headers)
-                    .contentType(contentType)
-                    .body(problem);
-        }).orElseGet(() -> fallback(throwable, problem, request, headers)));
-
+        return process(negotiate(request).map(contentType ->
+                ResponseEntity.status(status)
+                        .headers(headers)
+                        .contentType(contentType)
+                        .body(problem))
+                .orElseGet(() -> fallback(throwable, problem, request, headers)));
     }
 
     default ResponseEntity<Problem> fallback(final Throwable throwable, final Problem problem,
             final NativeWebRequest request, final HttpHeaders headers) {
-        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(null);
+        return ResponseEntity.status(NOT_ACCEPTABLE).body(null);
     }
 
-    default Optional<MediaType> negotiate(final NativeWebRequest request) throws HttpMediaTypeNotAcceptableException {
+    @SneakyThrows(HttpMediaTypeNotAcceptableException.class)
+    default Optional<MediaType> negotiate(final NativeWebRequest request) {
         final HeaderContentNegotiationStrategy negotiator = new HeaderContentNegotiationStrategy();
+
         final List<MediaType> mediaTypes = negotiator.resolveMediaTypes(request);
 
         if (mediaTypes.isEmpty()) {

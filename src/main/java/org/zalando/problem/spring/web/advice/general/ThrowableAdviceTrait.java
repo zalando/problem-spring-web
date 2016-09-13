@@ -1,7 +1,6 @@
 package org.zalando.problem.spring.web.advice.general;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.zalando.problem.Problem;
@@ -19,7 +18,7 @@ public interface ThrowableAdviceTrait extends AdviceTrait {
     @ExceptionHandler
     default ResponseEntity<Problem> handleThrowable(
             final Throwable throwable,
-            final NativeWebRequest request) throws HttpMediaTypeNotAcceptableException {
+            final NativeWebRequest request) {
         return create(Status.INTERNAL_SERVER_ERROR, throwable, request);
     }
 

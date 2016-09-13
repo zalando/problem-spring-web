@@ -3,6 +3,9 @@ package org.zalando.problem.spring.web.advice;
 
 import org.junit.Ignore;
 import org.junit.Test;
+import org.springframework.web.HttpMediaTypeNotAcceptableException;
+
+import javax.servlet.ServletException;
 
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.request;
@@ -52,12 +55,19 @@ public final class ContentNegotiationTest implements AdviceTraitTesting {
     }
 
     @Test
-    public void nonJsonGivesEmpty() throws Exception {
+    public void nonJsonIsNotAcceptable() throws Exception {
         mvc().perform(request(GET, url)
-                .accept("application/atom+xml"))
+                .header("Accept", "application/atom+xml"))
                 .andExpect(status().isNotAcceptable())
                 .andExpect(content().string(""))
                 .andExpect(header().doesNotExist("Content-Type"));
+    }
+
+    @Test(expected = ServletException.class)
+    public void invalidMediaTypeIsNotAcceptable() throws Exception {
+        mvc().perform(request(GET, url)
+                .header("Accept", "application/"));
+
     }
 
 }
