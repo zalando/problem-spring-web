@@ -1,7 +1,6 @@
 package org.zalando.problem.spring.web.advice.routing;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.bind.ServletRequestBindingException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -19,7 +18,7 @@ public interface ServletRequestBindingAdviceTrait extends AdviceTrait {
     @ExceptionHandler
     default ResponseEntity<Problem> handleServletRequestBinding(
             final ServletRequestBindingException exception,
-            final NativeWebRequest request) throws HttpMediaTypeNotAcceptableException {
+            final NativeWebRequest request) {
         return create(Status.BAD_REQUEST, exception, request);
     }
 

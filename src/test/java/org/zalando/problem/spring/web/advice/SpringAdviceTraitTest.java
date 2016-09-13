@@ -4,12 +4,9 @@ import org.junit.Test;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.zalando.problem.Problem;
 import org.zalando.problem.ThrowableProblem;
-
-import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.allOf;
@@ -29,7 +26,7 @@ public final class SpringAdviceTraitTest {
     };
 
     @Test
-    public void buildsOnThrowable() throws HttpMediaTypeNotAcceptableException {
+    public void buildsOnThrowable() {
         final HttpStatusAdapter adapter = new HttpStatusAdapter(RESET_CONTENT);
 
         final ResponseEntity<Problem> result = unit.create(HttpStatus.RESET_CONTENT,

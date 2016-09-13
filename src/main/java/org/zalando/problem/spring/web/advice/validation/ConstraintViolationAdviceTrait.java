@@ -1,7 +1,6 @@
 package org.zalando.problem.spring.web.advice.validation;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.zalando.problem.MoreStatus;
@@ -29,7 +28,7 @@ public interface ConstraintViolationAdviceTrait extends BaseValidationAdviceTrai
     @ExceptionHandler
     default ResponseEntity<Problem> handleConstraintViolation(
             final ConstraintViolationException exception,
-            final NativeWebRequest request) throws HttpMediaTypeNotAcceptableException {
+            final NativeWebRequest request) {
 
         final List<Violation> violations = exception.getConstraintViolations().stream()
                 .map(this::createViolation)

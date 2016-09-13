@@ -2,7 +2,6 @@ package org.zalando.problem.spring.web.advice.http;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -20,7 +19,7 @@ public interface UnsupportedMediaTypeAdviceTrait extends AdviceTrait {
     @ExceptionHandler
     default ResponseEntity<Problem> handleMediaTypeNotSupportedException(
             final HttpMediaTypeNotSupportedException exception,
-            final NativeWebRequest request) throws HttpMediaTypeNotAcceptableException {
+            final NativeWebRequest request) {
 
         final HttpHeaders headers = new HttpHeaders();
         headers.setAccept(exception.getSupportedMediaTypes());

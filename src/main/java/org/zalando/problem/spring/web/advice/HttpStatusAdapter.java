@@ -1,10 +1,10 @@
 package org.zalando.problem.spring.web.advice;
 
-import java.util.Objects;
 import org.springframework.http.HttpStatus;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status.Family;
+import java.util.Objects;
 
 /**
  * An implementation of {@link javax.ws.rs.core.Response.StatusType} to map {@link HttpStatus}.

@@ -2,7 +2,6 @@ package org.zalando.problem.spring.web.advice.http;
 
 import org.junit.Test;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.zalando.problem.Problem;
@@ -36,7 +35,7 @@ public final class MethodNotAllowedAdviceTraitTest implements AdviceTraitTesting
     }
 
     @Test
-    public void noAllowIfNullAllowed() throws HttpMediaTypeNotAcceptableException {
+    public void noAllowIfNullAllowed() {
         final MethodNotAllowedAdviceTrait unit = new MethodNotAllowedAdviceTrait() {
         };
         final ResponseEntity<Problem> entity = unit.handleRequestMethodNotSupportedException(
@@ -46,7 +45,7 @@ public final class MethodNotAllowedAdviceTraitTest implements AdviceTraitTesting
     }
 
     @Test
-    public void noAllowIfNoneAllowed() throws HttpMediaTypeNotAcceptableException {
+    public void noAllowIfNoneAllowed() {
         final MethodNotAllowedAdviceTrait unit = new MethodNotAllowedAdviceTrait() {
         };
         final ResponseEntity<Problem> entity = unit.handleRequestMethodNotSupportedException(
