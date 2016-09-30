@@ -284,6 +284,12 @@
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>0.7.6.201602180812</version>
+                <configuration>
+                	<excludes>
+                		<!-- abstract class without methods, nothing to test -->
+                		<exclude>**/AbstractPolymorphicThrowableProblem*</exclude>
+                	</excludes>
+                </configuration>
                 <executions>
                     <execution>
                         <id>prepare-agent</id>
