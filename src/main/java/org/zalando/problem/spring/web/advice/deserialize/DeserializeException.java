@@ -14,9 +14,17 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 
-public class DeserializeException {
+public final class DeserializeException {
 
-    public static ThrowableProblem extractException(final HttpClientErrorException exception) throws JsonParseException, JsonMappingException, IOException {
+	public static DeserializeException create() {
+		return new DeserializeException();
+	}
+	
+    private DeserializeException() {
+		super();
+	}
+
+	public ThrowableProblem extractException(final HttpClientErrorException exception) throws JsonParseException, JsonMappingException, IOException {
         final ObjectMapper mapper = new ObjectMapper();
         final SimpleModule module = new SimpleModule();
         module.addDeserializer(StatusType.class, new StatusDeserializer());

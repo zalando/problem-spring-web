@@ -2,9 +2,9 @@ package org.zalando.problem.spring.web.advice.deserialize;
 
 import java.io.IOException;
 
+import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.Response.Status.Family;
 import javax.ws.rs.core.Response.StatusType;
-import javax.ws.rs.core.Response.Status;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -13,7 +13,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import com.fasterxml.jackson.databind.node.IntNode;
 
 public class StatusDeserializer extends StdDeserializer<StatusType> {
 
@@ -62,18 +61,10 @@ public class StatusDeserializer extends StdDeserializer<StatusType> {
 	public StatusType deserialize(final JsonParser pJasonParser, final DeserializationContext pCtxt)
 			throws IOException, JsonProcessingException {
         final JsonNode node = pJasonParser.getCodec().readTree(pJasonParser);
-        if (node == null) {
-        	return null;
-        }
         if (node.isTextual()) {
         	final Status statusEnum = Status.valueOf(node.asText());
         	return new SimpleStatusType(statusEnum.getStatusCode(), statusEnum.getFamily(), statusEnum.getReasonPhrase());
         }
-        final int statusCode =  node.has("statusCode") ? (Integer) ((IntNode) node.get("statusCode")).numberValue() : 0;
-        final Family family = node.has("family") ? Family.valueOf(node.get("family").asText()) : null;
-        final String reasonPhrase = node.has("reasonPhrase") ? node.get("reasonPhrase").asText() : null;
- 
-        return new SimpleStatusType(statusCode, family, reasonPhrase);
+        return null;
 	}
-
 }
