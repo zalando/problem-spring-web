@@ -6,7 +6,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.client.HttpClientErrorException;
-import org.zalando.problem.DefaultDeserializingProblem;
+import org.zalando.problem.DefaultProblem;
 import org.zalando.problem.ThrowableProblem;
 import org.zalando.problem.spring.web.advice.deserialize.DeserializeException;
 import org.zalando.problem.spring.web.advice.validation.ConstraintViolationProblem;
@@ -40,7 +40,7 @@ public class DeserializeExceptionTest {
 
     final ThrowableProblem problem = DeserializeException.instance().extractException(exception);
 
-    Assert.assertTrue(problem instanceof DefaultDeserializingProblem);
+    Assert.assertTrue(problem instanceof DefaultProblem);
     Assert.assertEquals(405, problem.getStatus().getStatusCode());
     Assert.assertEquals(Family.CLIENT_ERROR, problem.getStatus().getFamily());
     Assert.assertEquals("Method Not Allowed", problem.getStatus().getReasonPhrase());
@@ -54,7 +54,7 @@ public class DeserializeExceptionTest {
 
     final ThrowableProblem problem = DeserializeException.instance().extractException(exception);
 
-    Assert.assertTrue(problem instanceof DefaultDeserializingProblem);
+    Assert.assertTrue(problem instanceof DefaultProblem);
     Assert.assertNull(problem.getStatus());
   }
 
