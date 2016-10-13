@@ -1,5 +1,6 @@
 package org.zalando.problem.spring.web.advice;
 
+import com.google.gag.annotation.remark.Hack;
 import lombok.SneakyThrows;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -155,15 +156,20 @@ public interface AdviceTrait {
         }
 
         for (final MediaType mediaType : mediaTypes) {
-            if (APPLICATION_JSON.isCompatibleWith(mediaType)) {
+            if (mediaType.includes(APPLICATION_JSON) || mediaType.includes(PROBLEM)) {
                 return Optional.of(PROBLEM);
-            } else if (PROBLEM.isCompatibleWith(mediaType)) {
-                return Optional.of(PROBLEM);
-            } else if (X_PROBLEM.isCompatibleWith(mediaType)) {
+            } else if (mediaType.includes(X_PROBLEM)) {
                 return Optional.of(X_PROBLEM);
-            } else if (WILDCARD_JSON.isCompatibleWith(mediaType)) {
-                return Optional.of(PROBLEM);
             }
+        }
+
+        @Hack("Accepting application/something+json doesn't make you understand application/problem+json, " +
+                "but a lot of clients miss to send it correctly")
+        final boolean isNeitherAcceptingJsonNorProblemJsonButSomeVendorSpecificJson =
+                mediaTypes.stream().anyMatch(WILDCARD_JSON::includes);
+
+        if (isNeitherAcceptingJsonNorProblemJsonButSomeVendorSpecificJson) {
+            return Optional.of(PROBLEM);
         }
 
         return Optional.empty();
