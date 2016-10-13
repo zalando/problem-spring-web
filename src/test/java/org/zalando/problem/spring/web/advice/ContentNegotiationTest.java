@@ -1,9 +1,9 @@
 package org.zalando.problem.spring.web.advice;
 
 
+import com.google.gag.annotation.remark.Hack;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.springframework.web.HttpMediaTypeNotAcceptableException;
 
 import javax.servlet.ServletException;
 
@@ -27,7 +27,14 @@ public final class ContentNegotiationTest implements AdviceTraitTesting {
     @Test
     public void xproblemGivesXProblem() throws Exception {
         mvc().perform(request(GET, url)
-                .accept("application/x.problem+json"))
+                .accept("application/x.something+json", "application/x.problem+json"))
+                .andExpect(content().contentType(MediaTypes.X_PROBLEM));
+    }
+
+    @Test
+    public void specificityWins() throws Exception {
+        mvc().perform(request(GET, url)
+                .accept("application/*", "application/x.problem+json"))
                 .andExpect(content().contentType(MediaTypes.X_PROBLEM));
     }
 
@@ -48,6 +55,7 @@ public final class ContentNegotiationTest implements AdviceTraitTesting {
     }
 
     @Test
+    @Hack("This is actually rather shady, but it's most likely what the client actually wants")
     public void specificJsonGivesProblem() throws Exception {
         mvc().perform(request(GET, url)
                 .accept("application/x.vendor.specific+json"))
