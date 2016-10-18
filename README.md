@@ -277,14 +277,14 @@ By doing this you'll loose the capability to handle certain types of exceptions 
 
 We inherit this restriction from Spring and therefore recommend to use an unrestricted `@ControllerAdvice`.
 
-## Getting help
+## Getting Help
 
-If you have questions, concerns, bug reports, etc., please file an issue in this repository's Issue Tracker.
+If you have questions, concerns, bug reports, etc., please file an issue in this repository's [Issue Tracker](../../issues).
 
-## Getting involved
+## Getting Involved/Contributing
 
-To contribute, simply make a pull request and add a brief description (1-2 sentences) of your addition or change.
-For more details, check the [contribution guidelines](CONTRIBUTING.md).
+To contribute, simply make a pull request and add a brief description (1-2 sentences) of your addition or change. For
+more details, check the [contribution guidelines](CONTRIBUTING.md).
 
 ## Credits and references
 
