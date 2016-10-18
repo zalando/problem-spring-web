@@ -259,6 +259,24 @@ Enabling both features, causal chains and stacktraces, will yield:
 }
 ```
 
+## Known Issuess
+
+Spring allows to restrict the scope of a `@ControllerAdvice` to a certain subset of controllers:
+
+```java
+
+@ControllerAdvice(assignableTypes = ExampleController.class)
+public final class ExceptionHandling implements ProblemHandling
+```
+
+By doing this you'll loose the capability to handle certain types of exceptions namely:
+- `HttpRequestMethodNotSupportedException`
+- `HttpMediaTypeNotAcceptableException`
+- `HttpMediaTypeNotSupportedException`
+- `NoHandlerFoundException`
+
+We inherit this restriction from Spring and therefore recommend to use an unrestricted `@ControllerAdvice`.
+
 ## Getting help
 
 If you have questions, concerns, bug reports, etc., please file an issue in this repository's Issue Tracker.
