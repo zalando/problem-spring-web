@@ -1,6 +1,7 @@
 package org.zalando.problem.spring.web.advice.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
@@ -14,8 +15,13 @@ import java.io.IOException;
 @Component
 public class ProblemAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
+    private final HandlerExceptionResolver resolver;
+
     @Autowired
-    private HandlerExceptionResolver resolver;
+    public ProblemAuthenticationEntryPoint(
+            @Qualifier("handlerExceptionResolver") final HandlerExceptionResolver resolver) {
+        this.resolver = resolver;
+    }
 
     @Override
     public void commence(final HttpServletRequest request, final HttpServletResponse response,
