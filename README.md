@@ -82,10 +82,11 @@ The following table shows all built-in advice traits:
 | `│   ├──`[`NoSuchRequestHandlingMethodAdviceTrait`](src/main/java/org/zalando/problem/spring/web/advice/routing/NoSuchRequestHandlingMethodAdviceTrait.java)       | [`404 Not Found`](https://httpstatus.es/404)              |
 | `│   └──`[`ServletRequestBindingAdviceTrait`](src/main/java/org/zalando/problem/spring/web/advice/routing/ServletRequestBindingAdviceTrait.java)                   | [`400 Bad Request`](https://httpstatus.es/400)            |
 | `├──`[**`SecurityAdviceTrait`**](src/main/java/org/zalando/problem/spring/web/advice/security/SecurityAdviceTrait.java)                                            |                                                           |
-| `│   └──`[`AuthenticationAdviceTrait`](src/main/java/org/zalando/problem/spring/web/advice/security/AuthenticationAdviceTrait.java)                                | [`403 Forbidden`](https://httpstatus.es/403)              |
+| `│   ├──`[`AccessDeniedAdviceTrait`](src/main/java/org/zalando/problem/spring/web/advice/security/AccessDeniedAdviceTrait.java)                                    | [`403 Forbidden`](https://httpstatus.es/403)              |
+| `│   └──`[`AuthenticationAdviceTrait`](src/main/java/org/zalando/problem/spring/web/advice/security/AuthenticationAdviceTrait.java)                                | [`401 Unauthorized`](https://httpstatus.es/401)           |
 | `└──`[**`ValidationAdviceTrait`**](src/main/java/org/zalando/problem/spring/web/advice/validation/ValidationAdviceTrait.java)                                      |                                                           |
-| `    ├──`[`ConstraintViolationAdviceTrait`](src/main/java/org/zalando/problem/spring/web/advice/validation/ConstraintViolationAdviceTrait.java)                    | [`422 Unprocessable Entity`](https://httpstatus.es/422)   |
-| `    └──`[`MethodArgumentNotValidAdviceTrait`](src/main/java/org/zalando/problem/spring/web/advice/validation/MethodArgumentNotValidAdviceTrait.java)              | [`422 Unprocessable Entity`](https://httpstatus.es/422)   |
+| `    ├──`[`ConstraintViolationAdviceTrait`](src/main/java/org/zalando/problem/spring/web/advice/validation/ConstraintViolationAdviceTrait.java)                    | [`400 Bad Request`](https://httpstatus.es/400)            |
+| `    └──`[`MethodArgumentNotValidAdviceTrait`](src/main/java/org/zalando/problem/spring/web/advice/validation/MethodArgumentNotValidAdviceTrait.java)              | [`400 Bad Request`](https://httpstatus.es/400)            |
 
 You're free to use them either individually or in groups. Future versions of this library may add additional traits to groups. A typical usage would look like this:
 
@@ -101,15 +102,17 @@ class ExceptionHandling implements ProblemHandling {
 The Spring Security integration requires an additional step:
 
 ```java
-@Import(ProblemAuthenticationEntryPoint.class)
+@Import(SecurityProblemSupport.class)
 public static class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private ProblemAuthenticationEntryPoint entryPoint;
+    private SecurityProblemSupport problemSupport;
 
     @Override
     public void configure(final HttpSecurity http) throws Exception {
-        http.exceptionHandling().authenticationEntryPoint(entryPoint);
+        http.exceptionHandling()
+                .authenticationEntryPoint(problemSupport)
+                .accessDeniedHandler(problemSupport);
     }
 
 }
