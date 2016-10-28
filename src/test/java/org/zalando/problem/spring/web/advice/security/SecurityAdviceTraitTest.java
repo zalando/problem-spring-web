@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -13,9 +12,6 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
-import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurer;
-import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -32,11 +28,14 @@ import org.zalando.problem.ProblemModule;
 import org.zalando.problem.spring.web.advice.MediaTypes;
 import org.zalando.problem.spring.web.advice.ProblemHandling;
 
-import javax.servlet.Filter;
 import java.util.List;
 
 import static org.hamcrest.Matchers.is;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.anonymous;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -52,15 +51,11 @@ public final class SecurityAdviceTraitTest {
     @Import({MvcConfiguration.class, SecurityConfiguration.class})
     public static class TestConfiguration extends WebMvcConfigurationSupport {
 
-        @Autowired
-        @Qualifier("springSecurityFilterChain")
-        private Filter securityFilter;
-
         @Bean
         public MockMvc mvc(final WebApplicationContext context) {
             return MockMvcBuilders
                     .webAppContextSetup(context)
-                    .addFilter(securityFilter)
+                    .apply(springSecurity())
                     .build();
         }
     }
@@ -73,28 +68,29 @@ public final class SecurityAdviceTraitTest {
         protected void configureMessageConverters(final List<HttpMessageConverter<?>> converters) {
             converters.clear();
             converters.add(new MappingJackson2HttpMessageConverter(new ObjectMapper()
-                .registerModule(new ProblemModule())));
+                    .registerModule(new ProblemModule())));
         }
 
     }
 
     @Configuration
-    @EnableResourceServer
-    @Import(ProblemAuthenticationEntryPoint.class)
-    public static class SecurityConfiguration extends WebSecurityConfigurerAdapter implements ResourceServerConfigurer {
+    @Import(SecurityProblemSupport.class)
+    public static class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
         @Autowired
-        private ProblemAuthenticationEntryPoint entryPoint;
-
-        @Override
-        public void configure(final ResourceServerSecurityConfigurer resources) throws Exception {
-            resources.resourceId("test");
-        }
+        private SecurityProblemSupport problemSupport;
 
         @Override
         public void configure(final HttpSecurity http) throws Exception {
-            http.authorizeRequests().anyRequest().denyAll();
-            http.exceptionHandling().authenticationEntryPoint(entryPoint);
+            http.csrf().disable();
+            http.httpBasic().disable();
+            http.sessionManagement().disable();
+            http.authorizeRequests()
+                    .antMatchers("/greet").hasRole("ADMIN")
+                    .anyRequest().authenticated();
+            http.exceptionHandling()
+                    .authenticationEntryPoint(problemSupport)
+                    .accessDeniedHandler(problemSupport);
         }
 
     }
@@ -119,13 +115,22 @@ public final class SecurityAdviceTraitTest {
 
     @Test
     public void notAuthenticated() throws Exception {
-        mvc.perform(get("/greet")
-                .param("name", "Alice"))
+        mvc.perform(post("/").with(anonymous()))
+                .andExpect(status().isUnauthorized())
+                .andExpect(content().contentType(MediaTypes.PROBLEM))
+                .andExpect(jsonPath("$.title", is("Unauthorized")))
+                .andExpect(jsonPath("$.status", is(401)))
+                .andExpect(jsonPath("$.detail", is("Full authentication is required to access this resource")));
+    }
+
+    @Test
+    public void notAuthorized() throws Exception {
+        mvc.perform(get("/greet").param("name", "Alice").with(user("user").roles("USER")))
                 .andExpect(status().isForbidden())
                 .andExpect(content().contentType(MediaTypes.PROBLEM))
                 .andExpect(jsonPath("$.title", is("Forbidden")))
                 .andExpect(jsonPath("$.status", is(403)))
-                .andExpect(jsonPath("$.detail", is("Full authentication is required to access this resource")));
+                .andExpect(jsonPath("$.detail", is("Access is denied")));
     }
 
 }
