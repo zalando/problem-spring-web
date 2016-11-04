@@ -2,6 +2,8 @@ package org.zalando.problem.spring.web.advice;
 
 import com.google.gag.annotation.remark.Hack;
 import lombok.SneakyThrows;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -22,6 +24,7 @@ import org.zalando.problem.spring.web.advice.io.IOAdviceTrait;
 import org.zalando.problem.spring.web.advice.routing.RoutingAdviceTrait;
 import org.zalando.problem.spring.web.advice.validation.ValidationAdviceTrait;
 
+import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.Response.StatusType;
 import java.util.List;
 import java.util.Optional;
@@ -29,7 +32,6 @@ import java.util.Optional;
 import static com.google.common.base.MoreObjects.firstNonNull;
 import static java.util.Arrays.asList;
 import static javax.servlet.RequestDispatcher.ERROR_EXCEPTION;
-import static javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.NOT_ACCEPTABLE;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.web.context.request.RequestAttributes.SCOPE_REQUEST;
@@ -65,6 +67,8 @@ import static org.zalando.problem.spring.web.advice.MediaTypes.X_PROBLEM;
  * @see ValidationAdviceTrait
  */
 public interface AdviceTrait {
+
+    Logger LOG = LoggerFactory.getLogger(AdviceTrait.class);
 
     default ResponseEntity<Problem> create(final StatusType status, final Throwable throwable,
             final NativeWebRequest request) {
@@ -126,7 +130,9 @@ public interface AdviceTrait {
             final NativeWebRequest request, final HttpHeaders headers) {
 
         final HttpStatus status = HttpStatus.valueOf(firstNonNull(
-                problem.getStatus(), INTERNAL_SERVER_ERROR).getStatusCode());
+                problem.getStatus(), Status.INTERNAL_SERVER_ERROR).getStatusCode());
+
+        log(throwable, problem, request, status);
 
         if (status == HttpStatus.INTERNAL_SERVER_ERROR) {
             request.setAttribute(ERROR_EXCEPTION, throwable, SCOPE_REQUEST);
@@ -138,6 +144,16 @@ public interface AdviceTrait {
                         .contentType(contentType)
                         .body(problem))
                 .orElseGet(() -> fallback(throwable, problem, request, headers)));
+    }
+
+    default void log(
+            @SuppressWarnings("UnusedParameters") final Throwable throwable,
+            @SuppressWarnings("UnusedParameters") final Problem problem,
+            @SuppressWarnings("UnusedParameters") final NativeWebRequest request,
+            final HttpStatus status) {
+        if (status == HttpStatus.INTERNAL_SERVER_ERROR) {
+            LOG.error("Internal Server Error", throwable);
+        }
     }
 
     default ResponseEntity<Problem> fallback(final Throwable throwable, final Problem problem,
