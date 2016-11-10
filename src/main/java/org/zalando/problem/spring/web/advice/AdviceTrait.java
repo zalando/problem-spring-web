@@ -151,7 +151,7 @@ public interface AdviceTrait {
             @SuppressWarnings("UnusedParameters") final Problem problem,
             @SuppressWarnings("UnusedParameters") final NativeWebRequest request,
             final HttpStatus status) {
-        if (status == HttpStatus.INTERNAL_SERVER_ERROR) {
+        if (status.is5xxServerError()) {
             LOG.error("Internal Server Error", throwable);
         }
     }
