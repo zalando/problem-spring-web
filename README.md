@@ -25,6 +25,7 @@ class for your [`@ControllerAdvice`](http://docs.spring.io/spring/docs/current/j
 - favors composition over inheritance
 - ~20 useful advice traits built in
 - Spring Security support
+- logging of 4xx and 5xx responses
 
 ## Dependencies
 
