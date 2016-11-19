@@ -1,8 +1,6 @@
 package org.zalando.problem.spring.web.advice;
 
 import com.google.gag.annotation.remark.Hack;
-import lombok.RequiredArgsConstructor;
-import lombok.Value;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,19 +17,19 @@ import uk.org.lidalia.slf4jtest.TestLogger;
 import uk.org.lidalia.slf4jtest.TestLoggerFactory;
 import uk.org.lidalia.slf4jtest.TestLoggerFactoryResetRule;
 
-import javax.annotation.Nullable;
 import javax.ws.rs.core.Response.Status;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Objects;
 
 import static com.google.common.collect.Iterables.getOnlyElement;
-import static java.util.stream.Collectors.toList;
+import static javax.ws.rs.core.Response.Status.Family.CLIENT_ERROR;
+import static javax.ws.rs.core.Response.Status.Family.SERVER_ERROR;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.emptyIterable;
-import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
+import static org.junit.Assume.assumeThat;
 import static org.mockito.Mockito.mock;
 
 @RunWith(Parameterized.class)
@@ -43,63 +41,46 @@ public final class AdviceTraitLoggingTest {
     public final TestLoggerFactoryResetRule rule = new TestLoggerFactoryResetRule();
 
     @Parameter
-    public Assertion assertion;
+    public Status status;
 
     private final AdviceTrait unit = new AdviceTrait() {
     };
 
-    @Value
-    @RequiredArgsConstructor
-    private static class Assertion {
-
-        Status status;
-        Level level;
-        String message;
-        Object[] arguments;
-        Throwable thrown;
-        Throwable logged;
-
-    }
-
     @Parameters(name = "{0}")
-    public static Iterable<Assertion> data() {
-        return Arrays.stream(Status.values())
-                .map(AdviceTraitLoggingTest::toAssertion)
-                .filter(Objects::nonNull)
-                .collect(toList());
+    public static Iterable<Status> data() {
+        return Arrays.asList(Status.values());
     }
 
-    @Nullable
-    private static Assertion toAssertion(final Status status) {
-        switch (status.getFamily()) {
-            case CLIENT_ERROR:
-                return new Assertion(status, Level.WARN, "{}: {}",
-                        new Object[]{getReasonPhrase(status), "No handler found for GET /"},
-                        new NoHandlerFoundException("GET", "/", new HttpHeaders()), null);
-            case SERVER_ERROR:
-                final IOException exception = new IOException();
-                return new Assertion(status, Level.ERROR, getReasonPhrase(status), new Object[0],
-                        exception, exception);
-            default:
-                return null;
-        }
+    @Test
+    public void shouldLog4xxAsWarn() {
+        assumeThat(status.getFamily(), is(CLIENT_ERROR));
+
+        unit.create(status, new NoHandlerFoundException("GET", "/", new HttpHeaders()), mock(NativeWebRequest.class));
+
+        final LoggingEvent event = getOnlyElement(log.getLoggingEvents());
+        assertThat(event.getLevel(), is(Level.WARN));
+        assertThat(event.getMessage(), is("{}: {}"));
+        assertThat(event.getArguments(), contains(getReasonPhrase(status), "No handler found for GET /"));
+        assertThat(event.getThrowable().orNull(), is(nullValue()));
+    }
+
+    @Test
+    public void shouldLog5xxAsError() {
+        assumeThat(status.getFamily(), is(SERVER_ERROR));
+
+        final IOException throwable = new IOException();
+        unit.create(status, throwable, mock(NativeWebRequest.class));
+
+        final LoggingEvent event = getOnlyElement(log.getLoggingEvents());
+        assertThat(event.getLevel(), is(Level.ERROR));
+        assertThat(event.getMessage(), is(getReasonPhrase(status)));
+        assertThat(event.getArguments(), emptyIterable());
+        assertThat(event.getThrowable().orNull(), is(throwable));
     }
 
     @Hack("Because several status codes are defined with different reason phrases in Spring and JAX-RS")
     public static String getReasonPhrase(final Status status) {
         return HttpStatus.valueOf(status.getStatusCode()).getReasonPhrase();
-    }
-
-    @Test
-    public void logs() {
-        unit.create(assertion.status, assertion.thrown, mock(NativeWebRequest.class));
-
-        final LoggingEvent event = getOnlyElement(log.getLoggingEvents());
-        assertThat(event.getLevel(), is(assertion.level));
-        assertThat(event.getMessage(), is(assertion.message));
-        assertThat(event.getArguments(),
-                assertion.arguments.length == 0 ? emptyIterable() : contains(assertion.arguments));
-        assertThat(event.getThrowable().orNull(), is(assertion.logged));
     }
 
 }
