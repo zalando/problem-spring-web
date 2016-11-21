@@ -23,7 +23,8 @@ class for your [`@ControllerAdvice`](http://docs.spring.io/spring/docs/current/j
 
 - lets you choose traits *à la carte*
 - favors composition over inheritance
-- +15 useful advice traits built in
+- ~20 useful advice traits built in
+- Spring Security support
 
 ## Dependencies
 
@@ -53,7 +54,6 @@ Make sure you register the required modules with your ObjectMapper:
 @Bean
 public ObjectMapper objectMapper() {
     return new ObjectMapper()
-            .registerModule(new Jdk8Module())
             .registerModule(new ProblemModule());
 }
 ```
@@ -97,6 +97,17 @@ class ExceptionHandling implements ProblemHandling {
 }
 ```
 
+The [`NoHandlerFoundAdviceTrait`](src/main/java/org/zalando/problem/spring/web/advice/routing/NoHandlerFoundAdviceTrait.java)
+in addition also requires the following configuration:
+
+```yaml
+spring:
+  resources:
+    add-mappings: false
+  mvc:
+    throw-exception-if-no-handler-found: true
+```
+
 ### Security
 
 The Spring Security integration requires an additional step:
@@ -129,10 +140,11 @@ class ProductsResource {
 
     @RequestMapping(method = GET, value = "/{productId}", produces = APPLICATION_JSON_VALUE)
     public Product getProduct(String productId) {
-        return ..;
+        // TODO implement
+        return null;
     }
 
-    @RequestMapping(method = PUT, value = "/{productId}", consumes = APPLICATION_JSON_VALUE}
+    @RequestMapping(method = PUT, value = "/{productId}", consumes = APPLICATION_JSON_VALUE)
     public Product updateProduct(String productId, Product product) {
         // TODO implement
         throw new UnsupportedOperationException();
@@ -188,7 +200,6 @@ In case you want to enable stack traces, please configure your `ProblemModule` a
 
 ```java
 ObjectMapper mapper = new ObjectMapper()
-    .registerModule(new Jdk8Module())
     .registerModule(new ProblemModule().withStackTraces());
 ```
 
