@@ -25,7 +25,7 @@ class for your [`@ControllerAdvice`](http://docs.spring.io/spring/docs/current/j
 - favors composition over inheritance
 - ~20 useful advice traits built in
 - Spring Security support
-- logging of 4xx and 5xx responses
+- customizable processing
 
 ## Dependencies
 
@@ -130,6 +130,19 @@ public static class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 }
 ```
 
+### Customization
+
+The problem handling process provided by `AdviceTrait` is built in a way that it allows for customization whenever the
+need arises. All of the following aspects can be overridden and tweaked:
+
+| Aspect              | Method(s)                   | Default                                                                                               |
+|---------------------|-----------------------------|-------------------------------------------------------------------------------------------------------|
+| Creation            | `AdviceTrait.create(..)`    |                                                                                                       |
+| Logging             | `AdviceTrait.log(..)`       | 4xx as `WARN`, 5xx as `ERROR` including stack trace                                                   |
+| Content Negotiation | `AdviceTrait.negotiate(..)` | `application/json`, `application/*+json`, `application/problem+json` and `application/x.problem+json` |
+| Fallback            | `AdviceTrait.fallback(..)`  | `406 Not Acceptable`, without a body                                                                  |
+| Post-Processing     | `AdviceTrait.process(..)`   | n/a                                                                                                   |
+
 ## Usage
 
 Assuming there is a controller like this:
@@ -193,7 +206,7 @@ Content-Type: application/problem+json
 
 ### Stack traces and causal chains
 
-**Before you continue**, please read the section about [*Stacktraces and causal chains*]
+**Before you continue**, please read the section about [*Stack traces and causal chains*]
 (https://github.com/zalando/problem#stack-traces-and-causal-chains) in [zalando/problem]
 (https://github.com/zalando/problem).
 

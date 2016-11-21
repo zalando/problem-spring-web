@@ -158,14 +158,6 @@ public interface AdviceTrait {
         }
     }
 
-    default ResponseEntity<Problem> fallback(
-            @SuppressWarnings("UnusedParameters") final Throwable throwable,
-            @SuppressWarnings("UnusedParameters") final Problem problem,
-            @SuppressWarnings("UnusedParameters") final NativeWebRequest request,
-            @SuppressWarnings("UnusedParameters") final HttpHeaders headers) {
-        return ResponseEntity.status(NOT_ACCEPTABLE).body(null);
-    }
-
     @SneakyThrows(HttpMediaTypeNotAcceptableException.class)
     default Optional<MediaType> negotiate(final NativeWebRequest request) {
         final HeaderContentNegotiationStrategy negotiator = new HeaderContentNegotiationStrategy();
@@ -194,6 +186,14 @@ public interface AdviceTrait {
         }
 
         return Optional.empty();
+    }
+
+    default ResponseEntity<Problem> fallback(
+            @SuppressWarnings("UnusedParameters") final Throwable throwable,
+            @SuppressWarnings("UnusedParameters") final Problem problem,
+            @SuppressWarnings("UnusedParameters") final NativeWebRequest request,
+            @SuppressWarnings("UnusedParameters") final HttpHeaders headers) {
+        return ResponseEntity.status(NOT_ACCEPTABLE).body(null);
     }
 
     default ResponseEntity<Problem> process(final ResponseEntity<Problem> entity) {
