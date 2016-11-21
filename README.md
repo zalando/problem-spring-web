@@ -162,7 +162,7 @@ Accept: application/xml
 
 ```http
 HTTP/1.1 406 Not Acceptable
-Content-Type: application/json
+Content-Type: application/problem+json
 
 {
   "title": "Not Acceptable",
@@ -181,7 +181,7 @@ Content-Type: application/json
 ```http
 HTTP/1.1 405 Method Not Allowed
 Allow: GET
-Content-Type: application/json
+Content-Type: application/problem+json
 
 {
   "title": "Method Not Allowed",
