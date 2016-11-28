@@ -151,14 +151,11 @@ public interface AdviceTrait {
             @SuppressWarnings("UnusedParameters") final Problem problem,
             @SuppressWarnings("UnusedParameters") final NativeWebRequest request,
             final HttpStatus status) {
-        if (status.is5xxServerError()) {
+        if (status.is4xxClientError()) {
+            LOG.warn("{}: {}", status.getReasonPhrase(), throwable.getMessage());
+        } else if (status.is5xxServerError()) {
             LOG.error(status.getReasonPhrase(), throwable);
         }
-    }
-
-    default ResponseEntity<Problem> fallback(final Throwable throwable, final Problem problem,
-            final NativeWebRequest request, final HttpHeaders headers) {
-        return ResponseEntity.status(NOT_ACCEPTABLE).body(null);
     }
 
     @SneakyThrows(HttpMediaTypeNotAcceptableException.class)
@@ -189,6 +186,14 @@ public interface AdviceTrait {
         }
 
         return Optional.empty();
+    }
+
+    default ResponseEntity<Problem> fallback(
+            @SuppressWarnings("UnusedParameters") final Throwable throwable,
+            @SuppressWarnings("UnusedParameters") final Problem problem,
+            @SuppressWarnings("UnusedParameters") final NativeWebRequest request,
+            @SuppressWarnings("UnusedParameters") final HttpHeaders headers) {
+        return ResponseEntity.status(NOT_ACCEPTABLE).body(null);
     }
 
     default ResponseEntity<Problem> process(final ResponseEntity<Problem> entity) {
