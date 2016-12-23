@@ -19,7 +19,7 @@ public final class ThrowableAdviceTraitTest implements AdviceTraitTesting {
         mvc().perform(request(GET, "http://localhost/api/handler-throwable"))
                 .andExpect(status().isInternalServerError())
                 .andExpect(header().string("Content-Type", is("application/problem+json")))
-                .andExpect(jsonPath("$.type").doesNotExist())
+                .andExpect(jsonPath("$.type", is("https://httpstatuses.com/500")))
                 .andExpect(jsonPath("$.title", is("Internal Server Error")))
                 .andExpect(jsonPath("$.status", is(500)))
                 .andExpect(jsonPath("$.detail", containsString("expected")))

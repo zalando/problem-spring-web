@@ -28,7 +28,7 @@ public final class MethodNotAllowedAdviceTraitTest implements AdviceTraitTesting
                 .andExpect(status().isMethodNotAllowed())
                 .andExpect(header().string("Content-Type", is("application/problem+json")))
                 .andExpect(header().string("Allow", is("GET")))
-                .andExpect(jsonPath("$.type").doesNotExist())
+                .andExpect(jsonPath("$.type", is("https://httpstatuses.com/405")))
                 .andExpect(jsonPath("$.title", is("Method Not Allowed")))
                 .andExpect(jsonPath("$.status", is(405)))
                 .andExpect(jsonPath("$.detail", containsString("not supported")));

@@ -19,7 +19,7 @@ public final class MultipartAdviceTraitTest implements AdviceTraitTesting {
         mvc().perform(request(POST, "http://localhost/api/handler-multipart"))
                 .andExpect(status().isBadRequest())
                 .andExpect(header().string("Content-Type", is("application/problem+json")))
-                .andExpect(jsonPath("$.type").doesNotExist())
+                .andExpect(jsonPath("$.type", is("https://httpstatuses.com/400")))
                 .andExpect(jsonPath("$.title", is("Bad Request")))
                 .andExpect(jsonPath("$.status", is(400)))
                 .andExpect(jsonPath("$.detail", containsString("not a multipart request")));

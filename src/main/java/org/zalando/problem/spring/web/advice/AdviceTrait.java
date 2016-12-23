@@ -26,6 +26,7 @@ import org.zalando.problem.spring.web.advice.validation.ValidationAdviceTrait;
 
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.Response.StatusType;
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
@@ -68,6 +69,7 @@ import static org.zalando.problem.spring.web.advice.MediaTypes.X_PROBLEM;
  */
 public interface AdviceTrait {
 
+    String STATUS_LINK_TEMPLATE = "https://httpstatuses.com/%s";
     Logger LOG = LoggerFactory.getLogger(AdviceTrait.class);
 
     default ResponseEntity<Problem> create(final StatusType status, final Throwable throwable,
@@ -80,12 +82,23 @@ public interface AdviceTrait {
         return create(throwable, toProblem(throwable, status), request, headers);
     }
 
-    default ThrowableProblem toProblem(final Throwable throwable, final StatusType status) {
+    default ResponseEntity<Problem> create(final StatusType status, final Throwable throwable,
+                                           final NativeWebRequest request, URI type) {
+        return create(status, throwable, request, new HttpHeaders(), type);
+    }
+
+    default ResponseEntity<Problem> create(final StatusType status, final Throwable throwable,
+                                           final NativeWebRequest request, final HttpHeaders headers, URI type) {
+        return create(throwable, toProblem(throwable, status, type), request, headers);
+    }
+
+    default ThrowableProblem toProblem(final Throwable throwable, final StatusType status, URI type) {
         final Throwable cause = throwable.getCause();
 
         final ProblemBuilder builder = Problem.builder()
                 .withTitle(status.getReasonPhrase())
                 .withStatus(status)
+                .withType(type)
                 .withDetail(throwable.getMessage());
 
         final StackTraceElement[] stackTrace;
@@ -107,6 +120,12 @@ public interface AdviceTrait {
         problem.setStackTrace(stackTrace);
         return problem;
     }
+
+    default ThrowableProblem toProblem(final Throwable throwable, final StatusType status) {
+        final URI type = URI.create(String.format(STATUS_LINK_TEMPLATE, status.getStatusCode()));
+        return toProblem(throwable, status, type);
+    }
+
 
     default boolean isCausalChainsEnabled() {
         return false;

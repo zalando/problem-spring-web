@@ -19,7 +19,7 @@ public final class MissingServletRequestParameterAdviceTraitTest implements Advi
         mvc().perform(request(GET, "http://localhost/api/handler-params"))
                 .andExpect(status().isBadRequest())
                 .andExpect(header().string("Content-Type", is("application/problem+json")))
-                .andExpect(jsonPath("$.type").doesNotExist())
+                .andExpect(jsonPath("$.type", is("https://httpstatuses.com/400")))
                 .andExpect(jsonPath("$.title", is("Bad Request")))
                 .andExpect(jsonPath("$.status", is(400)))
                 .andExpect(jsonPath("$.detail", containsString("params1")));
