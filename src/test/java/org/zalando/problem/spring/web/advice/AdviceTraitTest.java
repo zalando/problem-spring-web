@@ -11,6 +11,7 @@ import org.zalando.problem.ThrowableProblem;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+import java.net.URI;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -56,6 +57,18 @@ public class AdviceTraitTest {
         assertThat(result.getHeaders(), hasFeature("Content-Type", HttpHeaders::getContentType, is(PROBLEM)));
         assertThat(result.getBody(), compose(hasFeature("Status", Problem::getStatus, is(Status.RESET_CONTENT)))
                 .and(hasFeature("Detail", Problem::getDetail, is("Message"))));
+    }
+
+    @Test
+    public void buildsOnThrowableWithType() {
+        URI type = URI.create("https://google.com");
+        final ResponseEntity<Problem> result = unit.create(Status.RESET_CONTENT,
+          new IllegalStateException("Message"), request(), type);
+
+        assertThat(result, hasFeature("Status", ResponseEntity::getStatusCode, is(RESET_CONTENT)));
+        assertThat(result.getHeaders(), hasFeature("Content-Type", HttpHeaders::getContentType, is(PROBLEM)));
+        assertThat(result.getBody(), compose(hasFeature("Status", Problem::getStatus, is(Status.RESET_CONTENT)))
+          .and(hasFeature("Detail", Problem::getDetail, is("Message"))).and(hasFeature("Type", Problem::getType, is(type))));
     }
 
     @Test
