@@ -124,7 +124,7 @@ public class AdviceTraitTest {
         assertThat(entity.getBody(), is(instanceOf(ThrowableProblem.class)));
 
         final ThrowableProblem illegalState = (ThrowableProblem) entity.getBody();
-        assertThat(illegalState.getType(), hasToString("https://httpstatuses.com/500"));
+        assertThat(illegalState.getType(), hasToString("about:blank"));
         assertThat(illegalState.getTitle(), is("Internal Server Error"));
         assertThat(illegalState.getStatus(), is(Status.INTERNAL_SERVER_ERROR));
         assertThat(illegalState.getDetail(), is("Illegal State"));
@@ -133,7 +133,7 @@ public class AdviceTraitTest {
         assertThat(illegalState.getCause(), is(notNullValue()));
 
         final ThrowableProblem illegalArgument = illegalState.getCause();
-        assertThat(illegalArgument.getType(), hasToString("https://httpstatuses.com/500"));
+        assertThat(illegalArgument.getType(), hasToString("about:blank"));
         assertThat(illegalArgument.getTitle(), is("Internal Server Error"));
         assertThat(illegalArgument.getStatus(), is(Status.INTERNAL_SERVER_ERROR));
         assertThat(illegalArgument.getDetail(), is("Illegal Argument"));
@@ -142,7 +142,7 @@ public class AdviceTraitTest {
         assertThat(illegalArgument.getCause(), is(notNullValue()));
 
         final ThrowableProblem nullPointer = illegalArgument.getCause();
-        assertThat(nullPointer.getType(), hasToString("https://httpstatuses.com/500"));
+        assertThat(nullPointer.getType(), hasToString("about:blank"));
         assertThat(nullPointer.getTitle(), is("Internal Server Error"));
         assertThat(nullPointer.getStatus(), is(Status.INTERNAL_SERVER_ERROR));
         assertThat(nullPointer.getDetail(), is("Null Pointer"));

@@ -19,7 +19,7 @@ public final class MissingServletRequestPartAdviceTraitTest implements AdviceTra
                 .file("payload1", new byte[]{0x1}))
                 .andExpect(status().isBadRequest())
                 .andExpect(header().string("Content-Type", is("application/problem+json")))
-                .andExpect(jsonPath("$.type", is("https://httpstatuses.com/400")))
+                .andExpect(jsonPath("$.type").doesNotExist())
                 .andExpect(jsonPath("$.title", is("Bad Request")))
                 .andExpect(jsonPath("$.status", is(400)))
                 .andExpect(jsonPath("$.detail", containsString("payload2")));

@@ -26,7 +26,7 @@ public final class NoHandlerFoundAdviceTraitTest implements AdviceTraitTesting {
         mvc.perform(request(GET, "http://localhost/api/no-handler"))
                 .andExpect(status().isNotFound())
                 .andExpect(header().string("Content-Type", is("application/problem+json")))
-                .andExpect(jsonPath("$.type", is("https://httpstatuses.com/404")))
+                .andExpect(jsonPath("$.type").doesNotExist())
                 .andExpect(jsonPath("$.title", is("Not Found")))
                 .andExpect(jsonPath("$.status", is(404)))
                 .andExpect(jsonPath("$.detail", containsString("No handler found")));
@@ -40,7 +40,7 @@ public final class NoHandlerFoundAdviceTraitTest implements AdviceTraitTesting {
         mvc.perform(request(GET, "http://localhost/no-handler"))
                 .andExpect(status().isNotFound())
                 .andExpect(header().string("Content-Type", is("application/problem+json")))
-                .andExpect(jsonPath("$.type", is("https://httpstatuses.com/404")))
+                .andExpect(jsonPath("$.type").doesNotExist())
                 .andExpect(jsonPath("$.title", is("Not Found")))
                 .andExpect(jsonPath("$.status", is(404)))
                 .andExpect(jsonPath("$.detail", containsString("No handler found")));

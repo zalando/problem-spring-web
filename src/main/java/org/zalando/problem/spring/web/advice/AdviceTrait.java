@@ -69,7 +69,6 @@ import static org.zalando.problem.spring.web.advice.MediaTypes.X_PROBLEM;
  */
 public interface AdviceTrait {
 
-    String STATUS_LINK_TEMPLATE = "https://httpstatuses.com/%s";
     Logger LOG = LoggerFactory.getLogger(AdviceTrait.class);
 
     default ResponseEntity<Problem> create(final StatusType status, final Throwable throwable,
@@ -122,8 +121,7 @@ public interface AdviceTrait {
     }
 
     default ThrowableProblem toProblem(final Throwable throwable, final StatusType status) {
-        final URI type = URI.create(String.format(STATUS_LINK_TEMPLATE, status.getStatusCode()));
-        return toProblem(throwable, status, type);
+        return toProblem(throwable, status, Problem.DEFAULT_TYPE);
     }
 
 
