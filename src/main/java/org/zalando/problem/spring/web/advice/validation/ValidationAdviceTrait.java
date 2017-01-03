@@ -7,5 +7,6 @@ import org.zalando.problem.spring.web.advice.AdviceTrait;
  */
 public interface ValidationAdviceTrait extends
         ConstraintViolationAdviceTrait,
+        BindAdviceTrait,
         MethodArgumentNotValidAdviceTrait {
 }

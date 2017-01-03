@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gag.annotation.remark.Facepalm;
 import com.google.gag.annotation.remark.Hack;
 import com.google.gag.annotation.remark.OhNoYouDidnt;
+import lombok.Data;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,6 +27,7 @@ import javax.validation.ReportAsSingleViolation;
 import javax.validation.Valid;
 import javax.validation.Validation;
 import javax.validation.Validator;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -143,15 +145,20 @@ public class ExampleRestController {
         final Set<ConstraintViolation<UserRequest>> violations = validator.validate(user);
         throw new ConstraintViolationException(violations);
     }
-    
+
     @RequestMapping("/handler-secured")
     public void secured() {
-        
+
     }
 
     @RequestMapping(path = "/handler-invalid-body", method = POST)
     public ResponseEntity<String> validRequestBody(@Valid @RequestBody final UserRequest user) {
         // TODO find a way to change the "object name" of the body, by default it's the lower-camel-cased class name
+        return ResponseEntity.ok("done");
+    }
+
+    @RequestMapping(path = "/handler-invalid-query-strings", method = GET)
+    public ResponseEntity<String> validRequestQueryStrings(@Valid final PageRequest pageRequest) {
         return ResponseEntity.ok("done");
     }
 
@@ -204,6 +211,16 @@ public class ExampleRestController {
             return name;
         }
 
+    }
+
+    @Data
+    static final class PageRequest {
+
+        @Min(value = 0)
+        private int page = 0;
+
+        @Min(value = 1)
+        private int size = 50;
     }
 
 }
