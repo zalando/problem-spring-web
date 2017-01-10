@@ -29,7 +29,6 @@ import javax.ws.rs.core.Response.StatusType;
 import java.util.List;
 import java.util.Optional;
 
-import static com.google.common.base.MoreObjects.firstNonNull;
 import static java.util.Arrays.asList;
 import static javax.servlet.RequestDispatcher.ERROR_EXCEPTION;
 import static org.springframework.http.HttpStatus.NOT_ACCEPTABLE;
@@ -129,8 +128,9 @@ public interface AdviceTrait {
     default ResponseEntity<Problem> create(final Throwable throwable, final Problem problem,
             final NativeWebRequest request, final HttpHeaders headers) {
 
-        final HttpStatus status = HttpStatus.valueOf(firstNonNull(
-                problem.getStatus(), Status.INTERNAL_SERVER_ERROR).getStatusCode());
+        final HttpStatus status = HttpStatus.valueOf(Optional.ofNullable(problem.getStatus())
+                .orElse(Status.INTERNAL_SERVER_ERROR)
+                .getStatusCode());
 
         log(throwable, problem, request, status);
 
