@@ -3,7 +3,6 @@ package org.zalando.problem.spring.web.advice.validation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.NativeWebRequest;
-import org.zalando.problem.MoreStatus;
 import org.zalando.problem.Problem;
 
 import javax.validation.ConstraintViolation;
@@ -17,7 +16,7 @@ import static java.util.stream.Collectors.toList;
  * @see Violation
  * @see ConstraintViolationProblem
  * @see ConstraintViolationProblem#TYPE_VALUE
- * @see MoreStatus#UNPROCESSABLE_ENTITY
+ * @see BaseValidationAdviceTrait#defaultConstraintViolationStatus()
  */
 public interface ConstraintViolationAdviceTrait extends BaseValidationAdviceTrait {
 
