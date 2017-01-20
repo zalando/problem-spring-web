@@ -55,7 +55,8 @@ Make sure you register the required modules with your ObjectMapper:
 @Bean
 public ObjectMapper objectMapper() {
     return new ObjectMapper()
-            .registerModule(new ProblemModule());
+            .registerModule(new ProblemModule())
+            .registerModule(new ConstraintViolationProblemModule());
 }
 ```
 
