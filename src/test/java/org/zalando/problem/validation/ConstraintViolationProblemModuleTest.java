@@ -18,17 +18,17 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 
 @Slf4j
-public class ValidationProblemModuleTest {
+public class ConstraintViolationProblemModuleTest {
 
     @Test
     public void serializeConstraintViolationUsingMixinAnnotations() throws JsonProcessingException {
         ObjectMapper mapperWithDisabledAutoDetection = new ObjectMapper()
-                .configure(MapperFeature.AUTO_DETECT_FIELDS, false)
-                .configure(MapperFeature.AUTO_DETECT_GETTERS, false)
-                .configure(MapperFeature.AUTO_DETECT_IS_GETTERS, false);
+                .disable(MapperFeature.AUTO_DETECT_FIELDS)
+                .disable(MapperFeature.AUTO_DETECT_GETTERS)
+                .disable(MapperFeature.AUTO_DETECT_IS_GETTERS);
 
         mapperWithDisabledAutoDetection.registerModule(new ProblemModule());
-        mapperWithDisabledAutoDetection.registerModule(new ValidationProblemModule());
+        mapperWithDisabledAutoDetection.registerModule(new ConstraintViolationProblemModule());
 
         Violation violation = new Violation("bob", "was missing");
         ConstraintViolationProblem constraintViolationProblem = new ConstraintViolationProblem(Response.Status.BAD_REQUEST, asList(violation));

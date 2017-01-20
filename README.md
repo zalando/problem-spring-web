@@ -56,7 +56,7 @@ Make sure you register the required modules with your ObjectMapper:
 public ObjectMapper objectMapper() {
     return new ObjectMapper()
             .registerModule(new ProblemModule())
-            .registerModule(new ValidationProblemModule());
+            .registerModule(new ConstraintViolationProblemModule());
 }
 ```
 

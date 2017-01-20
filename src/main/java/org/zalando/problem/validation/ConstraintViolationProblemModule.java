@@ -11,7 +11,7 @@ import org.zalando.problem.spring.web.advice.validation.Violation;
  * A companion to {@link org.zalando.problem.ProblemModule} to enable serialization
  * of {@link ConstraintViolationProblem} and {@link Violation} without relying on autodetection.
  */
-public class ValidationProblemModule extends Module {
+public class ConstraintViolationProblemModule extends Module {
     @Override
     public void setupModule(SetupContext context) {
         final SimpleModule module = new SimpleModule();
@@ -24,13 +24,13 @@ public class ValidationProblemModule extends Module {
 
     @Override
     public String getModuleName() {
-        return ValidationProblemModule.class.getSimpleName();
+        return ConstraintViolationProblemModule.class.getSimpleName();
     }
 
     @SuppressWarnings("deprecation")
     @Override
     public Version version() {
-        return VersionUtil.mavenVersionFor(ValidationProblemModule.class.getClassLoader(),
+        return VersionUtil.mavenVersionFor(ConstraintViolationProblemModule.class.getClassLoader(),
                 "org.zalando", "problem-spring-web");
     }
 }
