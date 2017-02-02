@@ -12,8 +12,8 @@ import static java.util.stream.Collectors.toList;
 public interface BaseBindingResultAdviceTrait extends BaseValidationAdviceTrait {
 
     default Violation createViolation(final FieldError error) {
-        final String fieldName = error.getObjectName() + "." + error.getField();
-        return new Violation(formatFieldName(fieldName), error.getDefaultMessage());
+        final String fieldName = formatFieldName(error.getField());
+        return new Violation(fieldName, error.getDefaultMessage());
     }
 
     default Violation createViolation(final ObjectError error) {

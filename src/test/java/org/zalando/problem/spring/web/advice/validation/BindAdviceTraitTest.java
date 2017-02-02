@@ -21,9 +21,9 @@ public class BindAdviceTraitTest implements AdviceTraitTesting {
              .andExpect(jsonPath("$.title", is("Constraint Violation")))
              .andExpect(jsonPath("$.status", is(400)))
              .andExpect(jsonPath("$.violations", hasSize(2)))
-             .andExpect(jsonPath("$.violations[0].field", is("page_request.page")))
+             .andExpect(jsonPath("$.violations[0].field", is("page")))
              .andExpect(jsonPath("$.violations[0].message", is("must be greater than or equal to 0")))
-             .andExpect(jsonPath("$.violations[1].field", is("page_request.size")))
+             .andExpect(jsonPath("$.violations[1].field", is("size")))
              .andExpect(jsonPath("$.violations[1].message", is("must be greater than or equal to 1")));
     }
 }
