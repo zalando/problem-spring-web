@@ -112,11 +112,12 @@ spring:
 
 ### Security
 
-The Spring Security integration requires an additional step:
+The Spring Security integration requires additional steps:
 
 ```java
 @Import(SecurityProblemSupport.class)
-public static class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+@Configuration
+public class SecurityConfiguration extends ResourceServerConfigurerAdapter {
 
     @Autowired
     private SecurityProblemSupport problemSupport;
@@ -129,6 +130,15 @@ public static class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
 }
+```
+
+To return valid problem objects upon authentication exceptions, you will also need to implement the [`SecurityAdviceTrait`](src/main/java/org/zalando/problem/spring/web/advice/security/SecurityAdviceTrait.java), this is already sufficient:
+
+```java
+@ControllerAdvice
+public class SecurityExceptionHandler implements SecurityAdviceTrait {
+}
+
 ```
 
 ### Customization
