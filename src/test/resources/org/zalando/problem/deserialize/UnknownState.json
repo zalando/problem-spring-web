@@ -1,0 +1,12 @@
+{
+  "cause" : null,
+  "type" : "about:blank",
+  "title" : "Method Not Allowed",
+  "status" : { },
+  "detail" : "Request method 'POST' not supported",
+  "instance" : null,
+  "parameters" : { },
+  "message" : "Method Not Allowed: Request method 'POST' not supported",
+  "localizedMessage" : "Method Not Allowed: Request method 'POST' not supported",
+  "suppressed" : [ ]
+}

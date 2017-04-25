@@ -1,0 +1,349 @@
+{
+  "cause" : null,
+  "stackTrace" : [ {
+    "methodName" : "handleNoMatch",
+    "fileName" : "RequestMappingInfoHandlerMapping.java",
+    "lineNumber" : 207,
+    "className" : "org.springframework.web.servlet.mvc.method.RequestMappingInfoHandlerMapping",
+    "nativeMethod" : false
+  }, {
+    "methodName" : "lookupHandlerMethod",
+    "fileName" : "AbstractHandlerMethodMapping.java",
+    "lineNumber" : 374,
+    "className" : "org.springframework.web.servlet.handler.AbstractHandlerMethodMapping",
+    "nativeMethod" : false
+  }, {
+    "methodName" : "lookupHandlerMethod",
+    "fileName" : "BasePathAwareHandlerMapping.java",
+    "lineNumber" : 111,
+    "className" : "org.springframework.data.rest.webmvc.BasePathAwareHandlerMapping",
+    "nativeMethod" : false
+  }, {
+    "methodName" : "getHandlerInternal",
+    "fileName" : "AbstractHandlerMethodMapping.java",
+    "lineNumber" : 314,
+    "className" : "org.springframework.web.servlet.handler.AbstractHandlerMethodMapping",
+    "nativeMethod" : false
+  }, {
+    "methodName" : "getHandlerInternal",
+    "fileName" : "AbstractHandlerMethodMapping.java",
+    "lineNumber" : 61,
+    "className" : "org.springframework.web.servlet.handler.AbstractHandlerMethodMapping",
+    "nativeMethod" : false
+  }, {
+    "methodName" : "getHandler",
+    "fileName" : "AbstractHandlerMapping.java",
+    "lineNumber" : 352,
+    "className" : "org.springframework.web.servlet.handler.AbstractHandlerMapping",
+    "nativeMethod" : false
+  }, {
+    "methodName" : "getHandler",
+    "fileName" : "DelegatingHandlerMapping.java",
+    "lineNumber" : 75,
+    "className" : "org.springframework.data.rest.webmvc.support.DelegatingHandlerMapping",
+    "nativeMethod" : false
+  }, {
+    "methodName" : "getHandler",
+    "fileName" : "DispatcherServlet.java",
+    "lineNumber" : 1131,
+    "className" : "org.springframework.web.servlet.DispatcherServlet",
+    "nativeMethod" : false
+  }, {
+    "methodName" : "doDispatch",
+    "fileName" : "DispatcherServlet.java",
+    "lineNumber" : 936,
+    "className" : "org.springframework.web.servlet.DispatcherServlet",
+    "nativeMethod" : false
+  }, {
+    "methodName" : "doService",
+    "fileName" : "DispatcherServlet.java",
+    "lineNumber" : 897,
+    "className" : "org.springframework.web.servlet.DispatcherServlet",
+    "nativeMethod" : false
+  }, {
+    "methodName" : "processRequest",
+    "fileName" : "FrameworkServlet.java",
+    "lineNumber" : 970,
+    "className" : "org.springframework.web.servlet.FrameworkServlet",
+    "nativeMethod" : false
+  }, {
+    "methodName" : "doPost",
+    "fileName" : "FrameworkServlet.java",
+    "lineNumber" : 872,
+    "className" : "org.springframework.web.servlet.FrameworkServlet",
+    "nativeMethod" : false
+  }, {
+    "methodName" : "service",
+    "fileName" : "HttpServlet.java",
+    "lineNumber" : 707,
+    "className" : "javax.servlet.http.HttpServlet",
+    "nativeMethod" : false
+  }, {
+    "methodName" : "service",
+    "fileName" : "FrameworkServlet.java",
+    "lineNumber" : 846,
+    "className" : "org.springframework.web.servlet.FrameworkServlet",
+    "nativeMethod" : false
+  }, {
+    "methodName" : "service",
+    "fileName" : "HttpServlet.java",
+    "lineNumber" : 790,
+    "className" : "javax.servlet.http.HttpServlet",
+    "nativeMethod" : false
+  }, {
+    "methodName" : "handle",
+    "fileName" : "ServletHolder.java",
+    "lineNumber" : 845,
+    "className" : "org.eclipse.jetty.servlet.ServletHolder",
+    "nativeMethod" : false
+  }, {
+    "methodName" : "doFilter",
+    "fileName" : "ServletHandler.java",
+    "lineNumber" : 1689,
+    "className" : "org.eclipse.jetty.servlet.ServletHandler$CachedChain",
+    "nativeMethod" : false
+  }, {
+    "methodName" : "doFilter",
+    "fileName" : "WebSocketUpgradeFilter.java",
+    "lineNumber" : 225,
+    "className" : "org.eclipse.jetty.websocket.server.WebSocketUpgradeFilter",
+    "nativeMethod" : false
+  }, {
+    "methodName" : "doFilter",
+    "fileName" : "ServletHandler.java",
+    "lineNumber" : 1676,
+    "className" : "org.eclipse.jetty.servlet.ServletHandler$CachedChain",
+    "nativeMethod" : false
+  }, {
+    "methodName" : "doFilterInternal",
+    "fileName" : "RequestContextFilter.java",
+    "lineNumber" : 99,
+    "className" : "org.springframework.web.filter.RequestContextFilter",
+    "nativeMethod" : false
+  }, {
+    "methodName" : "doFilter",
+    "fileName" : "OncePerRequestFilter.java",
+    "lineNumber" : 107,
+    "className" : "org.springframework.web.filter.OncePerRequestFilter",
+    "nativeMethod" : false
+  }, {
+    "methodName" : "doFilter",
+    "fileName" : "ServletHandler.java",
+    "lineNumber" : 1676,
+    "className" : "org.eclipse.jetty.servlet.ServletHandler$CachedChain",
+    "nativeMethod" : false
+  }, {
+    "methodName" : "doFilterInternal",
+    "fileName" : "HttpPutFormContentFilter.java",
+    "lineNumber" : 89,
+    "className" : "org.springframework.web.filter.HttpPutFormContentFilter",
+    "nativeMethod" : false
+  }, {
+    "methodName" : "doFilter",
+    "fileName" : "OncePerRequestFilter.java",
+    "lineNumber" : 107,
+    "className" : "org.springframework.web.filter.OncePerRequestFilter",
+    "nativeMethod" : false
+  }, {
+    "methodName" : "doFilter",
+    "fileName" : "ServletHandler.java",
+    "lineNumber" : 1676,
+    "className" : "org.eclipse.jetty.servlet.ServletHandler$CachedChain",
+    "nativeMethod" : false
+  }, {
+    "methodName" : "doFilterInternal",
+    "fileName" : "HiddenHttpMethodFilter.java",
+    "lineNumber" : 77,
+    "className" : "org.springframework.web.filter.HiddenHttpMethodFilter",
+    "nativeMethod" : false
+  }, {
+    "methodName" : "doFilter",
+    "fileName" : "OncePerRequestFilter.java",
+    "lineNumber" : 107,
+    "className" : "org.springframework.web.filter.OncePerRequestFilter",
+    "nativeMethod" : false
+  }, {
+    "methodName" : "doFilter",
+    "fileName" : "ServletHandler.java",
+    "lineNumber" : 1676,
+    "className" : "org.eclipse.jetty.servlet.ServletHandler$CachedChain",
+    "nativeMethod" : false
+  }, {
+    "methodName" : "doFilterInternal",
+    "fileName" : "CharacterEncodingFilter.java",
+    "lineNumber" : 197,
+    "className" : "org.springframework.web.filter.CharacterEncodingFilter",
+    "nativeMethod" : false
+  }, {
+    "methodName" : "doFilter",
+    "fileName" : "OncePerRequestFilter.java",
+    "lineNumber" : 107,
+    "className" : "org.springframework.web.filter.OncePerRequestFilter",
+    "nativeMethod" : false
+  }, {
+    "methodName" : "doFilter",
+    "fileName" : "ServletHandler.java",
+    "lineNumber" : 1676,
+    "className" : "org.eclipse.jetty.servlet.ServletHandler$CachedChain",
+    "nativeMethod" : false
+  }, {
+    "methodName" : "doHandle",
+    "fileName" : "ServletHandler.java",
+    "lineNumber" : 581,
+    "className" : "org.eclipse.jetty.servlet.ServletHandler",
+    "nativeMethod" : false
+  }, {
+    "methodName" : "handle",
+    "fileName" : "ScopedHandler.java",
+    "lineNumber" : 143,
+    "className" : "org.eclipse.jetty.server.handler.ScopedHandler",
+    "nativeMethod" : false
+  }, {
+    "methodName" : "handle",
+    "fileName" : "SecurityHandler.java",
+    "lineNumber" : 548,
+    "className" : "org.eclipse.jetty.security.SecurityHandler",
+    "nativeMethod" : false
+  }, {
+    "methodName" : "doHandle",
+    "fileName" : "SessionHandler.java",
+    "lineNumber" : 226,
+    "className" : "org.eclipse.jetty.server.session.SessionHandler",
+    "nativeMethod" : false
+  }, {
+    "methodName" : "doHandle",
+    "fileName" : "ContextHandler.java",
+    "lineNumber" : 1180,
+    "className" : "org.eclipse.jetty.server.handler.ContextHandler",
+    "nativeMethod" : false
+  }, {
+    "methodName" : "doScope",
+    "fileName" : "ServletHandler.java",
+    "lineNumber" : 511,
+    "className" : "org.eclipse.jetty.servlet.ServletHandler",
+    "nativeMethod" : false
+  }, {
+    "methodName" : "doScope",
+    "fileName" : "SessionHandler.java",
+    "lineNumber" : 185,
+    "className" : "org.eclipse.jetty.server.session.SessionHandler",
+    "nativeMethod" : false
+  }, {
+    "methodName" : "doScope",
+    "fileName" : "ContextHandler.java",
+    "lineNumber" : 1112,
+    "className" : "org.eclipse.jetty.server.handler.ContextHandler",
+    "nativeMethod" : false
+  }, {
+    "methodName" : "handle",
+    "fileName" : "ScopedHandler.java",
+    "lineNumber" : 141,
+    "className" : "org.eclipse.jetty.server.handler.ScopedHandler",
+    "nativeMethod" : false
+  }, {
+    "methodName" : "handle",
+    "fileName" : "HandlerWrapper.java",
+    "lineNumber" : 134,
+    "className" : "org.eclipse.jetty.server.handler.HandlerWrapper",
+    "nativeMethod" : false
+  }, {
+    "methodName" : "handle",
+    "fileName" : "Server.java",
+    "lineNumber" : 524,
+    "className" : "org.eclipse.jetty.server.Server",
+    "nativeMethod" : false
+  }, {
+    "methodName" : "handle",
+    "fileName" : "HttpChannel.java",
+    "lineNumber" : 319,
+    "className" : "org.eclipse.jetty.server.HttpChannel",
+    "nativeMethod" : false
+  }, {
+    "methodName" : "onFillable",
+    "fileName" : "HttpConnection.java",
+    "lineNumber" : 253,
+    "className" : "org.eclipse.jetty.server.HttpConnection",
+    "nativeMethod" : false
+  }, {
+    "methodName" : "succeeded",
+    "fileName" : "AbstractConnection.java",
+    "lineNumber" : 273,
+    "className" : "org.eclipse.jetty.io.AbstractConnection$ReadCallback",
+    "nativeMethod" : false
+  }, {
+    "methodName" : "fillable",
+    "fileName" : "FillInterest.java",
+    "lineNumber" : 95,
+    "className" : "org.eclipse.jetty.io.FillInterest",
+    "nativeMethod" : false
+  }, {
+    "methodName" : "onFillable",
+    "fileName" : "SslConnection.java",
+    "lineNumber" : 202,
+    "className" : "org.eclipse.jetty.io.ssl.SslConnection",
+    "nativeMethod" : false
+  }, {
+    "methodName" : "succeeded",
+    "fileName" : "AbstractConnection.java",
+    "lineNumber" : 273,
+    "className" : "org.eclipse.jetty.io.AbstractConnection$ReadCallback",
+    "nativeMethod" : false
+  }, {
+    "methodName" : "fillable",
+    "fileName" : "FillInterest.java",
+    "lineNumber" : 95,
+    "className" : "org.eclipse.jetty.io.FillInterest",
+    "nativeMethod" : false
+  }, {
+    "methodName" : "run",
+    "fileName" : "SelectChannelEndPoint.java",
+    "lineNumber" : 93,
+    "className" : "org.eclipse.jetty.io.SelectChannelEndPoint$2",
+    "nativeMethod" : false
+  }, {
+    "methodName" : "executeProduceConsume",
+    "fileName" : "ExecuteProduceConsume.java",
+    "lineNumber" : 303,
+    "className" : "org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume",
+    "nativeMethod" : false
+  }, {
+    "methodName" : "produceConsume",
+    "fileName" : "ExecuteProduceConsume.java",
+    "lineNumber" : 148,
+    "className" : "org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume",
+    "nativeMethod" : false
+  }, {
+    "methodName" : "run",
+    "fileName" : "ExecuteProduceConsume.java",
+    "lineNumber" : 136,
+    "className" : "org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume",
+    "nativeMethod" : false
+  }, {
+    "methodName" : "runJob",
+    "fileName" : "QueuedThreadPool.java",
+    "lineNumber" : 671,
+    "className" : "org.eclipse.jetty.util.thread.QueuedThreadPool",
+    "nativeMethod" : false
+  }, {
+    "methodName" : "run",
+    "fileName" : "QueuedThreadPool.java",
+    "lineNumber" : 589,
+    "className" : "org.eclipse.jetty.util.thread.QueuedThreadPool$2",
+    "nativeMethod" : false
+  }, {
+    "methodName" : "run",
+    "fileName" : "Thread.java",
+    "lineNumber" : 745,
+    "className" : "java.lang.Thread",
+    "nativeMethod" : false
+  } ],
+  "type" : "about:blank",
+  "title" : "Method Not Allowed",
+  "status" : "METHOD_NOT_ALLOWED",
+  "detail" : "Request method 'POST' not supported",
+  "instance" : null,
+  "parameters" : { },
+  "message" : "Method Not Allowed: Request method 'POST' not supported",
+  "localizedMessage" : "Method Not Allowed: Request method 'POST' not supported",
+  "suppressed" : [ ]
+}
