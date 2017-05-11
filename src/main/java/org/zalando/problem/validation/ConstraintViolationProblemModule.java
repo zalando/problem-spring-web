@@ -9,15 +9,15 @@ import org.zalando.problem.spring.web.advice.validation.Violation;
 
 /**
  * A companion to {@link org.zalando.problem.ProblemModule} to enable serialization
- * of {@link ConstraintViolationProblem} and {@link Violation} without relying on autodetection.
+ * of {@link ConstraintViolationProblem} and {@link Violation} without relying on auto detection.
  */
-public class ConstraintViolationProblemModule extends Module {
-    @Override
-    public void setupModule(SetupContext context) {
-        final SimpleModule module = new SimpleModule();
+public final class ConstraintViolationProblemModule extends Module {
 
-        module.setMixInAnnotation(Violation.class, ViolationMixIn.class);
-        module.setMixInAnnotation(ConstraintViolationProblem.class, ConstraintViolationProblemMixin.class);
+    @Override
+    public void setupModule(final SetupContext context) {
+        final SimpleModule module = new SimpleModule()
+                .setMixInAnnotation(ConstraintViolationProblem.class, ConstraintViolationProblemMixin.class)
+                .setMixInAnnotation(Violation.class, ViolationMixIn.class);
 
         module.setupModule(context);
     }
@@ -27,10 +27,11 @@ public class ConstraintViolationProblemModule extends Module {
         return ConstraintViolationProblemModule.class.getSimpleName();
     }
 
-    @SuppressWarnings("deprecation")
     @Override
+    @SuppressWarnings("deprecation")
     public Version version() {
         return VersionUtil.mavenVersionFor(ConstraintViolationProblemModule.class.getClassLoader(),
                 "org.zalando", "problem-spring-web");
     }
+
 }
