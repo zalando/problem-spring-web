@@ -6,6 +6,7 @@ import org.zalando.problem.Problem;
 import org.zalando.problem.spring.web.advice.AdviceTrait;
 
 import javax.ws.rs.core.Response.StatusType;
+import java.net.URI;
 import java.util.Collection;
 import java.util.List;
 
@@ -14,6 +15,10 @@ import static java.util.stream.Collectors.toList;
 import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
 
 interface BaseValidationAdviceTrait extends AdviceTrait {
+
+    default URI defaultConstraintViolationType() {
+        return ConstraintViolationProblem.TYPE;
+    }
 
     default StatusType defaultConstraintViolationStatus() {
         return BAD_REQUEST;
@@ -32,13 +37,17 @@ interface BaseValidationAdviceTrait extends AdviceTrait {
     default ResponseEntity<Problem> newConstraintViolationProblem(final Throwable throwable,
         final Collection<Violation> stream, final NativeWebRequest request) {
 
+        final URI type = defaultConstraintViolationType();
         final StatusType status = defaultConstraintViolationStatus();
+
         final List<Violation> violations = stream.stream()
             // sorting to make tests deterministic
             .sorted(comparing(Violation::getField).thenComparing(Violation::getMessage))
             .collect(toList());
 
-        return create(throwable, new ConstraintViolationProblem(status, violations), request);
+        final Problem problem = new ConstraintViolationProblem(type, status, violations);
+
+        return create(throwable, problem, request);
     }
 
 }

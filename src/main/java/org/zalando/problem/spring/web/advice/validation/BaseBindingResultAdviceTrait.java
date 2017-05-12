@@ -21,10 +21,10 @@ public interface BaseBindingResultAdviceTrait extends BaseValidationAdviceTrait 
         return new Violation(fieldName, error.getDefaultMessage());
     }
 
-    default List<Violation> createViolations(BindingResult bindingResult) {
-      return Stream.concat(
-              bindingResult.getFieldErrors().stream().map(this::createViolation),
-              bindingResult.getGlobalErrors().stream().map(this::createViolation)).collect(toList());
+    default List<Violation> createViolations(final BindingResult result) {
+        final Stream<Violation> fieldErrors = result.getFieldErrors().stream().map(this::createViolation);
+        final Stream<Violation> globalErrors = result.getGlobalErrors().stream().map(this::createViolation);
+        return Stream.concat(fieldErrors, globalErrors).collect(toList());
     }
 
 }
