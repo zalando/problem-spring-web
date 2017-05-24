@@ -81,16 +81,16 @@ public interface AdviceTrait {
     }
 
     default ResponseEntity<Problem> create(final StatusType status, final Throwable throwable,
-                                           final NativeWebRequest request, URI type) {
+            final NativeWebRequest request, final URI type) {
         return create(status, throwable, request, new HttpHeaders(), type);
     }
 
     default ResponseEntity<Problem> create(final StatusType status, final Throwable throwable,
-                                           final NativeWebRequest request, final HttpHeaders headers, URI type) {
+            final NativeWebRequest request, final HttpHeaders headers, final URI type) {
         return create(throwable, toProblem(throwable, status, type), request, headers);
     }
 
-    default ThrowableProblem toProblem(final Throwable throwable, final StatusType status, URI type) {
+    default ThrowableProblem toProblem(final Throwable throwable, final StatusType status, final URI type) {
         final Throwable cause = throwable.getCause();
 
         final ProblemBuilder builder = Problem.builder()
