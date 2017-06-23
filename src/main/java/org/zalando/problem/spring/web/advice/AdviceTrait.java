@@ -8,6 +8,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.server.ServerHttpResponse;
+import org.springframework.http.server.ServletServerHttpResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.accept.HeaderContentNegotiationStrategy;
@@ -24,8 +26,11 @@ import org.zalando.problem.spring.web.advice.io.IOAdviceTrait;
 import org.zalando.problem.spring.web.advice.routing.RoutingAdviceTrait;
 import org.zalando.problem.spring.web.advice.validation.ValidationAdviceTrait;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.Response.StatusType;
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
@@ -35,6 +40,7 @@ import static javax.servlet.RequestDispatcher.ERROR_EXCEPTION;
 import static org.springframework.http.HttpStatus.NOT_ACCEPTABLE;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.web.context.request.RequestAttributes.SCOPE_REQUEST;
+import static org.zalando.fauxpas.FauxPas.throwingSupplier;
 import static org.zalando.problem.spring.web.advice.Lists.lengthOfTrailingPartialSubList;
 import static org.zalando.problem.spring.web.advice.MediaTypes.PROBLEM;
 import static org.zalando.problem.spring.web.advice.MediaTypes.WILDCARD_JSON;
@@ -160,7 +166,21 @@ public interface AdviceTrait {
                         .headers(headers)
                         .contentType(contentType)
                         .body(problem))
-                .orElseGet(() -> fallback(throwable, problem, request, headers)));
+                .orElseGet(throwingSupplier(() -> {
+                    final ResponseEntity<Problem> fallback = fallback(throwable, problem, request, headers);
+
+                    if (fallback.getBody() == null) {
+                        final ServerHttpResponse response = new ServletServerHttpResponse(
+                                request.getNativeResponse(HttpServletResponse.class));
+
+                        response.setStatusCode(fallback.getStatusCode());
+                        response.getHeaders().putAll(fallback.getHeaders());
+                        response.getBody(); // just so we're actually flushing the body...
+                        response.flush();
+                    }
+
+                    return fallback;
+                })));
     }
 
     default void log(
