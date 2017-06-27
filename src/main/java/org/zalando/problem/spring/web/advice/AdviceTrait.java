@@ -170,6 +170,19 @@ public interface AdviceTrait {
                     final ResponseEntity<Problem> fallback = fallback(throwable, problem, request, headers);
 
                     if (fallback.getBody() == null) {
+                        /*
+                         * Ugly hack to workaround an issue with Tomcat and Spring as described in
+                         * https://github.com/zalando/problem-spring-web/issues/84.
+                         *
+                         * The default fallback in case content negotiation failed is a 406 Not Acceptable without
+                         * a body. Tomcat will then display its error page since no body was written and the response
+                         * was not committed. In order to force Spring to flush/commit one would need to provide a
+                         * body but that in turn would fail because Spring would then fail to negotiate the correct
+                         * content type.
+                         *
+                         * Writing the status code, headers and flushing the body manually is a dirty way to bypass
+                         * both parties, Tomcat and Spring, at the same time.
+                         */
                         final ServerHttpResponse response = new ServletServerHttpResponse(
                                 request.getNativeResponse(HttpServletResponse.class));
 
