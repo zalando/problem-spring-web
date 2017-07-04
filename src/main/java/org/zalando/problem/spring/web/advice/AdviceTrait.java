@@ -8,6 +8,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.server.ServerHttpResponse;
+import org.springframework.http.server.ServletServerHttpResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.accept.HeaderContentNegotiationStrategy;
@@ -24,8 +26,11 @@ import org.zalando.problem.spring.web.advice.io.IOAdviceTrait;
 import org.zalando.problem.spring.web.advice.routing.RoutingAdviceTrait;
 import org.zalando.problem.spring.web.advice.validation.ValidationAdviceTrait;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.Response.StatusType;
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
@@ -35,6 +40,7 @@ import static javax.servlet.RequestDispatcher.ERROR_EXCEPTION;
 import static org.springframework.http.HttpStatus.NOT_ACCEPTABLE;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.web.context.request.RequestAttributes.SCOPE_REQUEST;
+import static org.zalando.fauxpas.FauxPas.throwingSupplier;
 import static org.zalando.problem.spring.web.advice.Lists.lengthOfTrailingPartialSubList;
 import static org.zalando.problem.spring.web.advice.MediaTypes.PROBLEM;
 import static org.zalando.problem.spring.web.advice.MediaTypes.WILDCARD_JSON;
@@ -160,7 +166,34 @@ public interface AdviceTrait {
                         .headers(headers)
                         .contentType(contentType)
                         .body(problem))
-                .orElseGet(() -> fallback(throwable, problem, request, headers)));
+                .orElseGet(throwingSupplier(() -> {
+                    final ResponseEntity<Problem> fallback = fallback(throwable, problem, request, headers);
+
+                    if (fallback.getBody() == null) {
+                        /*
+                         * Ugly hack to workaround an issue with Tomcat and Spring as described in
+                         * https://github.com/zalando/problem-spring-web/issues/84.
+                         *
+                         * The default fallback in case content negotiation failed is a 406 Not Acceptable without
+                         * a body. Tomcat will then display its error page since no body was written and the response
+                         * was not committed. In order to force Spring to flush/commit one would need to provide a
+                         * body but that in turn would fail because Spring would then fail to negotiate the correct
+                         * content type.
+                         *
+                         * Writing the status code, headers and flushing the body manually is a dirty way to bypass
+                         * both parties, Tomcat and Spring, at the same time.
+                         */
+                        final ServerHttpResponse response = new ServletServerHttpResponse(
+                                request.getNativeResponse(HttpServletResponse.class));
+
+                        response.setStatusCode(fallback.getStatusCode());
+                        response.getHeaders().putAll(fallback.getHeaders());
+                        response.getBody(); // just so we're actually flushing the body...
+                        response.flush();
+                    }
+
+                    return fallback;
+                })));
     }
 
     default void log(

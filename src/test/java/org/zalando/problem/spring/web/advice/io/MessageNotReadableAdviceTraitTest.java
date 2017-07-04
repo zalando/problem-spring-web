@@ -36,8 +36,7 @@ public final class MessageNotReadableAdviceTraitTest implements AdviceTraitTesti
                 .andExpect(jsonPath("$.type").doesNotExist())
                 .andExpect(jsonPath("$.title", is("Bad Request")))
                 .andExpect(jsonPath("$.status", is(400)))
-                .andExpect(jsonPath("$.detail", containsString("Unexpected end-of-input: expected close marker for OBJECT")))
-                .andExpect(jsonPath("$.detail", containsString("line: 1, column: 0")));
+                .andExpect(jsonPath("$.detail", containsString("Unexpected end-of-input: expected close marker for Object")));
     }
 
     @Test
