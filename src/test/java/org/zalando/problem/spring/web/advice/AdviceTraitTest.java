@@ -1,7 +1,7 @@
 package org.zalando.problem.spring.web.advice;
 
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +25,7 @@ import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.Matchers.startsWith;
 import static org.hobsoft.hamcrest.compose.ComposeMatchers.compose;
 import static org.hobsoft.hamcrest.compose.ComposeMatchers.hasFeature;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.HttpStatus.RESET_CONTENT;
@@ -37,7 +38,7 @@ public class AdviceTraitTest {
     };
 
     @Test
-    public void buildsOnProblem() {
+    void buildsOnProblem() {
         final ThrowableProblem problem = mock(ThrowableProblem.class);
         when(problem.getStatus()).thenReturn(Status.RESET_CONTENT);
 
@@ -49,7 +50,7 @@ public class AdviceTraitTest {
     }
 
     @Test
-    public void buildsOnThrowable() {
+    void buildsOnThrowable() {
         final ResponseEntity<Problem> result = unit.create(Status.RESET_CONTENT,
                 new IllegalStateException("Message"), request());
 
@@ -60,8 +61,8 @@ public class AdviceTraitTest {
     }
 
     @Test
-    public void buildsOnThrowableWithType() {
-        URI type = URI.create("https://google.com");
+    void buildsOnThrowableWithType() {
+        final URI type = URI.create("https://google.com");
         final ResponseEntity<Problem> result = unit.create(Status.RESET_CONTENT,
           new IllegalStateException("Message"), request(), type);
 
@@ -72,7 +73,7 @@ public class AdviceTraitTest {
     }
 
     @Test
-    public void buildsOnMessage() {
+    void buildsOnMessage() {
         final ResponseEntity<Problem> result = unit.create(Status.RESET_CONTENT,
                 new IllegalStateException("Message"), request());
 
@@ -83,7 +84,7 @@ public class AdviceTraitTest {
     }
 
     @Test
-    public void buildsIfIncludes() {
+    void buildsIfIncludes() {
         final String message = "Message";
 
         final ResponseEntity<Problem> result = unit.create(Status.RESET_CONTENT,
@@ -97,7 +98,7 @@ public class AdviceTraitTest {
     }
 
     @Test
-    public void buildsStacktrace() {
+    void buildsStacktrace() {
         final Throwable throwable;
 
         try {
@@ -174,7 +175,7 @@ public class AdviceTraitTest {
     }
 
     @Test
-    public void mapsStatus() {
+    void mapsStatus() {
         final HttpStatus expected = HttpStatus.BAD_REQUEST;
         final Response.StatusType input = Status.BAD_REQUEST;
         final ResponseEntity<Problem> entity = unit.create(input,
@@ -183,13 +184,14 @@ public class AdviceTraitTest {
         assertThat(entity.getStatusCode(), is(expected));
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void throwsOnUnknownStatus() {
+    @Test
+    void throwsOnUnknownStatus() {
         final Response.StatusType input = mock(Response.StatusType.class);
         when(input.getReasonPhrase()).thenReturn("L33t");
         when(input.getStatusCode()).thenReturn(1337);
 
-        unit.create(input, new IllegalStateException("L33t"), request());
+        assertThrows(IllegalArgumentException.class, () ->
+                unit.create(input, new IllegalStateException("L33t"), request()));
     }
 
     private NativeWebRequest request(final String acceptMediaType) {

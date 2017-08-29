@@ -1,6 +1,6 @@
 package org.zalando.problem.spring.web.advice.general;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.zalando.problem.spring.web.advice.AdviceTraitTesting;
 
 import static org.hamcrest.Matchers.is;
@@ -10,10 +10,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public final class UnsupportedOperationAdviceTraitTest implements AdviceTraitTesting {
+final class UnsupportedOperationAdviceTraitTest implements AdviceTraitTesting {
 
     @Test
-    public void unsupportedOperation() throws Exception {
+    void unsupportedOperation() throws Exception {
         mvc().perform(request(GET, "http://localhost/api/not-implemented"))
                 .andExpect(status().isNotImplemented())
                 .andExpect(header().string("Content-Type", is("application/problem+json")))

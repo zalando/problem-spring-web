@@ -1,12 +1,10 @@
 package org.zalando.problem.spring.web.advice;
 
 import com.google.gag.annotation.remark.Hack;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameter;
-import org.junit.runners.Parameterized.Parameters;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -15,11 +13,9 @@ import uk.org.lidalia.slf4jext.Level;
 import uk.org.lidalia.slf4jtest.LoggingEvent;
 import uk.org.lidalia.slf4jtest.TestLogger;
 import uk.org.lidalia.slf4jtest.TestLoggerFactory;
-import uk.org.lidalia.slf4jtest.TestLoggerFactoryResetRule;
 
 import javax.ws.rs.core.Response.Status;
 import java.io.IOException;
-import java.util.Arrays;
 
 import static com.google.common.collect.Iterables.getOnlyElement;
 import static javax.ws.rs.core.Response.Status.Family.CLIENT_ERROR;
@@ -29,31 +25,30 @@ import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.emptyIterable;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
-import static org.junit.Assume.assumeThat;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 import static org.mockito.Mockito.mock;
 
-@RunWith(Parameterized.class)
-public final class AdviceTraitLoggingTest {
+final class AdviceTraitLoggingTest {
 
     private final TestLogger log = TestLoggerFactory.getTestLogger(AdviceTrait.class);
-
-    @Rule
-    public final TestLoggerFactoryResetRule rule = new TestLoggerFactoryResetRule();
-
-    @Parameter
-    public Status status;
 
     private final AdviceTrait unit = new AdviceTrait() {
     };
 
-    @Parameters(name = "{0}")
-    public static Iterable<Status> data() {
-        return Arrays.asList(Status.values());
+    @BeforeEach
+    @AfterEach
+    void reset() {
+        TestLoggerFactory.clear();
     }
 
-    @Test
-    public void shouldLog4xxAsWarn() {
-        assumeThat(status.getFamily(), is(CLIENT_ERROR));
+    static Status[] data() {
+        return Status.values();
+    }
+
+    @ParameterizedTest
+    @MethodSource("data")
+    void shouldLog4xxAsWarn(final Status status) {
+        assumeTrue(status.getFamily().equals(CLIENT_ERROR));
 
         unit.create(status, new NoHandlerFoundException("GET", "/", new HttpHeaders()), mock(NativeWebRequest.class));
 
@@ -64,9 +59,10 @@ public final class AdviceTraitLoggingTest {
         assertThat(event.getThrowable().orNull(), is(nullValue()));
     }
 
-    @Test
-    public void shouldLog5xxAsError() {
-        assumeThat(status.getFamily(), is(SERVER_ERROR));
+    @ParameterizedTest
+    @MethodSource("data")
+    void shouldLog5xxAsError(final Status status) {
+        assumeTrue(status.getFamily().equals(SERVER_ERROR));
 
         final IOException throwable = new IOException();
         unit.create(status, throwable, mock(NativeWebRequest.class));
@@ -79,7 +75,7 @@ public final class AdviceTraitLoggingTest {
     }
 
     @Hack("Because several status codes are defined with different reason phrases in Spring and JAX-RS")
-    public static String getReasonPhrase(final Status status) {
+    private String getReasonPhrase(final Status status) {
         return HttpStatus.valueOf(status.getStatusCode()).getReasonPhrase();
     }
 

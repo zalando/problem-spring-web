@@ -1,7 +1,7 @@
 package org.zalando.problem.spring.web.advice.general;
 
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.zalando.problem.spring.web.advice.AdviceTraitTesting;
 
 import static org.hamcrest.Matchers.is;
@@ -11,10 +11,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public final class ProblemAdviceTraitTest implements AdviceTraitTesting {
+final class ProblemAdviceTraitTest implements AdviceTraitTesting {
 
     @Test
-    public void throwableProblem() throws Exception {
+    void throwableProblem() throws Exception {
         mvc().perform(request(GET, "http://localhost/api/handler-problem"))
                 .andExpect(status().isConflict())
                 .andExpect(header().string("Content-Type", is("application/problem+json")))

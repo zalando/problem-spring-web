@@ -1,7 +1,7 @@
 package org.zalando.problem.spring.web.advice.io;
 
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.zalando.problem.spring.web.advice.AdviceTraitTesting;
 
 import static org.hamcrest.Matchers.containsString;
@@ -12,10 +12,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public final class MultipartAdviceTraitTest implements AdviceTraitTesting {
+final class MultipartAdviceTraitTest implements AdviceTraitTesting {
 
     @Test
-    public void multipart() throws Exception {
+    void multipart() throws Exception {
         mvc().perform(request(POST, "http://localhost/api/handler-multipart"))
                 .andExpect(status().isBadRequest())
                 .andExpect(header().string("Content-Type", is("application/problem+json")))

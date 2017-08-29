@@ -1,7 +1,7 @@
 package org.zalando.problem.spring.web.advice.http;
 
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.zalando.problem.spring.web.advice.AdviceTraitTesting;
 
 import static org.hamcrest.Matchers.containsString;
@@ -13,10 +13,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public final class NotAcceptableAdviceTraitTest implements AdviceTraitTesting {
+final class NotAcceptableAdviceTraitTest implements AdviceTraitTesting {
 
     @Test
-    public void notAcceptable() throws Exception {
+    void notAcceptable() throws Exception {
         mvc().perform(request(GET, "http://localhost/api/handler-ok")
                 .accept("application/x.vnd.specific+json"))
                 .andExpect(status().isNotAcceptable())
@@ -28,7 +28,7 @@ public final class NotAcceptableAdviceTraitTest implements AdviceTraitTesting {
     }
 
     @Test
-    public void notAcceptableNoProblem() throws Exception {
+    void notAcceptableNoProblem() throws Exception {
         mvc().perform(request(GET, "http://localhost/api/handler-ok")
                 .accept("application/atom+xml"))
                 .andExpect(status().isNotAcceptable())

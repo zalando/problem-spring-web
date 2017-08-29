@@ -1,8 +1,8 @@
 package org.zalando.problem.spring.web.advice.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,7 +13,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -40,10 +40,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+@ExtendWith(SpringExtension.class)
 @ContextConfiguration
 @WebAppConfiguration
-public final class SecurityAdviceTraitTest {
+final class SecurityAdviceTraitTest {
 
     @Configuration
     @EnableWebMvc
@@ -114,7 +114,7 @@ public final class SecurityAdviceTraitTest {
     private MockMvc mvc;
 
     @Test
-    public void notAuthenticated() throws Exception {
+    void notAuthenticated() throws Exception {
         mvc.perform(post("/").with(anonymous()))
                 .andExpect(status().isUnauthorized())
                 .andExpect(content().contentType(MediaTypes.PROBLEM))
@@ -124,7 +124,7 @@ public final class SecurityAdviceTraitTest {
     }
 
     @Test
-    public void notAuthorized() throws Exception {
+    void notAuthorized() throws Exception {
         mvc.perform(get("/greet").param("name", "Alice").with(user("user").roles("USER")))
                 .andExpect(status().isForbidden())
                 .andExpect(content().contentType(MediaTypes.PROBLEM))

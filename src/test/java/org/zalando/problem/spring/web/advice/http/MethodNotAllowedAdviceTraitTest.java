@@ -1,6 +1,6 @@
 package org.zalando.problem.spring.web.advice.http;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -19,7 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public final class MethodNotAllowedAdviceTraitTest implements AdviceTraitTesting {
+final class MethodNotAllowedAdviceTraitTest implements AdviceTraitTesting {
 
     @Test
     public void methodNotAllowed() throws Exception {
@@ -35,7 +35,7 @@ public final class MethodNotAllowedAdviceTraitTest implements AdviceTraitTesting
     }
 
     @Test
-    public void noAllowIfNullAllowed() {
+    void noAllowIfNullAllowed() {
         final MethodNotAllowedAdviceTrait unit = new MethodNotAllowedAdviceTrait() {
         };
         final ResponseEntity<Problem> entity = unit.handleRequestMethodNotSupportedException(
@@ -45,7 +45,7 @@ public final class MethodNotAllowedAdviceTraitTest implements AdviceTraitTesting
     }
 
     @Test
-    public void noAllowIfNoneAllowed() {
+    void noAllowIfNoneAllowed() {
         final MethodNotAllowedAdviceTrait unit = new MethodNotAllowedAdviceTrait() {
         };
         final ResponseEntity<Problem> entity = unit.handleRequestMethodNotSupportedException(

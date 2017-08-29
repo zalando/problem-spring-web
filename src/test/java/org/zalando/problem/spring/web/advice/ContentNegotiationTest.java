@@ -2,11 +2,12 @@ package org.zalando.problem.spring.web.advice;
 
 
 import com.google.gag.annotation.remark.Hack;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import javax.servlet.ServletException;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.request;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -45,7 +46,7 @@ public final class ContentNegotiationTest implements AdviceTraitTesting {
                 .andExpect(content().contentType(MediaTypes.PROBLEM));
     }
 
-    @Ignore("https://jira.spring.io/browse/SPR-10493") // TODO enable as soon as this works
+    @Disabled("https://jira.spring.io/browse/SPR-10493") // TODO enable as soon as this works
     @Test
     public void wildcardJsonGivesProblem() throws Exception {
         mvc().perform(request(GET, url)
@@ -71,10 +72,11 @@ public final class ContentNegotiationTest implements AdviceTraitTesting {
                 .andExpect(header().doesNotExist("Content-Type"));
     }
 
-    @Test(expected = ServletException.class)
+    @Test
     public void invalidMediaTypeIsNotAcceptable() throws Exception {
-        mvc().perform(request(GET, url)
-                .header("Accept", "application/"));
+        assertThrows(ServletException.class, () ->
+                mvc().perform(request(GET, url)
+                        .header("Accept", "application/")));
 
     }
 
