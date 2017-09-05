@@ -2,19 +2,19 @@ package org.zalando.problem.spring.web.advice;
 
 import com.google.gag.annotation.remark.Hack;
 import com.google.gag.annotation.remark.OhNoYouDidnt;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 @Hack
 @OhNoYouDidnt
-public final class EnforceCoverageTest {
+final class EnforceCoverageTest {
 
     @Test
-    public void shouldUseListsConstructor() {
+    void shouldUseListsConstructor() {
         new Lists();
     }
 
     @Test
-    public void shouldUseMediaTypesConstructor() {
+    void shouldUseMediaTypesConstructor() {
         new MediaTypes();
     }
 

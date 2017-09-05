@@ -2,7 +2,7 @@ package org.zalando.problem.spring.web.advice.general;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.zalando.problem.ProblemModule;
 import org.zalando.problem.spring.web.advice.AdviceTraitTesting;
@@ -19,7 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public final class NestedThrowableAdviceTraitTest implements AdviceTraitTesting {
+final class NestedThrowableAdviceTraitTest implements AdviceTraitTesting {
 
     @Override
     public Object unit() {
@@ -34,7 +34,7 @@ public final class NestedThrowableAdviceTraitTest implements AdviceTraitTesting 
     }
 
     @Test
-    public void throwable() throws Exception {
+    void throwable() throws Exception {
         mvc().perform(request(GET, "http://localhost/api/handler-throwable"))
                 .andExpect(status().isInternalServerError())
                 .andExpect(header().string("Content-Type", is("application/problem+json")))
@@ -46,7 +46,7 @@ public final class NestedThrowableAdviceTraitTest implements AdviceTraitTesting 
     }
 
     @Test
-    public void nestedThrowable() throws Exception {
+    void nestedThrowable() throws Exception {
         mvc().perform(request(GET, "http://localhost/api/nested-throwable"))
                 .andExpect(status().isInternalServerError())
                 .andExpect(header().string("Content-Type", is("application/problem+json")))

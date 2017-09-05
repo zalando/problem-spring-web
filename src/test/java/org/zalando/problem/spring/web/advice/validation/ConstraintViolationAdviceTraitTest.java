@@ -1,6 +1,6 @@
 package org.zalando.problem.spring.web.advice.validation;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.zalando.problem.spring.web.advice.AdviceTraitTesting;
 
 import static org.hamcrest.Matchers.hasSize;
@@ -11,10 +11,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public final class ConstraintViolationAdviceTraitTest implements AdviceTraitTesting {
+final class ConstraintViolationAdviceTraitTest implements AdviceTraitTesting {
 
     @Test
-    public void invalidRequestParam() throws Exception {
+    void invalidRequestParam() throws Exception {
         mvc().perform(request(POST, "http://localhost/api/handler-invalid-param")
                 .contentType("application/json")
                 .content("{\"name\":\"Bob\"}"))

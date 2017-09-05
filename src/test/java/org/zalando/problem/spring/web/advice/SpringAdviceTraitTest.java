@@ -1,6 +1,6 @@
 package org.zalando.problem.spring.web.advice;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,13 +20,13 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.RESET_CONTENT;
 import static org.zalando.problem.spring.web.advice.MediaTypes.PROBLEM;
 
-public final class SpringAdviceTraitTest {
+final class SpringAdviceTraitTest {
 
     private final SpringAdviceTrait unit = new SpringAdviceTrait() {
     };
 
     @Test
-    public void buildsOnThrowable() {
+    void buildsOnThrowable() {
         final HttpStatusAdapter adapter = new HttpStatusAdapter(RESET_CONTENT);
 
         final ResponseEntity<Problem> result = unit.create(HttpStatus.RESET_CONTENT,
@@ -39,7 +39,7 @@ public final class SpringAdviceTraitTest {
     }
 
     @Test
-    public void toProblemWithoutCause() {
+    void toProblemWithoutCause() {
         final ThrowableProblem problem = unit.toProblem(new IllegalStateException("Message"), BAD_REQUEST);
 
         assertThat(problem.getCause(), nullValue());

@@ -1,7 +1,7 @@
 package org.zalando.problem.spring.web.advice.io;
 
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.zalando.problem.spring.web.advice.AdviceTraitTesting;
 
 import static org.hamcrest.Matchers.containsString;
@@ -12,10 +12,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public final class MessageNotReadableAdviceTraitTest implements AdviceTraitTesting {
+final class MessageNotReadableAdviceTraitTest implements AdviceTraitTesting {
 
     @Test
-    public void missingRequestBody() throws Exception {
+    void missingRequestBody() throws Exception {
         mvc().perform(request(PUT, "http://localhost/api/handler-put")
                 .contentType("application/json"))
                 .andExpect(status().isBadRequest())
@@ -27,7 +27,7 @@ public final class MessageNotReadableAdviceTraitTest implements AdviceTraitTesti
     }
 
     @Test
-    public void malformedJsonRequestBody() throws Exception {
+    void malformedJsonRequestBody() throws Exception {
         mvc().perform(request(PUT, "http://localhost/api/json-object")
                 .contentType("application/json")
                 .content("{"))
@@ -40,7 +40,7 @@ public final class MessageNotReadableAdviceTraitTest implements AdviceTraitTesti
     }
 
     @Test
-    public void invalidFormat() throws Exception {
+    void invalidFormat() throws Exception {
         mvc().perform(request(PUT, "http://localhost/api/json-decimal")
                 .contentType("application/json")
                 .content("\"foobar\""))
@@ -53,7 +53,7 @@ public final class MessageNotReadableAdviceTraitTest implements AdviceTraitTesti
     }
 
     @Test
-    public void noConstructor() throws Exception {
+    void noConstructor() throws Exception {
         mvc().perform(request(PUT, "http://localhost/api/json-user")
                 .contentType("application/json")
                 .content("{}"))
@@ -62,14 +62,14 @@ public final class MessageNotReadableAdviceTraitTest implements AdviceTraitTesti
                 .andExpect(jsonPath("$.type").doesNotExist())
                 .andExpect(jsonPath("$.title", is("Bad Request")))
                 .andExpect(jsonPath("$.status", is(400)))
-                .andExpect(jsonPath("$.detail", containsString("Could not read document")))
+                .andExpect(jsonPath("$.detail", containsString("JSON parse error")))
                 .andExpect(jsonPath("$.detail", containsString("No suitable constructor found for type [simple type, class org.zalando.problem.spring.web.advice.example.User]")))
                 .andExpect(jsonPath("$.detail", containsString("can not instantiate from JSON object")))
                 .andExpect(jsonPath("$.detail", containsString("missing default constructor or creator, or perhaps need to add/enable type information?")));
     }
 
     @Test
-    public void wrongJsonTypeRequestBody() throws Exception {
+    void wrongJsonTypeRequestBody() throws Exception {
         mvc().perform(request(PUT, "http://localhost/api/json-object")
                 .contentType("application/json")
                 .content("[]"))

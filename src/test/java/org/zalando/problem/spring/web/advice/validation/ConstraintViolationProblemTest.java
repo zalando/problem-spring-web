@@ -1,6 +1,6 @@
 package org.zalando.problem.spring.web.advice.validation;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;

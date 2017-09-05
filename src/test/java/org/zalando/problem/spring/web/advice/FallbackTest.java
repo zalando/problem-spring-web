@@ -2,7 +2,7 @@ package org.zalando.problem.spring.web.advice;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public final class FallbackTest implements AdviceTraitTesting {
+final class FallbackTest implements AdviceTraitTesting {
 
     @Override
     public Object unit() {
@@ -44,7 +44,7 @@ public final class FallbackTest implements AdviceTraitTesting {
     }
 
     @Test
-    public void customFallbackUsed() throws Exception {
+    void customFallbackUsed() throws Exception {
         mvc().perform(request(GET, "http://localhost/api/handler-problem")
                 .accept("text/xml"))
                 .andExpect(status().isConflict())

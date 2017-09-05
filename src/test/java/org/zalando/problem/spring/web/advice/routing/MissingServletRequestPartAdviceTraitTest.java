@@ -1,7 +1,7 @@
 package org.zalando.problem.spring.web.advice.routing;
 
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.zalando.problem.spring.web.advice.AdviceTraitTesting;
 
 import static org.hamcrest.Matchers.containsString;
@@ -11,10 +11,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public final class MissingServletRequestPartAdviceTraitTest implements AdviceTraitTesting {
+final class MissingServletRequestPartAdviceTraitTest implements AdviceTraitTesting {
 
     @Test
-    public void multipart() throws Exception {
+    void multipart() throws Exception {
         mvc().perform(fileUpload("http://localhost/api/handler-multipart")
                 .file("payload1", new byte[]{0x1}))
                 .andExpect(status().isBadRequest())

@@ -1,6 +1,6 @@
 package org.zalando.problem.spring.web.advice.validation;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.zalando.problem.spring.web.advice.AdviceTraitTesting;
 
 import static org.hamcrest.Matchers.hasSize;
@@ -12,10 +12,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public final class MethodArgumentNotValidAdviceTraitTest implements AdviceTraitTesting {
+final class MethodArgumentNotValidAdviceTraitTest implements AdviceTraitTesting {
 
     @Test
-    public void invalidRequestBodyField() throws Exception {
+    void invalidRequestBodyField() throws Exception {
         mvc().perform(request(POST, "http://localhost/api/handler-invalid-body")
                 .contentType("application/json")
                 .content("{\"name\":\"Jo\"}"))
@@ -30,7 +30,7 @@ public final class MethodArgumentNotValidAdviceTraitTest implements AdviceTraitT
     }
 
     @Test
-    public void invalidRequestBody() throws Exception {
+    void invalidRequestBody() throws Exception {
         mvc().perform(request(POST, "http://localhost/api/handler-invalid-body")
                 .contentType("application/json")
                 .content("{\"name\":\"Bob\"}"))

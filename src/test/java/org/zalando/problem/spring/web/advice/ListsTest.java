@@ -1,18 +1,18 @@
 package org.zalando.problem.spring.web.advice;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
 import static org.zalando.problem.spring.web.advice.Lists.lengthOfTrailingPartialSubList;
 
-public final class ListsTest {
+final class ListsTest {
 
     @Test
-    public void shouldFindCompleteMatch() {
+    void shouldFindCompleteMatch() {
         final int length = lengthOfTrailingPartialSubList(
                 asList("a", "b", "c"), asList("a", "b", "c"));
 
@@ -20,7 +20,7 @@ public final class ListsTest {
     }
 
     @Test
-    public void shouldFindPartialMatch() {
+    void shouldFindPartialMatch() {
         final int length = lengthOfTrailingPartialSubList(
                 asList("a", "b", "c"), asList("e", "d", "c"));
 
@@ -28,7 +28,7 @@ public final class ListsTest {
     }
 
     @Test
-    public void shouldFindNoMatch() {
+    void shouldFindNoMatch() {
         final int length = lengthOfTrailingPartialSubList(
                 asList("a", "b", "c"), asList("d", "e", "f"));
 
@@ -36,7 +36,7 @@ public final class ListsTest {
     }
 
     @Test
-    public void shouldFindNoMatchInEmptySource() {
+    void shouldFindNoMatchInEmptySource() {
         final int length = lengthOfTrailingPartialSubList(
                 emptyList(), asList("a", "b", "c"));
 
@@ -44,7 +44,7 @@ public final class ListsTest {
     }
 
     @Test
-    public void shouldFindNoMatchInEmptyTarget() {
+    void shouldFindNoMatchInEmptyTarget() {
         final int length = lengthOfTrailingPartialSubList(
                 asList("a", "b", "c"), emptyList());
 

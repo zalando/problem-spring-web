@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.zalando.problem.ProblemModule;
 import org.zalando.problem.validation.ConstraintViolationProblemModule;
 
@@ -19,10 +19,10 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 
 @Slf4j
-public class ConstraintViolationProblemModuleTest {
+final class ConstraintViolationProblemModuleTest {
 
     @Test
-    public void shouldSerializeWithoutAutoDetect() throws JsonProcessingException {
+    void shouldSerializeWithoutAutoDetect() throws JsonProcessingException {
         final ObjectMapper mapper = new ObjectMapper()
                 .disable(MapperFeature.AUTO_DETECT_FIELDS)
                 .disable(MapperFeature.AUTO_DETECT_GETTERS)
@@ -43,7 +43,7 @@ public class ConstraintViolationProblemModuleTest {
     }
 
     @Test
-    public void shouldSerializeCustomType() throws JsonProcessingException {
+    void shouldSerializeCustomType() throws JsonProcessingException {
         final ObjectMapper mapper = new ObjectMapper()
                 .registerModule(new ProblemModule())
                 .registerModule(new ConstraintViolationProblemModule());
