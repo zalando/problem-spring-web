@@ -3,10 +3,8 @@ package org.zalando.problem.spring.web.advice.general;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.zalando.problem.ProblemModule;
 import org.zalando.problem.spring.web.advice.AdviceTraitTesting;
-import org.zalando.problem.spring.web.advice.ProblemHandling;
 
 import java.util.List;
 
@@ -74,14 +72,38 @@ final class NestedThrowableAdviceTraitTest implements AdviceTraitTesting {
                 .andExpect(jsonPath("$.cause.cause.cause").doesNotExist());
     }
 
-    @ControllerAdvice
-    private static class NestedProblemHandling implements ProblemHandling {
+    @Test
+    void nonAnnotatedNestedThrowable() throws Exception {
+        mvc().perform(request(GET, "http://localhost/api/handler-throwable-annotated"))
+                .andExpect(status().isNotImplemented())
+                .andExpect(header().string("Content-Type", is("application/problem+json")))
+                .andExpect(jsonPath("$.type").doesNotExist())
+                .andExpect(jsonPath("$.title", is("Not Implemented")))
+                .andExpect(jsonPath("$.status", is(501)))
+                .andExpect(jsonPath("$.cause.type").doesNotExist())
+                .andExpect(jsonPath("$.cause.title", is("Internal Server Error")))
+                .andExpect(jsonPath("$.cause.status", is(500)))
+                .andExpect(jsonPath("$.cause.cause.type").doesNotExist())
+                .andExpect(jsonPath("$.cause.cause.title", is("Internal Server Error")))
+                .andExpect(jsonPath("$.cause.cause.status", is(500)))
+                .andExpect(jsonPath("$.cause.cause.cause").doesNotExist());
+    }
 
-        @Override
-        public boolean isCausalChainsEnabled() {
-            return true;
-        }
-
+    @Test
+    void annotatedNestedThrowable() throws Exception {
+        mvc().perform(request(GET, "http://localhost/api/handler-throwable-annotated-cause"))
+                .andExpect(status().isNotImplemented())
+                .andExpect(header().string("Content-Type", is("application/problem+json")))
+                .andExpect(jsonPath("$.type").doesNotExist())
+                .andExpect(jsonPath("$.title", is("Not Implemented")))
+                .andExpect(jsonPath("$.status", is(501)))
+                .andExpect(jsonPath("$.cause.type").doesNotExist())
+                .andExpect(jsonPath("$.cause.title", is("Not Implemented")))
+                .andExpect(jsonPath("$.cause.status", is(501)))
+                .andExpect(jsonPath("$.cause.cause.type").doesNotExist())
+                .andExpect(jsonPath("$.cause.cause.title", is("Not Implemented")))
+                .andExpect(jsonPath("$.cause.cause.status", is(501)))
+                .andExpect(jsonPath("$.cause.cause.cause").doesNotExist());
     }
 
 }

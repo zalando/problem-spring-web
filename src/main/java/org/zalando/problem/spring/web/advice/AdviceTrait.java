@@ -15,7 +15,9 @@ import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.accept.HeaderContentNegotiationStrategy;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.NativeWebRequest;
+import org.springframework.web.servlet.mvc.annotation.ResponseStatusExceptionResolver;
 import org.zalando.problem.Problem;
 import org.zalando.problem.ProblemBuilder;
 import org.zalando.problem.ThrowableProblem;
@@ -26,17 +28,17 @@ import org.zalando.problem.spring.web.advice.io.IOAdviceTrait;
 import org.zalando.problem.spring.web.advice.routing.RoutingAdviceTrait;
 import org.zalando.problem.spring.web.advice.validation.ValidationAdviceTrait;
 
+import javax.annotation.Nullable;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.Response.StatusType;
-import java.io.IOException;
-import java.io.UncheckedIOException;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
 import static java.util.Arrays.asList;
 import static javax.servlet.RequestDispatcher.ERROR_EXCEPTION;
+import static org.springframework.core.annotation.AnnotatedElementUtils.findMergedAnnotation;
 import static org.springframework.http.HttpStatus.NOT_ACCEPTABLE;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.web.context.request.RequestAttributes.SCOPE_REQUEST;
@@ -76,6 +78,20 @@ public interface AdviceTrait {
 
     Logger LOG = LoggerFactory.getLogger(AdviceTrait.class);
 
+    /**
+     * Creates a {@link Problem problem} {@link ResponseEntity response} for the given {@link Throwable throwable}
+     * by taking any {@link ResponseStatus} annotation on the exception type or one of the causes into account.
+     *
+     * @param throwable exception being caught
+     * @param request incoming request
+     * @return the problem response
+     * @see ResponseStatusExceptionResolver
+     */
+    default ResponseEntity<Problem> create(final Throwable throwable, final NativeWebRequest request) {
+        final ThrowableProblem problem = toProblem(throwable);
+        return create(throwable, problem, request);
+    }
+
     default ResponseEntity<Problem> create(final StatusType status, final Throwable throwable,
             final NativeWebRequest request) {
         return create(status, throwable, request, new HttpHeaders());
@@ -96,13 +112,39 @@ public interface AdviceTrait {
         return create(throwable, toProblem(throwable, status, type), request, headers);
     }
 
+    default ThrowableProblem toProblem(final Throwable throwable) {
+        final StatusType status = resolveStatus(throwable)
+                .<StatusType>map(HttpStatusAdapter::new)
+                .orElse(Status.INTERNAL_SERVER_ERROR);
+
+        return toProblem(throwable, status);
+    }
+
+    default Optional<HttpStatus> resolveStatus(final Throwable type) {
+        @Nullable final ResponseStatus candidate = findMergedAnnotation(type.getClass(), ResponseStatus.class);
+
+        if (candidate == null) {
+            if (type.getCause() == null) {
+                return Optional.empty();
+            }
+
+            return resolveStatus(type.getCause());
+        }
+
+        return Optional.of(candidate.code());
+    }
+
+    default ThrowableProblem toProblem(final Throwable throwable, final StatusType status) {
+        return toProblem(throwable, status, Problem.DEFAULT_TYPE);
+    }
+
     default ThrowableProblem toProblem(final Throwable throwable, final StatusType status, final URI type) {
         final Throwable cause = throwable.getCause();
 
         final ProblemBuilder builder = Problem.builder()
+                .withType(type)
                 .withTitle(status.getReasonPhrase())
                 .withStatus(status)
-                .withType(type)
                 .withDetail(throwable.getMessage());
 
         final StackTraceElement[] stackTrace;
@@ -110,7 +152,7 @@ public interface AdviceTrait {
         if (cause == null || !isCausalChainsEnabled()) {
             stackTrace = throwable.getStackTrace();
         } else {
-            builder.withCause(toProblem(cause, status));
+            builder.withCause(toProblem(cause));
 
             final StackTraceElement[] next = cause.getStackTrace();
             final StackTraceElement[] current = throwable.getStackTrace();
@@ -124,11 +166,6 @@ public interface AdviceTrait {
         problem.setStackTrace(stackTrace);
         return problem;
     }
-
-    default ThrowableProblem toProblem(final Throwable throwable, final StatusType status) {
-        return toProblem(throwable, status, Problem.DEFAULT_TYPE);
-    }
-
 
     default boolean isCausalChainsEnabled() {
         return false;

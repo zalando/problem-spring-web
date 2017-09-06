@@ -33,19 +33,20 @@ public class HttpStatusAdapter implements Response.StatusType {
     }
 
     @Override
-    public boolean equals(final Object o) {
-        if (this == o) {
+    public boolean equals(final Object that) {
+        if (this == that) {
             return true;
-        }
-        if (!(o instanceof HttpStatusAdapter)) {
+        } else if (that instanceof HttpStatusAdapter) {
+            final HttpStatusAdapter other = (HttpStatusAdapter) that;
+            return Objects.equals(status, other.status);
+        } else {
             return false;
         }
-        final HttpStatusAdapter that = (HttpStatusAdapter) o;
-        return status == that.status;
     }
 
     @Override
     public int hashCode() {
         return Objects.hashCode(status);
     }
+
 }
