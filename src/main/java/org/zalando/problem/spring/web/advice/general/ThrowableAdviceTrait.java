@@ -19,7 +19,7 @@ public interface ThrowableAdviceTrait extends AdviceTrait {
     default ResponseEntity<Problem> handleThrowable(
             final Throwable throwable,
             final NativeWebRequest request) {
-        return create(Status.INTERNAL_SERVER_ERROR, throwable, request);
+        return create(throwable, request);
     }
 
 }
