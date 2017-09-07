@@ -9,17 +9,15 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.servlet.NoHandlerFoundException;
+import org.zalando.problem.Status;
 import uk.org.lidalia.slf4jext.Level;
 import uk.org.lidalia.slf4jtest.LoggingEvent;
 import uk.org.lidalia.slf4jtest.TestLogger;
 import uk.org.lidalia.slf4jtest.TestLoggerFactory;
 
-import javax.ws.rs.core.Response.Status;
 import java.io.IOException;
 
 import static com.google.common.collect.Iterables.getOnlyElement;
-import static javax.ws.rs.core.Response.Status.Family.CLIENT_ERROR;
-import static javax.ws.rs.core.Response.Status.Family.SERVER_ERROR;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.emptyIterable;
@@ -48,8 +46,7 @@ final class AdviceTraitLoggingTest {
     @ParameterizedTest
     @MethodSource("data")
     void shouldLog4xxAsWarn(final Status status) {
-        assumeTrue(status.getFamily().equals(CLIENT_ERROR));
-
+        assumeTrue(status.getStatusCode() / 100 == 4);
         unit.create(status, new NoHandlerFoundException("GET", "/", new HttpHeaders()), mock(NativeWebRequest.class));
 
         final LoggingEvent event = getOnlyElement(log.getLoggingEvents());
@@ -62,8 +59,7 @@ final class AdviceTraitLoggingTest {
     @ParameterizedTest
     @MethodSource("data")
     void shouldLog5xxAsError(final Status status) {
-        assumeTrue(status.getFamily().equals(SERVER_ERROR));
-
+        assumeTrue(status.getStatusCode() / 100 == 5);
         final IOException throwable = new IOException();
         unit.create(status, throwable, mock(NativeWebRequest.class));
 

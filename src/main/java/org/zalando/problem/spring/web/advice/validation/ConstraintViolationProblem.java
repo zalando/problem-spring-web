@@ -1,9 +1,9 @@
 package org.zalando.problem.spring.web.advice.validation;
 
+import org.zalando.problem.StatusType;
 import org.zalando.problem.ThrowableProblem;
 
 import javax.annotation.concurrent.Immutable;
-import javax.ws.rs.core.Response.StatusType;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;

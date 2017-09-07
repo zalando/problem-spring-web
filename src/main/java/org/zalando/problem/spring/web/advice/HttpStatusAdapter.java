@@ -2,14 +2,13 @@ package org.zalando.problem.spring.web.advice;
 
 import org.springframework.http.HttpStatus;
 
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status.Family;
+import org.zalando.problem.StatusType;
 import java.util.Objects;
 
 /**
- * An implementation of {@link javax.ws.rs.core.Response.StatusType} to map {@link HttpStatus}.
+ * An implementation of {@link StatusType} to map {@link HttpStatus}.
  */
-public class HttpStatusAdapter implements Response.StatusType {
+public class HttpStatusAdapter implements StatusType {
 
     private final HttpStatus status;
 
@@ -20,11 +19,6 @@ public class HttpStatusAdapter implements Response.StatusType {
     @Override
     public int getStatusCode() {
         return status.value();
-    }
-
-    @Override
-    public Family getFamily() {
-        return Family.familyOf(status.value());
     }
 
     @Override

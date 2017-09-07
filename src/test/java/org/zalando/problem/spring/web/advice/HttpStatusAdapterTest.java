@@ -3,7 +3,6 @@ package org.zalando.problem.spring.web.advice;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 
-import static javax.ws.rs.core.Response.Status.Family;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
@@ -15,7 +14,6 @@ final class HttpStatusAdapterTest {
         final HttpStatusAdapter adapter = new HttpStatusAdapter(HttpStatus.I_AM_A_TEAPOT);
 
         assertThat(adapter.getStatusCode(), is(418));
-        assertThat(adapter.getFamily(), is(Family.CLIENT_ERROR));
         assertThat(adapter.getReasonPhrase(), is(HttpStatus.I_AM_A_TEAPOT.getReasonPhrase()));
     }
 

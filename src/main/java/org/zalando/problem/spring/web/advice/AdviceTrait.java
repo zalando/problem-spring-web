@@ -20,6 +20,8 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.servlet.mvc.annotation.ResponseStatusExceptionResolver;
 import org.zalando.problem.Problem;
 import org.zalando.problem.ProblemBuilder;
+import org.zalando.problem.Status;
+import org.zalando.problem.StatusType;
 import org.zalando.problem.ThrowableProblem;
 import org.zalando.problem.spring.web.advice.custom.CustomAdviceTrait;
 import org.zalando.problem.spring.web.advice.general.GeneralAdviceTrait;
@@ -30,8 +32,6 @@ import org.zalando.problem.spring.web.advice.validation.ValidationAdviceTrait;
 
 import javax.annotation.Nullable;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.core.Response.Status;
-import javax.ws.rs.core.Response.StatusType;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;

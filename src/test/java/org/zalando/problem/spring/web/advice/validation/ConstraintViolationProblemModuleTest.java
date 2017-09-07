@@ -13,10 +13,10 @@ import java.net.URI;
 import static com.jayway.jsonassert.JsonAssert.with;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
-import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.zalando.problem.Status.BAD_REQUEST;
 
 @Slf4j
 final class ConstraintViolationProblemModuleTest {
