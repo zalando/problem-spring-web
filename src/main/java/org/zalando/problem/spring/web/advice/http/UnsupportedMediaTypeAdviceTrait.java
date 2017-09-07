@@ -6,9 +6,8 @@ import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.zalando.problem.Problem;
+import org.zalando.problem.Status;
 import org.zalando.problem.spring.web.advice.AdviceTrait;
-
-import javax.ws.rs.core.Response.Status;
 
 /**
  * @see HttpMediaTypeNotSupportedException

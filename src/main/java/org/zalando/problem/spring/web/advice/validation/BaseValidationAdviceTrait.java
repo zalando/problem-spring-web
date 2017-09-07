@@ -3,16 +3,16 @@ package org.zalando.problem.spring.web.advice.validation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.zalando.problem.Problem;
+import org.zalando.problem.StatusType;
 import org.zalando.problem.spring.web.advice.AdviceTrait;
 
-import javax.ws.rs.core.Response.StatusType;
 import java.net.URI;
 import java.util.Collection;
 import java.util.List;
 
 import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.toList;
-import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
+import static org.zalando.problem.Status.BAD_REQUEST;
 
 interface BaseValidationAdviceTrait extends AdviceTrait {
 

@@ -1,10 +1,10 @@
 package org.zalando.problem.spring.web.advice.example;
 
 
+import org.zalando.problem.Status;
+import org.zalando.problem.StatusType;
 import org.zalando.problem.ThrowableProblem;
 
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 import java.net.URI;
 
 public class ExpectedProblem extends ThrowableProblem {
@@ -26,7 +26,7 @@ public class ExpectedProblem extends ThrowableProblem {
     }
 
     @Override
-    public Response.StatusType getStatus() {
+    public StatusType getStatus() {
         return Status.CONFLICT;
     }
 

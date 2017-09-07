@@ -7,10 +7,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.zalando.problem.Problem;
+import org.zalando.problem.Status;
+import org.zalando.problem.StatusType;
 import org.zalando.problem.ThrowableProblem;
 
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 import java.net.URI;
 import java.util.List;
 import java.util.stream.Stream;
@@ -177,7 +177,7 @@ public class AdviceTraitTest {
     @Test
     void mapsStatus() {
         final HttpStatus expected = HttpStatus.BAD_REQUEST;
-        final Response.StatusType input = Status.BAD_REQUEST;
+        final StatusType input = Status.BAD_REQUEST;
         final ResponseEntity<Problem> entity = unit.create(input,
                 new IllegalStateException("Checkpoint"), request());
 
@@ -186,7 +186,7 @@ public class AdviceTraitTest {
 
     @Test
     void throwsOnUnknownStatus() {
-        final Response.StatusType input = mock(Response.StatusType.class);
+        final StatusType input = mock(StatusType.class);
         when(input.getReasonPhrase()).thenReturn("L33t");
         when(input.getStatusCode()).thenReturn(1337);
 

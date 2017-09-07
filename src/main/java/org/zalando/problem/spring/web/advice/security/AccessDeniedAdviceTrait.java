@@ -7,7 +7,7 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.zalando.problem.Problem;
 import org.zalando.problem.spring.web.advice.AdviceTrait;
 
-import javax.ws.rs.core.Response;
+import static org.zalando.problem.Status.FORBIDDEN;
 
 /**
  * The request was a valid request, but the server is refusing to respond to it. The user might be logged in but does
@@ -18,7 +18,7 @@ public interface AccessDeniedAdviceTrait extends AdviceTrait {
     @ExceptionHandler
     default ResponseEntity<Problem> handleAccessDenied(final AccessDeniedException e,
             final NativeWebRequest request) {
-        return create(Response.Status.FORBIDDEN, e, request);
+        return create(FORBIDDEN, e, request);
     }
 
 }

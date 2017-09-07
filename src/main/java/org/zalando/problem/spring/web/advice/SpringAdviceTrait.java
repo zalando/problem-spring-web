@@ -4,10 +4,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.context.request.NativeWebRequest;
+import org.zalando.problem.StatusType;
 import org.zalando.problem.Problem;
 import org.zalando.problem.ThrowableProblem;
-
-import javax.ws.rs.core.Response.StatusType;
 
 /**
  * Spring version of {@link AdviceTrait} which uses {@link HttpStatus} rather than

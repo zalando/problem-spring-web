@@ -6,9 +6,8 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.zalando.problem.Problem;
+import org.zalando.problem.Status;
 import org.zalando.problem.spring.web.advice.AdviceTrait;
-
-import javax.ws.rs.core.Response.Status;
 
 /**
  * Transforms {@link NoHandlerFoundException NoHandlerFoundExceptions} into {@link Status#NOT_FOUND not-found}

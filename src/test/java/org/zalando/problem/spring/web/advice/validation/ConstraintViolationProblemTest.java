@@ -5,9 +5,9 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
+import static org.zalando.problem.Status.BAD_REQUEST;
 
 public class ConstraintViolationProblemTest {
 
