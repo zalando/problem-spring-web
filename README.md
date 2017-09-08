@@ -298,7 +298,7 @@ Enabling both features, causal chains and stacktraces, will yield:
 }
 ```
 
-## Known Issuess
+## Known Issues
 
 Spring allows to restrict the scope of a `@ControllerAdvice` to a certain subset of controllers:
 
