@@ -73,12 +73,24 @@ public class ExampleRestController {
         throw new RuntimeException("expected", new IllegalStateException(new MyException()));
     }
 
+    @RequestMapping(path = "/handler-throwable-annotated-reason", method = GET)
+    public ResponseEntity<String> throwableAnnotatedWithReason() {
+        throw new MyExceptionWithReason(new RuntimeException("expected", new IllegalStateException()));
+    }
+
     @ResponseStatus(HttpStatus.NOT_IMPLEMENTED)
     private static final class MyException extends RuntimeException {
         public MyException() {
         }
 
         public MyException(final Throwable cause) {
+            super(cause);
+        }
+    }
+
+    @ResponseStatus(code = HttpStatus.NOT_IMPLEMENTED, reason = "Test reason")
+    private static final class MyExceptionWithReason extends RuntimeException {
+        public MyExceptionWithReason(final Throwable cause) {
             super(cause);
         }
     }

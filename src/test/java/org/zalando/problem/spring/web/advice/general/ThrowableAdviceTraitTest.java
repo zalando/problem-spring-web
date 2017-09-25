@@ -39,4 +39,16 @@ final class ThrowableAdviceTraitTest implements AdviceTraitTesting {
                 .andExpect(jsonPath("$.cause").doesNotExist());
     }
 
+    @Test
+    void annotatedWithReasonThrowable() throws Exception {
+        mvc().perform(request(GET, "http://localhost/api/handler-throwable-annotated-reason"))
+                .andExpect(status().isNotImplemented())
+                .andExpect(header().string("Content-Type", is("application/problem+json")))
+                .andExpect(jsonPath("$.type").doesNotExist())
+                .andExpect(jsonPath("$.title", is("Test reason")))
+                .andExpect(jsonPath("$.status", is(501)))
+                .andExpect(jsonPath("$.stacktrace").doesNotExist())
+                .andExpect(jsonPath("$.cause").doesNotExist());
+    }
+
 }

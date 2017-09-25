@@ -113,25 +113,16 @@ public interface AdviceTrait {
     }
 
     default ThrowableProblem toProblem(final Throwable throwable) {
-        final StatusType status = resolveStatus(throwable)
-                .<StatusType>map(HttpStatusAdapter::new)
+        final StatusType status = Optional.ofNullable(resolveResponseStatus(throwable))
+                .<StatusType>map(ResponseStatusAdapter::new)
                 .orElse(Status.INTERNAL_SERVER_ERROR);
 
         return toProblem(throwable, status);
     }
 
-    default Optional<HttpStatus> resolveStatus(final Throwable type) {
+    default ResponseStatus resolveResponseStatus(final Throwable type) {
         @Nullable final ResponseStatus candidate = findMergedAnnotation(type.getClass(), ResponseStatus.class);
-
-        if (candidate == null) {
-            if (type.getCause() == null) {
-                return Optional.empty();
-            }
-
-            return resolveStatus(type.getCause());
-        }
-
-        return Optional.of(candidate.code());
+        return candidate == null && type.getCause() != null ? resolveResponseStatus(type.getCause()) : candidate;
     }
 
     default ThrowableProblem toProblem(final Throwable throwable, final StatusType status) {
