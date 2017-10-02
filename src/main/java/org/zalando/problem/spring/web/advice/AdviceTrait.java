@@ -221,7 +221,7 @@ public interface AdviceTrait {
                     }
 
                     return fallback;
-                })));
+                })), request);
     }
 
     default void log(
@@ -272,6 +272,12 @@ public interface AdviceTrait {
             @SuppressWarnings("UnusedParameters") final NativeWebRequest request,
             @SuppressWarnings("UnusedParameters") final HttpHeaders headers) {
         return ResponseEntity.status(NOT_ACCEPTABLE).body(null);
+    }
+
+    default ResponseEntity<Problem> process(
+            final ResponseEntity<Problem> entity,
+            @SuppressWarnings("UnusedParameters") final NativeWebRequest request) {
+        return process(entity);
     }
 
     default ResponseEntity<Problem> process(final ResponseEntity<Problem> entity) {
