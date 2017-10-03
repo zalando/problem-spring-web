@@ -125,19 +125,8 @@ public interface AdviceTrait {
         return candidate == null && type.getCause() != null ? resolveResponseStatus(type.getCause()) : candidate;
     }
 
-    default ThrowableProblem toProblem(final Throwable throwable, final StatusType status) {
-        return toProblem(throwable, status, Problem.DEFAULT_TYPE);
-    }
-
-    default ThrowableProblem toProblem(final Throwable throwable, final StatusType status, final URI type) {
+    default StackTraceElement[] createStackTrace(final ProblemBuilder builder, final Throwable throwable) {
         final Throwable cause = throwable.getCause();
-
-        final ProblemBuilder builder = Problem.builder()
-                .withType(type)
-                .withTitle(status.getReasonPhrase())
-                .withStatus(status)
-                .withDetail(throwable.getMessage());
-
         final StackTraceElement[] stackTrace;
 
         if (cause == null || !isCausalChainsEnabled()) {
@@ -153,9 +142,28 @@ public interface AdviceTrait {
             System.arraycopy(current, 0, stackTrace, 0, length);
         }
 
+        return stackTrace;
+    }
+
+    default ThrowableProblem toProblem(final Throwable throwable, final StatusType status) {
+        return toProblem(throwable, status, Problem.DEFAULT_TYPE);
+    }
+
+    default ThrowableProblem toProblem(final Throwable throwable, final StatusType status, final URI type) {
+        final ProblemBuilder builder = newInitializedProblemBuilder(throwable, status, type);
+        final StackTraceElement[] stackTrace = createStackTrace(builder, throwable);
         final ThrowableProblem problem = builder.build();
+
         problem.setStackTrace(stackTrace);
         return problem;
+    }
+
+    default ProblemBuilder newInitializedProblemBuilder(final Throwable throwable, final StatusType status, final URI type) {
+        return Problem.builder()
+                .withType(type)
+                .withTitle(status.getReasonPhrase())
+                .withStatus(status)
+                .withDetail(throwable.getMessage());
     }
 
     default boolean isCausalChainsEnabled() {
