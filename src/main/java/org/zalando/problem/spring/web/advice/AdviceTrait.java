@@ -130,18 +130,24 @@ public interface AdviceTrait {
     }
 
     default ThrowableProblem toProblem(final Throwable throwable, final StatusType status, final URI type) {
-        final Throwable cause = throwable.getCause();
+        final ThrowableProblem problem = prepare(throwable, type, status).build();
+        problem.setStackTrace(createStackTrace(throwable, prepare(throwable, type, status)));
+        return problem;
+    }
 
-        final ProblemBuilder builder = Problem.builder()
+    default ProblemBuilder prepare(final Throwable throwable, final URI type, final StatusType status) {
+        return Problem.builder()
                 .withType(type)
                 .withTitle(status.getReasonPhrase())
                 .withStatus(status)
                 .withDetail(throwable.getMessage());
+    }
 
-        final StackTraceElement[] stackTrace;
+    default StackTraceElement[] createStackTrace(final Throwable throwable, final ProblemBuilder builder) {
+        final Throwable cause = throwable.getCause();
 
         if (cause == null || !isCausalChainsEnabled()) {
-            stackTrace = throwable.getStackTrace();
+            return throwable.getStackTrace();
         } else {
             builder.withCause(toProblem(cause));
 
@@ -149,13 +155,10 @@ public interface AdviceTrait {
             final StackTraceElement[] current = throwable.getStackTrace();
 
             final int length = current.length - lengthOfTrailingPartialSubList(asList(next), asList(current));
-            stackTrace = new StackTraceElement[length];
+            final StackTraceElement[] stackTrace = new StackTraceElement[length];
             System.arraycopy(current, 0, stackTrace, 0, length);
+            return stackTrace;
         }
-
-        final ThrowableProblem problem = builder.build();
-        problem.setStackTrace(stackTrace);
-        return problem;
     }
 
     default boolean isCausalChainsEnabled() {
