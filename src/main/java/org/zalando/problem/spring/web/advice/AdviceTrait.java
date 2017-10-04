@@ -131,7 +131,8 @@ public interface AdviceTrait {
 
     default ThrowableProblem toProblem(final Throwable throwable, final StatusType status, final URI type) {
         final ThrowableProblem problem = prepare(throwable, type, status).build();
-        problem.setStackTrace(createStackTrace(throwable, prepare(throwable, type, status)));
+        final StackTraceElement[] stackTrace = createStackTrace(throwable);
+        problem.setStackTrace(stackTrace);
         return problem;
     }
 
@@ -140,16 +141,19 @@ public interface AdviceTrait {
                 .withType(type)
                 .withTitle(status.getReasonPhrase())
                 .withStatus(status)
-                .withDetail(throwable.getMessage());
+                .withDetail(throwable.getMessage())
+                .withCause(Optional.ofNullable(throwable.getCause())
+                    .filter(cause -> isCausalChainsEnabled())
+                    .map(this::toProblem)
+                    .orElse(null));
     }
 
-    default StackTraceElement[] createStackTrace(final Throwable throwable, final ProblemBuilder builder) {
+    default StackTraceElement[] createStackTrace(final Throwable throwable) {
         final Throwable cause = throwable.getCause();
 
         if (cause == null || !isCausalChainsEnabled()) {
             return throwable.getStackTrace();
         } else {
-            builder.withCause(toProblem(cause));
 
             final StackTraceElement[] next = cause.getStackTrace();
             final StackTraceElement[] current = throwable.getStackTrace();
