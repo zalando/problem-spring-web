@@ -42,7 +42,7 @@ interface BaseValidationAdviceTrait extends AdviceTrait {
 
         final List<Violation> violations = stream.stream()
             // sorting to make tests deterministic
-            .sorted(comparing(Violation::getField).thenComparing(Violation::getMessage))
+            .sorted(comparing(Violation::getField).thenComparing(Violation::getMessage).thenComparing(Violation::getCode))
             .collect(toList());
 
         final Problem problem = new ConstraintViolationProblem(type, status, violations);

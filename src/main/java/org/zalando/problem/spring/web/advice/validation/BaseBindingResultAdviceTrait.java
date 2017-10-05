@@ -13,12 +13,12 @@ public interface BaseBindingResultAdviceTrait extends BaseValidationAdviceTrait 
 
     default Violation createViolation(final FieldError error) {
         final String fieldName = formatFieldName(error.getField());
-        return new Violation(fieldName, error.getDefaultMessage());
+        return new Violation(fieldName, error.getDefaultMessage(), error.getCode());
     }
 
     default Violation createViolation(final ObjectError error) {
         final String fieldName = formatFieldName(error.getObjectName());
-        return new Violation(fieldName, error.getDefaultMessage());
+        return new Violation(fieldName, error.getDefaultMessage(), error.getCode());
     }
 
     default List<Violation> createViolations(final BindingResult result) {

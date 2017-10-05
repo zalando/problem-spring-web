@@ -21,7 +21,7 @@ import static java.util.stream.Collectors.toList;
 public interface ConstraintViolationAdviceTrait extends BaseValidationAdviceTrait {
 
     default Violation createViolation(final ConstraintViolation violation) {
-        return new Violation(formatFieldName(violation.getPropertyPath().toString()), violation.getMessage());
+        return new Violation(formatFieldName(violation.getPropertyPath().toString()), violation.getMessage(), null);
     }
 
     @ExceptionHandler

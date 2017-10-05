@@ -5,6 +5,7 @@ import org.zalando.problem.spring.web.advice.AdviceTraitTesting;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 import static org.springframework.http.HttpMethod.POST;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.request;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
@@ -25,7 +26,8 @@ final class ConstraintViolationAdviceTraitTest implements AdviceTraitTesting {
                 .andExpect(jsonPath("$.status", is(400)))
                 .andExpect(jsonPath("$.violations", hasSize(1)))
                 .andExpect(jsonPath("$.violations[0].field", is(""))) // field is not set when validation manually
-                .andExpect(jsonPath("$.violations[0].message", is("must not be called Bob")));
+                .andExpect(jsonPath("$.violations[0].message", is("must not be called Bob")))
+                .andExpect(jsonPath("$.violations[0].code", nullValue()));
     }
 
 }
