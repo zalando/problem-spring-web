@@ -130,13 +130,13 @@ public interface AdviceTrait {
     }
 
     default ThrowableProblem toProblem(final Throwable throwable, final StatusType status, final URI type) {
-        final ThrowableProblem problem = prepare(throwable, type, status).build();
+        final ThrowableProblem problem = prepare(throwable, status, type).build();
         final StackTraceElement[] stackTrace = createStackTrace(throwable);
         problem.setStackTrace(stackTrace);
         return problem;
     }
 
-    default ProblemBuilder prepare(final Throwable throwable, final URI type, final StatusType status) {
+    default ProblemBuilder prepare(final Throwable throwable, final StatusType status, final URI type) {
         return Problem.builder()
                 .withType(type)
                 .withTitle(status.getReasonPhrase())
