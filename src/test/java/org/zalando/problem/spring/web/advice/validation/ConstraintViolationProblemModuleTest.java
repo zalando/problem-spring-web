@@ -30,7 +30,7 @@ final class ConstraintViolationProblemModuleTest {
                 .registerModule(new ProblemModule())
                 .registerModule(new ConstraintViolationProblemModule());
 
-        final Violation violation = new Violation("bob", "was missing");
+        final Violation violation = new Violation("bob", "was missing", "missing code");
         final ConstraintViolationProblem unit = new ConstraintViolationProblem(BAD_REQUEST, singletonList(violation));
 
         with(mapper.writeValueAsString(unit))
@@ -39,7 +39,8 @@ final class ConstraintViolationProblemModuleTest {
                 .assertThat("title", is("Constraint Violation"))
                 .assertThat("violations", hasSize(1))
                 .assertThat("violations.*.field", contains("bob"))
-                .assertThat("violations.*.message", contains("was missing"));
+                .assertThat("violations.*.message", contains("was missing"))
+                .assertThat("violations.*.code", contains("missing code"));
     }
 
     @Test

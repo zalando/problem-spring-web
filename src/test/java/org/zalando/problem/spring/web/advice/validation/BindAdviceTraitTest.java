@@ -24,8 +24,10 @@ final class BindAdviceTraitTest implements AdviceTraitTesting {
              .andExpect(jsonPath("$.violations", hasSize(2)))
              .andExpect(jsonPath("$.violations[0].field", is("page")))
              .andExpect(jsonPath("$.violations[0].message", is("must be greater than or equal to 0")))
+             .andExpect(jsonPath("$.violations[0].code", is("Min")))
              .andExpect(jsonPath("$.violations[1].field", is("size")))
-             .andExpect(jsonPath("$.violations[1].message", is("must be greater than or equal to 1")));
+             .andExpect(jsonPath("$.violations[1].message", is("must be greater than or equal to 1")))
+             .andExpect(jsonPath("$.violations[1].code", is("Min")));
     }
 
 }
