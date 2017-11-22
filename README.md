@@ -110,6 +110,12 @@ spring:
     throw-exception-if-no-handler-found: true
 ```
 
+If you're using Spring Boot, make sure you disable the `ErrorMvcAutoConfiguration`:
+
+```java
+@EnableAutoConfiguration(exclude = ErrorMvcAutoConfiguration.class)
+```
+
 ### Security
 
 The Spring Security integration requires additional steps:
