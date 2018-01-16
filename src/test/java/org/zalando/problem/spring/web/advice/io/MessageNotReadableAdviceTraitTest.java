@@ -36,7 +36,7 @@ final class MessageNotReadableAdviceTraitTest implements AdviceTraitTesting {
                 .andExpect(jsonPath("$.type").doesNotExist())
                 .andExpect(jsonPath("$.title", is("Bad Request")))
                 .andExpect(jsonPath("$.status", is(400)))
-                .andExpect(jsonPath("$.detail", containsString("Unexpected end-of-input: expected close marker for Object")));
+                .andExpect(jsonPath("$.detail", containsString("Unexpected end-of-input")));
     }
 
     @Test
@@ -49,7 +49,8 @@ final class MessageNotReadableAdviceTraitTest implements AdviceTraitTesting {
                 .andExpect(jsonPath("$.type").doesNotExist())
                 .andExpect(jsonPath("$.title", is("Bad Request")))
                 .andExpect(jsonPath("$.status", is(400)))
-                .andExpect(jsonPath("$.detail", containsString("Can not construct instance of java.math.BigDecimal from String value 'foobar': not a valid representation")));
+                .andExpect(jsonPath("$.detail", containsString("java.math.BigDecimal")))
+                .andExpect(jsonPath("$.detail", containsString("foobar")));
     }
 
     @Test
@@ -62,10 +63,7 @@ final class MessageNotReadableAdviceTraitTest implements AdviceTraitTesting {
                 .andExpect(jsonPath("$.type").doesNotExist())
                 .andExpect(jsonPath("$.title", is("Bad Request")))
                 .andExpect(jsonPath("$.status", is(400)))
-                .andExpect(jsonPath("$.detail", containsString("JSON parse error")))
-                .andExpect(jsonPath("$.detail", containsString("No suitable constructor found for type [simple type, class org.zalando.problem.spring.web.advice.example.User]")))
-                .andExpect(jsonPath("$.detail", containsString("can not instantiate from JSON object")))
-                .andExpect(jsonPath("$.detail", containsString("missing default constructor or creator, or perhaps need to add/enable type information?")));
+                .andExpect(jsonPath("$.detail", containsString("org.zalando.problem.spring.web.advice.example.User")));
     }
 
     @Test
@@ -78,8 +76,8 @@ final class MessageNotReadableAdviceTraitTest implements AdviceTraitTesting {
                 .andExpect(jsonPath("$.type").doesNotExist())
                 .andExpect(jsonPath("$.title", is("Bad Request")))
                 .andExpect(jsonPath("$.status", is(400)))
-                .andExpect(jsonPath("$.detail", containsString("Can not deserialize instance of java.util.LinkedHashMap out of START_ARRAY token")))
-                .andExpect(jsonPath("$.detail", containsString("line: 1, column: 1")));
+                .andExpect(jsonPath("$.detail", containsString("java.util.LinkedHashMap")))
+                .andExpect(jsonPath("$.detail", containsString("START_ARRAY")));
     }
 
 }
