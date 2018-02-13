@@ -7,11 +7,12 @@ import org.junit.jupiter.api.Test;
 
 import javax.servlet.ServletException;
 
+import static org.hamcrest.Matchers.emptyString;
+import static org.hamcrest.Matchers.not;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.request;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public final class ContentNegotiationTest implements AdviceTraitTesting {
@@ -22,28 +23,36 @@ public final class ContentNegotiationTest implements AdviceTraitTesting {
     public void problemGivesProblem() throws Exception {
         mvc().perform(request(GET, url)
                 .accept("application/problem+json"))
-                .andExpect(content().contentType(MediaTypes.PROBLEM));
+                .andExpect(status().isConflict())
+                .andExpect(content().contentType(MediaTypes.PROBLEM))
+                .andExpect(content().string(not(emptyString())));
     }
 
     @Test
     public void xproblemGivesXProblem() throws Exception {
         mvc().perform(request(GET, url)
                 .accept("application/x.something+json", "application/x.problem+json"))
-                .andExpect(content().contentType(MediaTypes.X_PROBLEM));
+                .andExpect(status().isConflict())
+                .andExpect(content().contentType(MediaTypes.X_PROBLEM))
+                .andExpect(content().string(not(emptyString())));
     }
 
     @Test
     public void specificityWins() throws Exception {
         mvc().perform(request(GET, url)
                 .accept("application/*", "application/x.problem+json"))
-                .andExpect(content().contentType(MediaTypes.X_PROBLEM));
+                .andExpect(status().isConflict())
+                .andExpect(content().contentType(MediaTypes.X_PROBLEM))
+                .andExpect(content().string(not(emptyString())));
     }
 
     @Test
     public void jsonGivesProblem() throws Exception {
         mvc().perform(request(GET, url)
                 .accept("application/json"))
-                .andExpect(content().contentType(MediaTypes.PROBLEM));
+                .andExpect(status().isConflict())
+                .andExpect(content().contentType(MediaTypes.PROBLEM))
+                .andExpect(content().string(not(emptyString())));
     }
 
     @Disabled("https://jira.spring.io/browse/SPR-10493") // TODO enable as soon as this works
@@ -52,7 +61,8 @@ public final class ContentNegotiationTest implements AdviceTraitTesting {
         mvc().perform(request(GET, url)
                 .accept("application/*+json"))
                 .andExpect(status().isConflict())
-                .andExpect(content().contentType(MediaTypes.PROBLEM));
+                .andExpect(content().contentType(MediaTypes.PROBLEM))
+                .andExpect(content().string(not(emptyString())));
     }
 
     @Test
@@ -60,20 +70,22 @@ public final class ContentNegotiationTest implements AdviceTraitTesting {
     public void specificJsonGivesProblem() throws Exception {
         mvc().perform(request(GET, url)
                 .accept("application/x.vendor.specific+json"))
-                .andExpect(content().contentType(MediaTypes.PROBLEM));
+                .andExpect(status().isConflict())
+                .andExpect(content().contentType(MediaTypes.PROBLEM))
+                .andExpect(content().string(not(emptyString())));
     }
 
     @Test
-    public void nonJsonIsNotAcceptable() throws Exception {
+    public void nonJsonFallsBackToProblemJson() throws Exception {
         mvc().perform(request(GET, url)
-                .header("Accept", "application/atom+xml"))
-                .andExpect(status().isNotAcceptable())
-                .andExpect(content().string(""))
-                .andExpect(header().doesNotExist("Content-Type"));
+                .accept("application/atom+xml"))
+                .andExpect(status().isConflict())
+                .andExpect(content().contentType(MediaTypes.PROBLEM))
+                .andExpect(content().string(not(emptyString())));
     }
 
     @Test
-    public void invalidMediaTypeIsNotAcceptable() throws Exception {
+    public void invalidMediaTypeIsNotAcceptable() {
         assertThrows(ServletException.class, () ->
                 mvc().perform(request(GET, url)
                         .header("Accept", "application/")));

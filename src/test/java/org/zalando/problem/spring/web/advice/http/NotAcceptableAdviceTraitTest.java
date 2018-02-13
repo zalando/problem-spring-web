@@ -30,7 +30,7 @@ final class NotAcceptableAdviceTraitTest implements AdviceTraitTesting {
     @Test
     void notAcceptableNoProblem() throws Exception {
         mvc().perform(request(GET, "http://localhost/api/handler-ok")
-                .accept("application/atom+xml"))
+                .accept("image/png"))
                 .andExpect(status().isNotAcceptable())
                 .andExpect(header().doesNotExist("Content-Type"));
     }
