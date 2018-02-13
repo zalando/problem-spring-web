@@ -32,7 +32,6 @@ final class FallbackTest implements AdviceTraitTesting {
         mvc().perform(request(GET, "http://localhost/api/handler-problem")
                 .accept("text/xml"))
                 .andExpect(status().isConflict())
-                .andExpect(content().string(not(emptyString())))
                 .andExpect(header().string("Content-Type", "text/xml"))
                 .andExpect(header().string("X-Fallback-Used", is("true")));
     }
@@ -52,7 +51,7 @@ final class FallbackTest implements AdviceTraitTesting {
                     .status(problem.getStatus().getStatusCode())
                     .contentType(MediaType.TEXT_XML)
                     .header("X-Fallback-Used", Boolean.toString(true))
-                    .body(problem);
+                    .body(null);
         }
 
     }
