@@ -30,9 +30,13 @@ final class NotAcceptableAdviceTraitTest implements AdviceTraitTesting {
     @Test
     void notAcceptableNoProblem() throws Exception {
         mvc().perform(request(GET, "http://localhost/api/handler-ok")
-                .accept("application/atom+xml"))
+                .accept("image/png"))
                 .andExpect(status().isNotAcceptable())
-                .andExpect(header().doesNotExist("Content-Type"));
+                .andExpect(content().contentType("application/problem+json"))
+                .andExpect(jsonPath("$.type").doesNotExist())
+                .andExpect(jsonPath("$.title", is("Not Acceptable")))
+                .andExpect(jsonPath("$.status", is(406)))
+                .andExpect(jsonPath("$.detail", containsString("Could not find acceptable representation")));
     }
 
 }

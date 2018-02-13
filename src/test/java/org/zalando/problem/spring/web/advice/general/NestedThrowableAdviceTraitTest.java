@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.zalando.problem.ProblemModule;
 import org.zalando.problem.spring.web.advice.AdviceTraitTesting;
+import org.zalando.problem.spring.web.advice.ProblemHandling;
 
 import java.util.List;
 
@@ -20,7 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 final class NestedThrowableAdviceTraitTest implements AdviceTraitTesting {
 
     @Override
-    public Object unit() {
+    public ProblemHandling unit() {
         return new NestedProblemHandling();
     }
 

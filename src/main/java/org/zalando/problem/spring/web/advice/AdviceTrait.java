@@ -1,6 +1,5 @@
 package org.zalando.problem.spring.web.advice;
 
-import com.google.gag.annotation.remark.Hack;
 import lombok.SneakyThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,13 +38,11 @@ import java.util.Optional;
 import static java.util.Arrays.asList;
 import static javax.servlet.RequestDispatcher.ERROR_EXCEPTION;
 import static org.springframework.core.annotation.AnnotatedElementUtils.findMergedAnnotation;
-import static org.springframework.http.HttpStatus.NOT_ACCEPTABLE;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.web.context.request.RequestAttributes.SCOPE_REQUEST;
 import static org.zalando.fauxpas.FauxPas.throwingSupplier;
 import static org.zalando.problem.spring.web.advice.Lists.lengthOfTrailingPartialSubList;
 import static org.zalando.problem.spring.web.advice.MediaTypes.PROBLEM;
-import static org.zalando.problem.spring.web.advice.MediaTypes.WILDCARD_JSON;
 import static org.zalando.problem.spring.web.advice.MediaTypes.X_PROBLEM;
 
 /**
@@ -197,7 +194,8 @@ public interface AdviceTrait {
         }
 
         return process(negotiate(request).map(contentType ->
-                ResponseEntity.status(status)
+                ResponseEntity
+                        .status(status)
                         .headers(headers)
                         .contentType(contentType)
                         .body(problem))
@@ -261,15 +259,6 @@ public interface AdviceTrait {
             }
         }
 
-        @Hack("Accepting application/something+json doesn't make you understand application/problem+json, " +
-                "but a lot of clients miss to send it correctly")
-        final boolean isNeitherAcceptingJsonNorProblemJsonButSomeVendorSpecificJson =
-                mediaTypes.stream().anyMatch(WILDCARD_JSON::includes);
-
-        if (isNeitherAcceptingJsonNorProblemJsonButSomeVendorSpecificJson) {
-            return Optional.of(PROBLEM);
-        }
-
         return Optional.empty();
     }
 
@@ -278,7 +267,13 @@ public interface AdviceTrait {
             @SuppressWarnings("UnusedParameters") final Problem problem,
             @SuppressWarnings("UnusedParameters") final NativeWebRequest request,
             @SuppressWarnings("UnusedParameters") final HttpHeaders headers) {
-        return ResponseEntity.status(NOT_ACCEPTABLE).body(null);
+        return ResponseEntity
+                .status(HttpStatus.valueOf(Optional.ofNullable(problem.getStatus())
+                        .orElse(Status.INTERNAL_SERVER_ERROR)
+                        .getStatusCode()))
+                .headers(headers)
+                .contentType(PROBLEM)
+                .body(problem);
     }
 
     default ResponseEntity<Problem> process(
