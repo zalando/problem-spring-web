@@ -13,7 +13,6 @@ import org.zalando.problem.spring.web.advice.AdviceTrait;
  * Transforms {@link NoHandlerFoundException NoHandlerFoundExceptions} into {@link Status#NOT_FOUND not-found}
  * {@link Problem problems}.
  * <p>
- * <p>
  * <strong>Note</strong>: This requires {@link DispatcherServlet#setThrowExceptionIfNoHandlerFound(boolean)} being set
  * to true.
  * </p>

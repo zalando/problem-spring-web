@@ -12,12 +12,12 @@ import org.zalando.problem.spring.web.advice.AdviceTrait;
  * {@link org.springframework.validation.beanvalidation.MethodValidationPostProcessor} like following:
  *
  * <pre><code>
- *  @Bean
+ * {@literal @}Bean
  *  public Validator validator() {
  *      return new LocalValidatorFactoryBean();
  *  }
  *
- *  @Bean
+ * {@literal @}Bean
  *  public MethodValidationPostProcessor methodValidationPostProcessor() {
  *      MethodValidationPostProcessor methodValidationPostProcessor = new MethodValidationPostProcessor();
  *      methodValidationPostProcessor.setValidator(validator());
