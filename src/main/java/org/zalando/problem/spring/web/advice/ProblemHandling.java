@@ -11,12 +11,10 @@ import org.zalando.problem.spring.web.advice.validation.ValidationAdviceTrait;
 /**
  * {@link ProblemHandling} is a composite {@link AdviceTrait} that combines all built-in advice traits into a single
  * interface that makes it easier to use:
- * <p>
- * <pre>{@code
- * &#064;ControllerAdvice
- * public class ExceptionHandling implements ProblemHandling
- * }</pre>
- * <p>
+ * <pre><code>
+ * {@literal @}ControllerAdvice
+ *  public class ExceptionHandling implements ProblemHandling
+ * </code></pre>
  * <strong>Note:</strong> Future versions of this class will be extended with additional traits.
  *
  * @see AdviceTrait
