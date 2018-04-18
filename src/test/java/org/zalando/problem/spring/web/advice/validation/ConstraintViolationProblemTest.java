@@ -14,7 +14,7 @@ public class ConstraintViolationProblemTest {
     @Test
     public void shouldCreateCopyOfViolations(){
         final List<Violation> violations = new ArrayList<>();
-        violations.add(new Violation("x", "y"));
+        violations.add(new Violation("x",new String[]{"NotEmpty"}, "y"));
 
         final ConstraintViolationProblem problem = new ConstraintViolationProblem(BAD_REQUEST, violations);
 
