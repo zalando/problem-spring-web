@@ -10,4 +10,7 @@ public interface ViolationMixIn {
 
     @JsonProperty("message")
     String getMessage();
+
+    @JsonProperty("codes")
+    String[] getCodes();
 }

@@ -7,10 +7,13 @@ public final class Violation {
 
     private final String field;
     private final String message;
+    private String[] codes = {};
 
-    public Violation(final String field, final String message) {
+
+    public Violation(final String field, String[] codes, final String message) {
         this.field = field;
         this.message = message;
+        this.codes = codes;
     }
 
     public String getField() {
@@ -21,4 +24,7 @@ public final class Violation {
         return message;
     }
 
+    public String[] getCodes() {
+        return codes;
+    }
 }

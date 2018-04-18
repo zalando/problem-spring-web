@@ -52,8 +52,8 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
 
-        <spring.version>4.3.12.RELEASE</spring.version>
-        <spring-security.version>4.2.3.RELEASE</spring-security.version>
+        <spring.version>4.3.16.RELEASE</spring.version>
+        <spring-security.version>4.2.5.RELEASE</spring-security.version>
         <problem.version>0.20.1</problem.version>
         <jackson.version>2.9.5</jackson.version>
         <junit-platform.version>1.0.3</junit-platform.version>
