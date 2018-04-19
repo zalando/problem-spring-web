@@ -12,7 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-final class TypeMistmatchAdviceTraitTest implements AdviceTraitTesting {
+final class TypeMismatchAdviceTraitTest implements AdviceTraitTesting {
 
     @Test
     void typeMismatch() throws Exception {

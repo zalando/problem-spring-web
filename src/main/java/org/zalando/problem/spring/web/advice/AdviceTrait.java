@@ -1,6 +1,7 @@
 package org.zalando.problem.spring.web.advice;
 
 import lombok.SneakyThrows;
+import org.apiguardian.api.API;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -37,6 +38,8 @@ import java.util.Optional;
 
 import static java.util.Arrays.asList;
 import static javax.servlet.RequestDispatcher.ERROR_EXCEPTION;
+import static org.apiguardian.api.API.Status.MAINTAINED;
+import static org.apiguardian.api.API.Status.STABLE;
 import static org.springframework.core.annotation.AnnotatedElementUtils.findMergedAnnotation;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.web.context.request.RequestAttributes.SCOPE_REQUEST;
@@ -71,6 +74,7 @@ import static org.zalando.problem.spring.web.advice.MediaTypes.X_PROBLEM;
  * @see RoutingAdviceTrait
  * @see ValidationAdviceTrait
  */
+@API(status = STABLE)
 public interface AdviceTrait {
 
     Logger LOG = LoggerFactory.getLogger(AdviceTrait.class);
@@ -117,6 +121,7 @@ public interface AdviceTrait {
         return toProblem(throwable, status);
     }
 
+    @API(status = MAINTAINED)
     default ResponseStatus resolveResponseStatus(final Throwable type) {
         @Nullable final ResponseStatus candidate = findMergedAnnotation(type.getClass(), ResponseStatus.class);
         return candidate == null && type.getCause() != null ? resolveResponseStatus(type.getCause()) : candidate;

@@ -1,13 +1,18 @@
 package org.zalando.problem.spring.web.advice;
 
+import org.apiguardian.api.API;
 import org.springframework.http.HttpStatus;
-
 import org.zalando.problem.StatusType;
+
 import java.util.Objects;
+
+import static org.apiguardian.api.API.Status.EXPERIMENTAL;
 
 /**
  * An implementation of {@link StatusType} to map {@link HttpStatus}.
  */
+@API(status = EXPERIMENTAL)
+// TODO final
 public class HttpStatusAdapter implements StatusType {
 
     private final HttpStatus status;

@@ -1,5 +1,6 @@
 package org.zalando.problem.spring.web.advice.http;
 
+import org.apiguardian.api.API;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
@@ -9,12 +10,17 @@ import org.zalando.problem.Problem;
 import org.zalando.problem.Status;
 import org.zalando.problem.spring.web.advice.AdviceTrait;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+import static org.apiguardian.api.API.Status.STABLE;
+
 /**
  * @see HttpMediaTypeNotSupportedException
  * @see Status#UNSUPPORTED_MEDIA_TYPE
  */
+@API(status = STABLE)
 public interface UnsupportedMediaTypeAdviceTrait extends AdviceTrait {
 
+    @API(status = INTERNAL)
     @ExceptionHandler
     default ResponseEntity<Problem> handleMediaTypeNotSupportedException(
             final HttpMediaTypeNotSupportedException exception,

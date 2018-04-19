@@ -1,5 +1,6 @@
 package org.zalando.problem.spring.web.advice.validation;
 
+import org.apiguardian.api.API;
 import org.zalando.problem.StatusType;
 import org.zalando.problem.ThrowableProblem;
 
@@ -9,6 +10,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static org.apiguardian.api.API.Status.STABLE;
+
+@API(status = STABLE)
 @Immutable
 public final class ConstraintViolationProblem extends ThrowableProblem {
 
