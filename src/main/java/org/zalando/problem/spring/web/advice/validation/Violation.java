@@ -1,7 +1,12 @@
 package org.zalando.problem.spring.web.advice.validation;
 
+import org.apiguardian.api.API;
+
 import javax.annotation.concurrent.Immutable;
 
+import static org.apiguardian.api.API.Status.STABLE;
+
+@API(status = STABLE)
 @Immutable
 public final class Violation {
 

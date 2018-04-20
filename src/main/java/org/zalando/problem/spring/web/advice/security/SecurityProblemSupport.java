@@ -1,5 +1,6 @@
 package org.zalando.problem.spring.web.advice.security;
 
+import org.apiguardian.api.API;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.access.AccessDeniedException;
@@ -15,6 +16,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+import static org.apiguardian.api.API.Status.STABLE;
+
 
 /**
  * A compound {@link AuthenticationEntryPoint} and {@link AccessDeniedHandler} that delegates exceptions to
@@ -24,11 +28,13 @@ import java.io.IOException;
  *
  * @see WebMvcConfigurationSupport#handlerExceptionResolver()
  */
+@API(status = STABLE)
 @Component
 public class SecurityProblemSupport implements AuthenticationEntryPoint, AccessDeniedHandler {
 
     private final HandlerExceptionResolver resolver;
 
+    @API(status = INTERNAL)
     @Autowired
     public SecurityProblemSupport(
             @Qualifier("handlerExceptionResolver") final HandlerExceptionResolver resolver) {

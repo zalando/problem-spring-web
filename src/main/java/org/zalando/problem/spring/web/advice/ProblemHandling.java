@@ -1,5 +1,6 @@
 package org.zalando.problem.spring.web.advice;
 
+import org.apiguardian.api.API;
 import org.zalando.problem.spring.web.advice.custom.CustomAdviceTrait;
 import org.zalando.problem.spring.web.advice.general.GeneralAdviceTrait;
 import org.zalando.problem.spring.web.advice.http.HttpAdviceTrait;
@@ -7,6 +8,8 @@ import org.zalando.problem.spring.web.advice.io.IOAdviceTrait;
 import org.zalando.problem.spring.web.advice.routing.RoutingAdviceTrait;
 import org.zalando.problem.spring.web.advice.security.SecurityAdviceTrait;
 import org.zalando.problem.spring.web.advice.validation.ValidationAdviceTrait;
+
+import static org.apiguardian.api.API.Status.STABLE;
 
 /**
  * {@link ProblemHandling} is a composite {@link AdviceTrait} that combines all built-in advice traits into a single
@@ -26,6 +29,7 @@ import org.zalando.problem.spring.web.advice.validation.ValidationAdviceTrait;
  * @see SecurityAdviceTrait
  * @see ValidationAdviceTrait
  */
+@API(status = STABLE)
 public interface ProblemHandling extends
         GeneralAdviceTrait,
         HttpAdviceTrait,

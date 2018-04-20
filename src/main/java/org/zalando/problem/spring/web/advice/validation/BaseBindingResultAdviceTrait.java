@@ -1,5 +1,6 @@
 package org.zalando.problem.spring.web.advice.validation;
 
+import org.apiguardian.api.API;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
@@ -8,7 +9,9 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
+import static org.apiguardian.api.API.Status.INTERNAL;
 
+@API(status = INTERNAL)
 public interface BaseBindingResultAdviceTrait extends BaseValidationAdviceTrait {
 
     default Violation createViolation(final FieldError error) {
