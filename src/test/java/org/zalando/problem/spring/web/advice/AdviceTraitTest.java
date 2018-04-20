@@ -30,7 +30,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.HttpStatus.RESET_CONTENT;
 import static org.zalando.problem.spring.web.advice.MediaTypes.PROBLEM;
-import static org.zalando.problem.spring.web.advice.MediaTypes.WILDCARD_JSON_VALUE;
 
 public class AdviceTraitTest {
 
@@ -89,7 +88,7 @@ public class AdviceTraitTest {
 
         final ResponseEntity<Problem> result = unit.create(Status.RESET_CONTENT,
                 new IllegalStateException(message),
-                request(WILDCARD_JSON_VALUE));
+                request("application/*+json"));
 
         assertThat(result, hasFeature("Status", ResponseEntity::getStatusCode, is(RESET_CONTENT)));
         assertThat(result.getHeaders(), hasFeature("Content-Type", HttpHeaders::getContentType, is(PROBLEM)));
