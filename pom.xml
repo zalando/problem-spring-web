@@ -351,6 +351,7 @@
                     <parallel>classesAndMethods</parallel>
                     <threadCount>1</threadCount>
                     <perCoreThreadCount>true</perCoreThreadCount>
+                    <useFile>false</useFile>
                 </configuration>
                 <dependencies>
                     <dependency>
