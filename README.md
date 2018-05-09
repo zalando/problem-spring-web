@@ -2,6 +2,7 @@
 
 [![Build Status](https://img.shields.io/travis/zalando/problem-spring-web/master.svg)](https://travis-ci.org/zalando/problem-spring-web)
 [![Coverage Status](https://img.shields.io/coveralls/zalando/problem-spring-web/master.svg)](https://coveralls.io/r/zalando/problem-spring-web)
+[![Code Quality](https://img.shields.io/codacy/grade/0236149bf46749b1a582f9fbbde2a4eb/master.svg)](https://www.codacy.com/app/whiskeysierra/problem-spring-web)
 [![Javadoc](http://javadoc.io/badge/org.zalando/problem-spring-web.svg)](http://www.javadoc.io/doc/org.zalando/problem-spring-web)
 [![Release](https://img.shields.io/github/release/zalando/problem-spring-web.svg)](https://github.com/zalando/problem-spring-web/releases)
 [![Maven Central](https://img.shields.io/maven-central/v/org.zalando/problem-spring-web.svg)](https://maven-badges.herokuapp.com/maven-central/org.zalando/problem-spring-web)
