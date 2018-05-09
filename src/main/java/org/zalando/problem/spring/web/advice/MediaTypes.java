@@ -20,8 +20,8 @@ public final class MediaTypes {
     @Deprecated
     static final MediaType WILDCARD_JSON = MediaType.parseMediaType(WILDCARD_JSON_VALUE);
 
-    MediaTypes() {
-        // package private so we can trick code coverage
+    private MediaTypes() {
+
     }
 
 }
