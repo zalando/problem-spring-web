@@ -66,9 +66,9 @@ final class NestedThrowableAdviceTraitTest implements AdviceTraitTesting {
                 .andExpect(jsonPath("$.cause.cause.type").doesNotExist())
                 .andExpect(jsonPath("$.cause.cause.title", is("Internal Server Error")))
                 .andExpect(jsonPath("$.cause.cause.status", is(500)))
-                .andExpect(jsonPath("$.cause.cause.detail", containsString("Null Pointer")))
+                .andExpect(jsonPath("$.cause.cause.detail", containsString("No such element")))
                 .andExpect(jsonPath("$.cause.cause.stacktrace", is(instanceOf(List.class))))
-                .andExpect(jsonPath("$.cause.cause.stacktrace[0]", containsString("newNullPointer")))
+                .andExpect(jsonPath("$.cause.cause.stacktrace[0]", containsString("newNoSuchElement")))
                 .andExpect(jsonPath("$.cause.cause.stacktrace[1]", containsString("nestedThrowable")))
                 .andExpect(jsonPath("$.cause.cause.cause").doesNotExist());
     }

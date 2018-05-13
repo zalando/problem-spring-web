@@ -39,6 +39,7 @@ import java.lang.annotation.Target;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Set;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -60,22 +61,22 @@ public class ExampleRestController {
 
     @RequestMapping(path = "/handler-throwable", method = GET)
     public ResponseEntity<String> throwable() {
-        throw new RuntimeException("expected", new IllegalStateException());
+        throw new IllegalArgumentException("expected", new IllegalStateException());
     }
 
     @RequestMapping(path = "/handler-throwable-annotated", method = GET)
     public ResponseEntity<String> throwableAnnotated() {
-        throw new MyException(new RuntimeException("expected", new IllegalStateException()));
+        throw new MyException(new IllegalArgumentException("expected", new IllegalStateException()));
     }
 
     @RequestMapping(path = "/handler-throwable-annotated-cause", method = GET)
     public ResponseEntity<String> throwableAnnotatedCause() {
-        throw new RuntimeException("expected", new IllegalStateException(new MyException()));
+        throw new IllegalArgumentException("expected", new IllegalStateException(new MyException()));
     }
 
     @RequestMapping(path = "/handler-throwable-annotated-reason", method = GET)
     public ResponseEntity<String> throwableAnnotatedWithReason() {
-        throw new MyExceptionWithReason(new RuntimeException("expected", new IllegalStateException()));
+        throw new MyExceptionWithReason(new IllegalArgumentException("expected", new IllegalStateException()));
     }
 
     @ResponseStatus(HttpStatus.NOT_IMPLEMENTED)
@@ -99,8 +100,8 @@ public class ExampleRestController {
     public ResponseEntity<String> nestedThrowable() {
         try {
             try {
-                throw newNullPointer();
-            } catch (final NullPointerException e) {
+                throw newNoSuchElement();
+            } catch (final NoSuchElementException e) {
                 throw newIllegalArgument(e);
             }
         } catch (final IllegalArgumentException e) {
@@ -108,16 +109,16 @@ public class ExampleRestController {
         }
     }
 
-    private IllegalStateException newIllegalState(final IllegalArgumentException e) {
+    private IllegalStateException newIllegalState(final Exception e) {
         throw new IllegalStateException("Illegal State", e);
     }
 
-    private IllegalArgumentException newIllegalArgument(final NullPointerException e) {
+    private IllegalArgumentException newIllegalArgument(final Exception e) {
         throw new IllegalArgumentException("Illegal Argument", e);
     }
 
-    private NullPointerException newNullPointer() {
-        throw new NullPointerException("Null Pointer");
+    private NoSuchElementException newNoSuchElement() {
+        throw new NoSuchElementException("No such element");
     }
 
     @RequestMapping(path = "/handler-problem", method = GET)
@@ -132,17 +133,17 @@ public class ExampleRestController {
 
     @RequestMapping(path = "/json-object")
     public void jsonObject(@RequestBody final Map<String, Object> body) {
-
+        // no response needed for testing
     }
 
     @RequestMapping(path = "/json-decimal")
     public void bigDecimal(@RequestBody final BigDecimal bigDecimal) {
-
+        // no response needed for testing
     }
 
     @RequestMapping(path = "/json-user")
     public void user(@RequestBody final User user) {
-
+        // no response needed for testing
     }
 
     @RequestMapping(path = "/handler-params", method = GET)
@@ -182,7 +183,7 @@ public class ExampleRestController {
 
     @RequestMapping("/handler-secured")
     public void secured() {
-
+        // no response needed for testing
     }
 
     @RequestMapping(path = "/handler-invalid-body", method = POST)
@@ -220,7 +221,7 @@ public class ExampleRestController {
 
         @Override
         public void initialize(final NotBob constraintAnnotation) {
-
+            // no initialization needed
         }
 
         @Override

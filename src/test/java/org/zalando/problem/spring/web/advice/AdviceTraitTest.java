@@ -13,6 +13,7 @@ import org.zalando.problem.ThrowableProblem;
 
 import java.net.URI;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
@@ -103,8 +104,8 @@ public class AdviceTraitTest {
         try {
             try {
                 try {
-                    throw newNullPointer();
-                } catch (final NullPointerException e) {
+                    throw newNoSuchElement();
+                } catch (final NoSuchElementException e) {
                     throw newIllegalArgument(e);
                 }
             } catch (final IllegalArgumentException e) {
@@ -145,8 +146,8 @@ public class AdviceTraitTest {
         assertThat(nullPointer.getType(), hasToString("about:blank"));
         assertThat(nullPointer.getTitle(), is("Internal Server Error"));
         assertThat(nullPointer.getStatus(), is(Status.INTERNAL_SERVER_ERROR));
-        assertThat(nullPointer.getDetail(), is("Null Pointer"));
-        assertThat(stacktraceAsString(nullPointer).get(0), startsWith(method("newNullPointer")));
+        assertThat(nullPointer.getDetail(), is("No such element"));
+        assertThat(stacktraceAsString(nullPointer).get(0), startsWith(method("newNoSuchElement")));
         assertThat(stacktraceAsString(nullPointer).get(1), startsWith(method("buildsStacktrace")));
         assertThat(nullPointer.getCause(), is(nullValue()));
     }
@@ -161,16 +162,16 @@ public class AdviceTraitTest {
                 .collect(toList());
     }
 
-    private IllegalStateException newIllegalState(final IllegalArgumentException e) {
+    private IllegalStateException newIllegalState(final Exception e) {
         throw new IllegalStateException("Illegal State", e);
     }
 
-    private IllegalArgumentException newIllegalArgument(final NullPointerException e) {
+    private IllegalArgumentException newIllegalArgument(final Exception e) {
         throw new IllegalArgumentException("Illegal Argument", e);
     }
 
-    private NullPointerException newNullPointer() {
-        throw new NullPointerException("Null Pointer");
+    private NoSuchElementException newNoSuchElement() {
+        throw new NoSuchElementException("No such element");
     }
 
     @Test
