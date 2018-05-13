@@ -2,7 +2,6 @@ package org.zalando.problem.spring.web.advice;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.zalando.problem.Problem;
@@ -29,7 +28,7 @@ final class SpringAdviceTraitTest {
     void buildsOnThrowable() {
         final HttpStatusAdapter adapter = new HttpStatusAdapter(RESET_CONTENT);
 
-        final ResponseEntity<Problem> result = unit.create(HttpStatus.RESET_CONTENT,
+        final ResponseEntity<Problem> result = unit.create(RESET_CONTENT,
                 new IllegalStateException("Message"), mock(NativeWebRequest.class));
 
         assertThat(result, hasFeature("Status", ResponseEntity::getStatusCode, is(RESET_CONTENT)));
