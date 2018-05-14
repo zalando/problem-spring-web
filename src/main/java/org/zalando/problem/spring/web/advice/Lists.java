@@ -4,8 +4,8 @@ import java.util.List;
 
 final class Lists {
 
-    Lists() {
-        // package private so we can trick code coverage
+    private Lists() {
+
     }
 
     /**
