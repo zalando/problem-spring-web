@@ -54,7 +54,7 @@
 
         <spring.version>4.3.14.RELEASE</spring.version>
         <spring-security.version>4.2.4.RELEASE</spring-security.version>
-        <problem.version>0.20.1</problem.version>
+        <problem.version>0.20.3</problem.version>
         <jackson.version>2.9.5</jackson.version>
         <junit-platform.version>1.0.3</junit-platform.version>
         <junit-jupiter.version>5.0.3</junit-jupiter.version>
