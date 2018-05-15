@@ -234,7 +234,7 @@
         <dependency>
             <groupId>org.springframework.security.oauth</groupId>
             <artifactId>spring-security-oauth2</artifactId>
-            <version>2.2.0.RELEASE</version>
+            <version>2.3.3.RELEASE</version>
             <scope>test</scope>
         </dependency>
         <dependency>
