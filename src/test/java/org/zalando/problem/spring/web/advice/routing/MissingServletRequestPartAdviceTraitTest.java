@@ -1,6 +1,5 @@
 package org.zalando.problem.spring.web.advice.routing;
 
-
 import org.junit.jupiter.api.Test;
 import org.zalando.problem.spring.web.advice.AdviceTraitTesting;
 
@@ -14,6 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 final class MissingServletRequestPartAdviceTraitTest implements AdviceTraitTesting {
 
     @Test
+    @SuppressWarnings("deprecation") // TODO use multipart(String) when Spring 4 support is no longer needed
     void multipart() throws Exception {
         mvc().perform(fileUpload("http://localhost/api/handler-multipart")
                 .file("payload1", new byte[]{0x1}))

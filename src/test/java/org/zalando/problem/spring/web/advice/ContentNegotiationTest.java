@@ -1,6 +1,5 @@
 package org.zalando.problem.spring.web.advice;
 
-
 import com.google.gag.annotation.remark.Hack;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;

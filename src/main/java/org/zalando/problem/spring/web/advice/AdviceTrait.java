@@ -12,6 +12,7 @@ import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.http.server.ServletServerHttpResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
+import org.springframework.web.accept.ContentNegotiationStrategy;
 import org.springframework.web.accept.HeaderContentNegotiationStrategy;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -248,13 +249,9 @@ public interface AdviceTrait {
 
     @SneakyThrows(HttpMediaTypeNotAcceptableException.class)
     default Optional<MediaType> negotiate(final NativeWebRequest request) {
-        final HeaderContentNegotiationStrategy negotiator = new HeaderContentNegotiationStrategy();
+        final ContentNegotiationStrategy negotiator = ContentNegotiation.DEFAULT;
 
         final List<MediaType> mediaTypes = negotiator.resolveMediaTypes(request);
-
-        if (mediaTypes.isEmpty()) {
-            return Optional.of(PROBLEM);
-        }
 
         for (final MediaType mediaType : mediaTypes) {
             if (mediaType.includes(APPLICATION_JSON) || mediaType.includes(PROBLEM)) {

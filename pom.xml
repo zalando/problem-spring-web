@@ -86,10 +86,15 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
             <version>${spring.version}</version>
+            <scope>provided</scope>
             <exclusions>
                 <exclusion>
                     <groupId>commons-logging</groupId>
                     <artifactId>commons-logging</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-jcl</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -97,6 +102,7 @@
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-web</artifactId>
             <version>${spring-security.version}</version>
+            <scope>provided</scope>
             <exclusions>
                 <exclusion>
                     <groupId>aopalliance</groupId>
@@ -162,12 +168,6 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.github.sbrannen</groupId>
-            <artifactId>spring-test-junit5</artifactId>
-            <version>1.0.3</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>com.jayway.jsonpath</groupId>
             <artifactId>json-path-assert</artifactId>
             <version>2.4.0</version>
@@ -196,7 +196,7 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.hibernate</groupId>
+            <groupId>org.hibernate.validator</groupId>
             <artifactId>hibernate-validator</artifactId>
             <version>6.0.10.Final</version>
             <scope>test</scope>
@@ -442,6 +442,40 @@
 
     <profiles>
         <profile>
+            <id>spring5</id>
+            <properties>
+                <spring.version>5.0.6.RELEASE</spring.version>
+                <spring-security.version>5.0.5.RELEASE</spring-security.version>
+            </properties>
+        </profile>
+        <profile>
+            <id>spring4-junit5</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>com.github.sbrannen</groupId>
+                    <artifactId>spring-test-junit5</artifactId>
+                    <version>1.0.3</version>
+                    <scope>test</scope>
+                </dependency>
+                <!-- for some reason, this is needed to make spring-test-junit5 work -->
+                <dependency>
+                    <groupId>org.junit.platform</groupId>
+                    <artifactId>junit-platform-commons</artifactId>
+                    <version>${junit-platform.version}</version>
+                    <scope>test</scope>
+                </dependency>
+            </dependencies>
+            <repositories>
+                <repository>
+                    <id>jitpack.io</id>
+                    <url>https://jitpack.io</url>
+                </repository>
+            </repositories>
+        </profile>
+        <profile>
             <id>release</id>
             <build>
                 <plugins>
@@ -500,12 +534,5 @@
             </build>
         </profile>
     </profiles>
-
-    <repositories>
-        <repository>
-            <id>jitpack.io</id>
-            <url>https://jitpack.io</url>
-        </repository>
-    </repositories>
 
 </project>
