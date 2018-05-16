@@ -33,8 +33,8 @@ class for your [`@ControllerAdvice`](http://docs.spring.io/spring/docs/current/j
 - Java 8
 - Any build tool using Maven Central, or direct download
 - Servlet Container
-- Spring
-- Spring Security
+- Spring 4.x **or 5.x**
+- Spring Security 4.x **or 5.x**
 
 ## Installation
 
@@ -58,6 +58,21 @@ public ObjectMapper objectMapper() {
     return new ObjectMapper()
             .registerModule(new ProblemModule())
             .registerModule(new ConstraintViolationProblemModule());
+}
+```
+
+Spring 5 users that want to retain the Jackson auto-configuration feature can [register modules
+as beans](https://docs.spring.io/spring-boot/docs/2.0.2.RELEASE/reference/htmlsingle/#howto-customize-the-jackson-objectmapper):
+
+```java
+@Bean
+public ProblemModule problemModule() {
+    return new ProblemModule();
+}
+
+@Bean
+public ConstraintViolationProblemModule constraintViolationProblemModule() {
+    return new ConstraintViolationProblemModule();
 }
 ```
 
@@ -158,7 +173,7 @@ need arises. All of the following aspects can be overridden and tweaked:
 | Creation            | `AdviceTrait.create(..)`    |                                                                                                       |
 | Logging             | `AdviceTrait.log(..)`       | 4xx as `WARN`, 5xx as `ERROR` including stack trace                                                   |
 | Content Negotiation | `AdviceTrait.negotiate(..)` | `application/json`, `application/*+json`, `application/problem+json` and `application/x.problem+json` |
-| Fallback            | `AdviceTrait.fallback(..)`  | `406 Not Acceptable`, without a body                                                                  |
+| Fallback            | `AdviceTrait.fallback(..)`  | `application/problem+json`                                                                            |
 | Post-Processing     | `AdviceTrait.process(..)`   | n/a                                                                                                   |
 
 ## Usage
