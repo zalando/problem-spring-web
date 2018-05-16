@@ -1,6 +1,5 @@
 package org.zalando.problem.spring.web.advice.example;
 
-
 import org.zalando.problem.Status;
 import org.zalando.problem.StatusType;
 import org.zalando.problem.ThrowableProblem;

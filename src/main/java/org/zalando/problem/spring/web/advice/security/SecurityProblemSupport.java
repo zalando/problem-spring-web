@@ -19,7 +19,6 @@ import java.io.IOException;
 import static org.apiguardian.api.API.Status.INTERNAL;
 import static org.apiguardian.api.API.Status.STABLE;
 
-
 /**
  * A compound {@link AuthenticationEntryPoint} and {@link AccessDeniedHandler} that delegates exceptions to
  * Spring WebMVC's {@link HandlerExceptionResolver} as defined in {@link WebMvcConfigurationSupport}.

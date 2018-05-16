@@ -1,6 +1,5 @@
 package org.zalando.problem.spring.web.advice.example;
 
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gag.annotation.remark.Facepalm;

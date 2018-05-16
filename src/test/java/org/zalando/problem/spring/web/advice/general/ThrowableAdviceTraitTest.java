@@ -1,6 +1,5 @@
 package org.zalando.problem.spring.web.advice.general;
 
-
 import org.junit.jupiter.api.Test;
 import org.zalando.problem.spring.web.advice.AdviceTraitTesting;
 
