@@ -12,7 +12,7 @@ next=$(semver -i minor ${release})
 ./mvnw versions:set -D newVersion=${release}
 git add $(find . -name pom.xml)
 git commit -m "Release ${release}"
-./mvnw clean deploy -P release
+./mvnw clean deploy -P release,spring4-junit5
 ./mvnw scm:tag
 
 # next development version
