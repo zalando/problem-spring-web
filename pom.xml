@@ -52,8 +52,8 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
 
-        <spring.version>4.3.14.RELEASE</spring.version>
-        <spring-security.version>4.2.4.RELEASE</spring-security.version>
+        <spring.version>4.3.17.RELEASE</spring.version>
+        <spring-security.version>4.2.7.RELEASE</spring-security.version>
         <problem.version>0.20.3</problem.version>
         <jackson.version>2.9.6</jackson.version>
         <junit-platform.version>1.2.0</junit-platform.version>
@@ -444,8 +444,8 @@
         <profile>
             <id>spring5</id>
             <properties>
-                <spring.version>5.0.6.RELEASE</spring.version>
-                <spring-security.version>5.0.5.RELEASE</spring-security.version>
+                <spring.version>5.0.7.RELEASE</spring.version>
+                <spring-security.version>5.0.6.RELEASE</spring-security.version>
             </properties>
         </profile>
         <profile>
