@@ -15,6 +15,7 @@ import java.io.IOException;
 import static com.google.common.collect.Iterables.getOnlyElement;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assumptions.assumeFalse;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 final class AdviceTraitLoggingTest {
@@ -59,6 +60,16 @@ final class AdviceTraitLoggingTest {
         assertThat(event.getMessage(), is(status.getReasonPhrase()));
         assertThat(event.getArguments(), emptyIterable());
         assertThat(event.getThrowable().orNull(), is(throwable));
+    }
+
+    @ParameterizedTest
+    @MethodSource("data")
+    void shouldNotLogNon4xx5xxErrors(final HttpStatus status) {
+        assumeFalse(status.is5xxServerError() || status.is4xxClientError());
+        final IOException throwable = new IOException();
+        unit.log(throwable, null, status);
+
+        assertThat(log.getLoggingEvents(), iterableWithSize(0));
     }
 
 }

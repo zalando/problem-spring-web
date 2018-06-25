@@ -72,17 +72,6 @@ public class AdviceTraitTest {
     }
 
     @Test
-    void buildsOnMessage() {
-        final ResponseEntity<Problem> result = unit.create(Status.RESET_CONTENT,
-                new IllegalStateException("Message"), request());
-
-        assertThat(result, hasFeature("Status", ResponseEntity::getStatusCode, is(RESET_CONTENT)));
-        assertThat(result.getHeaders(), hasFeature("Content-Type", HttpHeaders::getContentType, is(PROBLEM)));
-        assertThat(result.getBody(), compose(hasFeature("Status", Problem::getStatus, is(Status.RESET_CONTENT)))
-                .and(hasFeature("Detail", Problem::getDetail, is("Message"))));
-    }
-
-    @Test
     void buildsIfIncludes() {
         final String message = "Message";
 
@@ -94,83 +83,6 @@ public class AdviceTraitTest {
         assertThat(result.getHeaders(), hasFeature("Content-Type", HttpHeaders::getContentType, is(PROBLEM)));
         assertThat(result.getBody(), compose(hasFeature("Status", Problem::getStatus, is(Status.RESET_CONTENT)))
                 .and(hasFeature("Detail", Problem::getDetail, is(message))));
-    }
-
-    @Test
-    void buildsStacktrace() {
-        final Throwable throwable;
-
-        try {
-            try {
-                try {
-                    throw newNoSuchElement();
-                } catch (final NoSuchElementException e) {
-                    throw newIllegalArgument(e);
-                }
-            } catch (final IllegalArgumentException e) {
-                throw newIllegalState(e);
-            }
-        } catch (final IllegalStateException e) {
-            throwable = e;
-        }
-
-        final ResponseEntity<Problem> entity = new AdviceTrait() {
-            @Override
-            public boolean isCausalChainsEnabled() {
-                return true;
-            }
-        }.create(Status.INTERNAL_SERVER_ERROR, throwable, request());
-
-        assertThat(entity.getBody(), is(instanceOf(ThrowableProblem.class)));
-
-        final ThrowableProblem illegalState = (ThrowableProblem) entity.getBody();
-        assertThat(illegalState.getType(), hasToString("about:blank"));
-        assertThat(illegalState.getTitle(), is("Internal Server Error"));
-        assertThat(illegalState.getStatus(), is(Status.INTERNAL_SERVER_ERROR));
-        assertThat(illegalState.getDetail(), is("Illegal State"));
-        assertThat(stacktraceAsString(illegalState).get(0), startsWith(method("newIllegalState")));
-        assertThat(stacktraceAsString(illegalState).get(1), startsWith(method("buildsStacktrace")));
-        assertThat(illegalState.getCause(), is(notNullValue()));
-
-        final ThrowableProblem illegalArgument = illegalState.getCause();
-        assertThat(illegalArgument.getType(), hasToString("about:blank"));
-        assertThat(illegalArgument.getTitle(), is("Internal Server Error"));
-        assertThat(illegalArgument.getStatus(), is(Status.INTERNAL_SERVER_ERROR));
-        assertThat(illegalArgument.getDetail(), is("Illegal Argument"));
-        assertThat(stacktraceAsString(illegalArgument).get(0), startsWith(method("newIllegalArgument")));
-        assertThat(stacktraceAsString(illegalArgument).get(1), startsWith(method("buildsStacktrace")));
-        assertThat(illegalArgument.getCause(), is(notNullValue()));
-
-        final ThrowableProblem nullPointer = illegalArgument.getCause();
-        assertThat(nullPointer.getType(), hasToString("about:blank"));
-        assertThat(nullPointer.getTitle(), is("Internal Server Error"));
-        assertThat(nullPointer.getStatus(), is(Status.INTERNAL_SERVER_ERROR));
-        assertThat(nullPointer.getDetail(), is("No such element"));
-        assertThat(stacktraceAsString(nullPointer).get(0), startsWith(method("newNoSuchElement")));
-        assertThat(stacktraceAsString(nullPointer).get(1), startsWith(method("buildsStacktrace")));
-        assertThat(nullPointer.getCause(), is(nullValue()));
-    }
-
-    private String method(final String s) {
-        return "org.zalando.problem.spring.web.advice.AdviceTraitTest." + s;
-    }
-
-    private List<String> stacktraceAsString(final Throwable throwable) {
-        return Stream.of(throwable.getStackTrace())
-                .map(Object::toString)
-                .collect(toList());
-    }
-
-    private IllegalStateException newIllegalState(final Exception e) {
-        throw new IllegalStateException("Illegal State", e);
-    }
-
-    private IllegalArgumentException newIllegalArgument(final Exception e) {
-        throw new IllegalArgumentException("Illegal Argument", e);
-    }
-
-    private NoSuchElementException newNoSuchElement() {
-        throw new NoSuchElementException("No such element");
     }
 
     @Test
