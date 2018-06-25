@@ -14,11 +14,6 @@
     <name>Problem: Spring Web</name>
     <description>Spring Controller Advices for Problems</description>
 
-    <properties>
-        <spring.version>4.3.17.RELEASE</spring.version>
-        <spring-security.version>4.2.7.RELEASE</spring-security.version>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>org.zalando</groupId>
