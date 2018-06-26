@@ -80,31 +80,31 @@ The following table shows all built-in advice traits:
 
 | Advice Trait                                                                                                                                                       | Produces                                                  |
 |--------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------|
-| [**`ProblemHandling`**](src/main/java/org/zalando/problem/spring/web/advice/ProblemHandling.java)                                                                  |                                                           |
-| `├──`[**`GeneralAdviceTrait`**](src/main/java/org/zalando/problem/spring/web/advice/general/GeneralAdviceTrait.java)                                               |                                                           |
-| `│   ├──`[`ProblemAdviceTrait`](src/main/java/org/zalando/problem/spring/web/advice/general/ProblemAdviceTrait.java)                                               | *depends*                                                 |
-| `│   ├──`[`ThrowableAdviceTrait`](src/main/java/org/zalando/problem/spring/web/advice/general/ThrowableAdviceTrait.java)                                           | [`500 Internal Server Error`](https://httpstatus.es/500)  |
-| `│   └──`[ `UnsupportedOperationAdviceTrait`](src/main/java/org/zalando/problem/spring/web/advice/general/UnsupportedOperationAdviceTrait.java)                    | [`501 Not Implemented`](https://httpstatus.es/501)        |
-| `├──`[**`HttpAdviceTrait`**](src/main/java/org/zalando/problem/spring/web/advice/http/HttpAdviceTrait.java)                                                        |                                                           |
-| `│   ├──`[`MethodNotAllowedAdviceTrait`](src/main/java/org/zalando/problem/spring/web/advice/http/MethodNotAllowedAdviceTrait.java)                                | [`405 Method Not Allowed`](https://httpstatus.es/405)     |
-| `│   ├──`[`NotAcceptableAdviceTrait`](src/main/java/org/zalando/problem/spring/web/advice/http/NotAcceptableAdviceTrait.java)                                      | [`406 Not Acceptable`](https://httpstatus.es/406)         |
-| `│   └──`[`UnsupportedMediaTypeAdviceTrait`](src/main/java/org/zalando/problem/spring/web/advice/http/UnsupportedMediaTypeAdviceTrait.java)                        | [`415 Unsupported Media Type`](https://httpstatus.es/415) |
-| `├──`[**`IOAdviceTrait`**](src/main/java/org/zalando/problem/spring/web/advice/io/IOAdviceTrait.java)                                                              |                                                           |
-| `│   ├──`[`MessageNotReadableAdviceTrait`](src/main/java/org/zalando/problem/spring/web/advice/io/MessageNotReadableAdviceTrait.java)                              | [`400 Bad Request`](https://httpstatus.es/400)            |
-| `│   ├──`[`MultipartAdviceTrait`](src/main/java/org/zalando/problem/spring/web/advice/io/MultipartAdviceTrait.java)                                                | [`400 Bad Request`](https://httpstatus.es/400)            |
-| `│   └──`[`TypeMismatchAdviceTrait`](src/main/java/org/zalando/problem/spring/web/advice/io/TypeMismatchAdviceTrait.java)                                          | [`400 Bad Request`](https://httpstatus.es/400)            |
-| `├──`[**`RoutingAdviceTrait`**](src/main/java/org/zalando/problem/spring/web/advice/routing/RoutingAdviceTrait.java)                                               |                                                           |
-| `│   ├──`[`MissingServletRequestParameterAdviceTrait`](src/main/java/org/zalando/problem/spring/web/advice/routing/MissingServletRequestParameterAdviceTrait.java) | [`400 Bad Request`](https://httpstatus.es/400)            |
-| `│   ├──`[`MissingServletRequestPartAdviceTrait`](src/main/java/org/zalando/problem/spring/web/advice/routing/MissingServletRequestPartAdviceTrait.java)           | [`400 Bad Request`](https://httpstatus.es/400)            |
-| `│   ├──`[`NoHandlerFoundAdviceTrait`](src/main/java/org/zalando/problem/spring/web/advice/routing/NoHandlerFoundAdviceTrait.java)                                 | [`404 Not Found`](https://httpstatus.es/404)              |
-| `│   ├──`[`NoSuchRequestHandlingMethodAdviceTrait`](src/main/java/org/zalando/problem/spring/web/advice/routing/NoSuchRequestHandlingMethodAdviceTrait.java)       | [`404 Not Found`](https://httpstatus.es/404)              |
-| `│   └──`[`ServletRequestBindingAdviceTrait`](src/main/java/org/zalando/problem/spring/web/advice/routing/ServletRequestBindingAdviceTrait.java)                   | [`400 Bad Request`](https://httpstatus.es/400)            |
-| `├──`[**`SecurityAdviceTrait`**](src/main/java/org/zalando/problem/spring/web/advice/security/SecurityAdviceTrait.java)                                            |                                                           |
-| `│   ├──`[`AccessDeniedAdviceTrait`](src/main/java/org/zalando/problem/spring/web/advice/security/AccessDeniedAdviceTrait.java)                                    | [`403 Forbidden`](https://httpstatus.es/403)              |
-| `│   └──`[`AuthenticationAdviceTrait`](src/main/java/org/zalando/problem/spring/web/advice/security/AuthenticationAdviceTrait.java)                                | [`401 Unauthorized`](https://httpstatus.es/401)           |
-| `└──`[**`ValidationAdviceTrait`**](src/main/java/org/zalando/problem/spring/web/advice/validation/ValidationAdviceTrait.java)                                      |                                                           |
-| `    ├──`[`ConstraintViolationAdviceTrait`](src/main/java/org/zalando/problem/spring/web/advice/validation/ConstraintViolationAdviceTrait.java)                    | [`400 Bad Request`](https://httpstatus.es/400)            |
-| `    └──`[`MethodArgumentNotValidAdviceTrait`](src/main/java/org/zalando/problem/spring/web/advice/validation/MethodArgumentNotValidAdviceTrait.java)              | [`400 Bad Request`](https://httpstatus.es/400)            |
+| [**`ProblemHandling`**](problem-spring-web/src/main/java/org/zalando/problem/spring/web/advice/ProblemHandling.java)                                                                  |                                                           |
+| `├──`[**`GeneralAdviceTrait`**](problem-spring-web/src/main/java/org/zalando/problem/spring/web/advice/general/GeneralAdviceTrait.java)                                               |                                                           |
+| `│   ├──`[`ProblemAdviceTrait`](problem-spring-web/src/main/java/org/zalando/problem/spring/web/advice/general/ProblemAdviceTrait.java)                                               | *depends*                                                 |
+| `│   ├──`[`ThrowableAdviceTrait`](problem-spring-web/src/main/java/org/zalando/problem/spring/web/advice/general/ThrowableAdviceTrait.java)                                           | [`500 Internal Server Error`](https://httpstatus.es/500)  |
+| `│   └──`[ `UnsupportedOperationAdviceTrait`](problem-spring-web/src/main/java/org/zalando/problem/spring/web/advice/general/UnsupportedOperationAdviceTrait.java)                    | [`501 Not Implemented`](https://httpstatus.es/501)        |
+| `├──`[**`HttpAdviceTrait`**](problem-spring-web/src/main/java/org/zalando/problem/spring/web/advice/http/HttpAdviceTrait.java)                                                        |                                                           |
+| `│   ├──`[`MethodNotAllowedAdviceTrait`](problem-spring-web/src/main/java/org/zalando/problem/spring/web/advice/http/MethodNotAllowedAdviceTrait.java)                                | [`405 Method Not Allowed`](https://httpstatus.es/405)     |
+| `│   ├──`[`NotAcceptableAdviceTrait`](problem-spring-web/src/main/java/org/zalando/problem/spring/web/advice/http/NotAcceptableAdviceTrait.java)                                      | [`406 Not Acceptable`](https://httpstatus.es/406)         |
+| `│   └──`[`UnsupportedMediaTypeAdviceTrait`](problem-spring-web/src/main/java/org/zalando/problem/spring/web/advice/http/UnsupportedMediaTypeAdviceTrait.java)                        | [`415 Unsupported Media Type`](https://httpstatus.es/415) |
+| `├──`[**`IOAdviceTrait`**](problem-spring-web/src/main/java/org/zalando/problem/spring/web/advice/io/IOAdviceTrait.java)                                                              |                                                           |
+| `│   ├──`[`MessageNotReadableAdviceTrait`](problem-spring-web/src/main/java/org/zalando/problem/spring/web/advice/io/MessageNotReadableAdviceTrait.java)                              | [`400 Bad Request`](https://httpstatus.es/400)            |
+| `│   ├──`[`MultipartAdviceTrait`](problem-spring-web/src/main/java/org/zalando/problem/spring/web/advice/io/MultipartAdviceTrait.java)                                                | [`400 Bad Request`](https://httpstatus.es/400)            |
+| `│   └──`[`TypeMismatchAdviceTrait`](problem-spring-web/src/main/java/org/zalando/problem/spring/web/advice/io/TypeMismatchAdviceTrait.java)                                          | [`400 Bad Request`](https://httpstatus.es/400)            |
+| `├──`[**`RoutingAdviceTrait`**](problem-spring-web/src/main/java/org/zalando/problem/spring/web/advice/routing/RoutingAdviceTrait.java)                                               |                                                           |
+| `│   ├──`[`MissingServletRequestParameterAdviceTrait`](problem-spring-web/src/main/java/org/zalando/problem/spring/web/advice/routing/MissingServletRequestParameterAdviceTrait.java) | [`400 Bad Request`](https://httpstatus.es/400)            |
+| `│   ├──`[`MissingServletRequestPartAdviceTrait`](problem-spring-web/src/main/java/org/zalando/problem/spring/web/advice/routing/MissingServletRequestPartAdviceTrait.java)           | [`400 Bad Request`](https://httpstatus.es/400)            |
+| `│   ├──`[`NoHandlerFoundAdviceTrait`](problem-spring-web/src/main/java/org/zalando/problem/spring/web/advice/routing/NoHandlerFoundAdviceTrait.java)                                 | [`404 Not Found`](https://httpstatus.es/404)              |
+| `│   ├──`[`NoSuchRequestHandlingMethodAdviceTrait`](problem-spring-web/src/main/java/org/zalando/problem/spring/web/advice/routing/NoSuchRequestHandlingMethodAdviceTrait.java)       | [`404 Not Found`](https://httpstatus.es/404)              |
+| `│   └──`[`ServletRequestBindingAdviceTrait`](problem-spring-web/src/main/java/org/zalando/problem/spring/web/advice/routing/ServletRequestBindingAdviceTrait.java)                   | [`400 Bad Request`](https://httpstatus.es/400)            |
+| `├──`[**`SecurityAdviceTrait`**](problem-spring-web/src/main/java/org/zalando/problem/spring/web/advice/security/SecurityAdviceTrait.java)                                            |                                                           |
+| `│   ├──`[`AccessDeniedAdviceTrait`](problem-spring-web/src/main/java/org/zalando/problem/spring/web/advice/security/AccessDeniedAdviceTrait.java)                                    | [`403 Forbidden`](https://httpstatus.es/403)              |
+| `│   └──`[`AuthenticationAdviceTrait`](problem-spring-web/src/main/java/org/zalando/problem/spring/web/advice/security/AuthenticationAdviceTrait.java)                                | [`401 Unauthorized`](https://httpstatus.es/401)           |
+| `└──`[**`ValidationAdviceTrait`**](problem-spring-web/src/main/java/org/zalando/problem/spring/web/advice/validation/ValidationAdviceTrait.java)                                      |                                                           |
+| `    ├──`[`ConstraintViolationAdviceTrait`](problem-spring-web/src/main/java/org/zalando/problem/spring/web/advice/validation/ConstraintViolationAdviceTrait.java)                    | [`400 Bad Request`](https://httpstatus.es/400)            |
+| `    └──`[`MethodArgumentNotValidAdviceTrait`](problem-spring-web/src/main/java/org/zalando/problem/spring/web/advice/validation/MethodArgumentNotValidAdviceTrait.java)              | [`400 Bad Request`](https://httpstatus.es/400)            |
 
 You're free to use them either individually or in groups. Future versions of this library may add additional traits to groups. A typical usage would look like this:
 
@@ -115,7 +115,7 @@ class ExceptionHandling implements ProblemHandling {
 }
 ```
 
-The [`NoHandlerFoundAdviceTrait`](src/main/java/org/zalando/problem/spring/web/advice/routing/NoHandlerFoundAdviceTrait.java)
+The [`NoHandlerFoundAdviceTrait`](problem-spring-web/src/main/java/org/zalando/problem/spring/web/advice/routing/NoHandlerFoundAdviceTrait.java)
 in addition also requires the following configuration:
 
 ```yaml
@@ -154,7 +154,7 @@ public class SecurityConfiguration extends ResourceServerConfigurerAdapter {
 }
 ```
 
-To return valid problem objects upon authentication exceptions, you will also need to implement the [`SecurityAdviceTrait`](src/main/java/org/zalando/problem/spring/web/advice/security/SecurityAdviceTrait.java), this is already sufficient:
+To return valid problem objects upon authentication exceptions, you will also need to implement the [`SecurityAdviceTrait`](problem-spring-web/src/main/java/org/zalando/problem/spring/web/advice/security/SecurityAdviceTrait.java), this is already sufficient:
 
 ```java
 @ControllerAdvice

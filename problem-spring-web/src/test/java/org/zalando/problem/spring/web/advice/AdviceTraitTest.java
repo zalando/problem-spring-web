@@ -11,18 +11,9 @@ import org.zalando.problem.StatusType;
 import org.zalando.problem.ThrowableProblem;
 
 import java.net.URI;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.stream.Stream;
 
-import static java.util.stream.Collectors.toList;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasToString;
-import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.Matchers.nullValue;
-import static org.hamcrest.Matchers.startsWith;
 import static org.hobsoft.hamcrest.compose.ComposeMatchers.compose;
 import static org.hobsoft.hamcrest.compose.ComposeMatchers.hasFeature;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -113,6 +104,14 @@ public class AdviceTraitTest {
 
     private NativeWebRequest request() {
         return mock(NativeWebRequest.class);
+    }
+
+    @Test
+    void processDoesNothing() {
+        ResponseEntity<Problem> entity = ResponseEntity.ok(Problem.valueOf(Status.RESET_CONTENT));
+        ResponseEntity<Problem> result = unit.process(entity, mock(NativeWebRequest.class));
+        assertThat(result.getStatusCode(), is(HttpStatus.OK));
+        assertThat(result.getBody().getStatus(), is(Status.RESET_CONTENT));
     }
 
 }

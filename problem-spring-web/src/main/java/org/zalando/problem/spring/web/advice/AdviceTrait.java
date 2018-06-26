@@ -198,4 +198,10 @@ public interface AdviceTrait extends org.zalando.problem.spring.common.AdviceTra
         return fallback(throwable, problem, headers);
     }
 
+    default ResponseEntity<Problem> process(
+            final ResponseEntity<Problem> entity,
+            @SuppressWarnings("UnusedParameters") final NativeWebRequest request) {
+        return process(entity);
+    }
+
 }

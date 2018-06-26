@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.context.request.NativeWebRequest;
 import org.zalando.problem.*;
 
 import javax.annotation.Nullable;
@@ -17,8 +16,8 @@ import java.net.URI;
 import java.util.Optional;
 
 import static java.util.Arrays.asList;
+import static org.apiguardian.api.API.Status.INTERNAL;
 import static org.apiguardian.api.API.Status.MAINTAINED;
-import static org.apiguardian.api.API.Status.STABLE;
 import static org.springframework.core.annotation.AnnotatedElementUtils.findMergedAnnotation;
 import static org.zalando.problem.spring.common.Lists.lengthOfTrailingPartialSubList;
 import static org.zalando.problem.spring.common.MediaTypes.PROBLEM;
@@ -41,7 +40,7 @@ import static org.zalando.problem.spring.common.MediaTypes.PROBLEM;
  * @see Exception
  * @see Problem
  */
-@API(status = STABLE)
+@API(status = INTERNAL)
 public interface AdviceTrait {
 
     Logger LOG = LoggerFactory.getLogger(AdviceTrait.class);
@@ -126,12 +125,6 @@ public interface AdviceTrait {
                 .headers(headers)
                 .contentType(PROBLEM)
                 .body(problem);
-    }
-
-    default ResponseEntity<Problem> process(
-            final ResponseEntity<Problem> entity,
-            @SuppressWarnings("UnusedParameters") final NativeWebRequest request) {
-        return process(entity);
     }
 
     default ResponseEntity<Problem> process(final ResponseEntity<Problem> entity) {

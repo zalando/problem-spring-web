@@ -6,7 +6,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.context.request.NativeWebRequest;
 import org.zalando.problem.Problem;
 import org.zalando.problem.Status;
 import org.zalando.problem.ThrowableProblem;
@@ -19,7 +18,6 @@ import java.util.stream.Stream;
 import static java.util.stream.Collectors.toList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.mockito.Mockito.mock;
 
 class AdviceTraitTest {
 
@@ -179,14 +177,6 @@ class AdviceTraitTest {
     }
 
     @Test
-    void processDoesNothing() {
-        ResponseEntity<Problem> entity = ResponseEntity.ok(Problem.valueOf(Status.RESET_CONTENT));
-        ResponseEntity<Problem> result = unit.process(entity, mock(NativeWebRequest.class));
-        assertThat(result.getStatusCode(), is(HttpStatus.OK));
-        assertThat(result.getBody().getStatus(), is(Status.RESET_CONTENT));
-    }
-
-    @Test
     void fallsbackProblemWithStatus() {
         ResponseEntity<Problem> result = unit.fallback(
             new IllegalStateException("Message"),
@@ -212,5 +202,13 @@ class AdviceTraitTest {
         expectedHeaders.setContentType(MediaType.valueOf("application/problem+json"));
         assertThat(result.getHeaders(), is(expectedHeaders));
         assertThat(result.getBody().getTitle(), is("Some title"));
+    }
+
+    @Test
+    void processDoesNothing() {
+        ResponseEntity<Problem> entity = ResponseEntity.ok(Problem.valueOf(Status.RESET_CONTENT));
+        ResponseEntity<Problem> result = unit.process(entity);
+        assertThat(result.getStatusCode(), is(HttpStatus.OK));
+        assertThat(result.getBody().getStatus(), is(Status.RESET_CONTENT));
     }
 }
