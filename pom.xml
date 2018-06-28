@@ -29,6 +29,7 @@
         <module>problem-violations</module>
         <module>problem-spring-common</module>
         <module>problem-spring-web</module>
+        <module>problem-spring-webflux</module>
     </modules>
 
     <developers>

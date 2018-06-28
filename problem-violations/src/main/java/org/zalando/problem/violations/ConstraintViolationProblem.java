@@ -14,7 +14,7 @@ import static org.apiguardian.api.API.Status.STABLE;
 
 @API(status = STABLE)
 @Immutable
-public final class ConstraintViolationProblem extends ThrowableProblem {
+public class ConstraintViolationProblem extends ThrowableProblem {
 
     public static final String TYPE_VALUE = "https://zalando.github.io/problem/constraint-violation";
     public static final URI TYPE = URI.create(TYPE_VALUE);
@@ -24,13 +24,13 @@ public final class ConstraintViolationProblem extends ThrowableProblem {
     private final List<Violation> violations;
 
     public ConstraintViolationProblem(final StatusType status, final List<Violation> violations) {
-        this(TYPE, status, new ArrayList<>(violations));
+        this(TYPE, status, violations != null ? new ArrayList<>(violations) : new ArrayList<>());
     }
 
     public ConstraintViolationProblem(final URI type, final StatusType status, final List<Violation> violations) {
         this.type = type;
         this.status = status;
-        this.violations = Collections.unmodifiableList(violations);
+        this.violations = violations != null ? Collections.unmodifiableList(violations) : Collections.emptyList();
     }
 
     @Override

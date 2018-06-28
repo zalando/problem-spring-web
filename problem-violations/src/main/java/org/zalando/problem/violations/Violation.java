@@ -1,5 +1,6 @@
 package org.zalando.problem.violations;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import org.apiguardian.api.API;
 
 import javax.annotation.concurrent.Immutable;
