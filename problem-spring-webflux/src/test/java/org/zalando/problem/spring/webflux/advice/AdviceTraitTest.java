@@ -25,7 +25,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.http.HttpStatus.RESET_CONTENT;
 import static org.zalando.problem.spring.common.MediaTypes.PROBLEM;
 
-public class AdviceTraitTest {
+final class AdviceTraitTest {
 
     private final AdviceTrait unit = new AdviceTrait() {
     };

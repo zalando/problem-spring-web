@@ -23,7 +23,7 @@ import static org.hamcrest.collection.IsMapContaining.hasKey;
 final class MethodNotAllowedAdviceTraitTest implements AdviceTraitTesting {
 
     @Test
-    public void methodNotAllowed() {
+    void methodNotAllowed() {
         Problem problem = webTestClient().post().uri("http://localhost/api/handler-problem")
                 .accept(MediaType.valueOf("application/x.bla+json"), MediaTypes.PROBLEM)
                 .exchange()

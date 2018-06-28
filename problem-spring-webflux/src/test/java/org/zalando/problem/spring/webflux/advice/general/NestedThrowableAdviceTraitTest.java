@@ -104,7 +104,7 @@ final class NestedThrowableAdviceTraitTest implements AdviceTraitTesting {
                 .jsonPath("$.cause.cause.cause").doesNotExist();
     }
 
-    static String containsStringExpression(String path, String substring) {
+    private static String containsStringExpression(String path, String substring) {
         return String.format("$[?(@.%s =~ /.*%s.*/)].%s", path, substring, path);
     }
 

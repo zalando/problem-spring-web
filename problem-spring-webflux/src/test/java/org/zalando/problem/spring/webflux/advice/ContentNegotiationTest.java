@@ -7,12 +7,12 @@ import org.springframework.http.MediaType;
 import org.zalando.problem.Problem;
 import org.zalando.problem.spring.common.MediaTypes;
 
-public final class ContentNegotiationTest implements AdviceTraitTesting {
+final class ContentNegotiationTest implements AdviceTraitTesting {
 
     private final String url = "http://localhost/api/handler-problem";
 
     @Test
-    public void problemGivesProblem() {
+    void problemGivesProblem() {
         webTestClient().get().uri(url)
                 .accept(MediaTypes.PROBLEM)
                 .exchange()
@@ -22,7 +22,7 @@ public final class ContentNegotiationTest implements AdviceTraitTesting {
     }
 
     @Test
-    public void xproblemGivesXProblem() {
+    void xproblemGivesXProblem() {
         webTestClient().get().uri(url)
                 .accept(MediaType.valueOf("application/x.something+json"), MediaType.valueOf("application/x.problem+json"))
                 .exchange()
@@ -32,7 +32,7 @@ public final class ContentNegotiationTest implements AdviceTraitTesting {
     }
 
     @Test
-    public void specificityWins() {
+    void specificityWins() {
         webTestClient().get().uri(url)
                 .accept(MediaType.valueOf("application/*"), MediaType.valueOf("application/x.problem+json"))
                 .exchange()
@@ -42,7 +42,7 @@ public final class ContentNegotiationTest implements AdviceTraitTesting {
     }
 
     @Test
-    public void jsonGivesProblem() {
+    void jsonGivesProblem() {
         webTestClient().get().uri(url)
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()
@@ -52,7 +52,7 @@ public final class ContentNegotiationTest implements AdviceTraitTesting {
     }
 
     @Test
-    public void wildcardJsonGivesProblem() {
+    void wildcardJsonGivesProblem() {
         webTestClient().get().uri(url)
                 .accept(MediaType.valueOf("application/*+json"))
                 .exchange()
@@ -63,7 +63,7 @@ public final class ContentNegotiationTest implements AdviceTraitTesting {
 
     @Test
     @Hack("This is actually rather shady, but it's most likely what the client actually wants")
-    public void specificJsonGivesProblem() {
+    void specificJsonGivesProblem() {
         webTestClient().get().uri(url)
                 .accept(MediaType.valueOf("application/x.vendor.specific+json"))
                 .exchange()
@@ -73,7 +73,7 @@ public final class ContentNegotiationTest implements AdviceTraitTesting {
     }
 
     @Test
-    public void nonJsonFallsBackToProblemJson() {
+    void nonJsonFallsBackToProblemJson() {
         webTestClient().get().uri(url)
                 .accept(MediaType.APPLICATION_ATOM_XML)
                 .exchange()
@@ -83,7 +83,7 @@ public final class ContentNegotiationTest implements AdviceTraitTesting {
     }
 
     @Test
-    public void invalidMediaTypeIsNotAcceptable() {
+    void invalidMediaTypeIsNotAcceptable() {
         webTestClient().get().uri(url)
                 .header("Accept", "application/")
                 .exchange()
