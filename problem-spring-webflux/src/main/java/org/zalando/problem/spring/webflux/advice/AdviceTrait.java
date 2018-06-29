@@ -18,8 +18,6 @@ import org.zalando.problem.ThrowableProblem;
 import org.zalando.problem.spring.webflux.advice.custom.CustomAdviceTrait;
 import org.zalando.problem.spring.webflux.advice.general.GeneralAdviceTrait;
 import org.zalando.problem.spring.webflux.advice.http.HttpAdviceTrait;
-import org.zalando.problem.spring.webflux.advice.io.IOAdviceTrait;
-import org.zalando.problem.spring.webflux.advice.routing.RoutingAdviceTrait;
 import org.zalando.problem.spring.webflux.advice.validation.ValidationAdviceTrait;
 import reactor.core.publisher.Mono;
 
@@ -55,8 +53,6 @@ import static org.zalando.problem.spring.common.MediaTypes.X_PROBLEM;
  * @see CustomAdviceTrait
  * @see GeneralAdviceTrait
  * @see HttpAdviceTrait
- * @see IOAdviceTrait
- * @see RoutingAdviceTrait
  * @see ValidationAdviceTrait
  */
 @API(status = STABLE)
@@ -138,8 +134,7 @@ public interface AdviceTrait extends org.zalando.problem.spring.common.AdviceTra
             @SuppressWarnings("UnusedParameters") final Problem problem,
             @SuppressWarnings("UnusedParameters") final ServerWebExchange request,
             final HttpStatus status) {
-        log(throwable, problem, status);
-        return Mono.empty();
+        return Mono.fromRunnable(() -> log(throwable, problem, status));
     }
 
     default Optional<MediaType> negotiate(final ServerWebExchange request) {

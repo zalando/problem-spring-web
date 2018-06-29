@@ -1,22 +1,20 @@
 package org.zalando.problem.spring.webflux.advice;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.core.io.buffer.DefaultDataBufferFactory;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.reactive.handler.WebFluxResponseStatusExceptionHandler;
 import org.springframework.web.server.*;
 import org.zalando.problem.Problem;
 import org.zalando.problem.spring.webflux.advice.http.HttpAdviceTrait;
+import org.zalando.problem.spring.webflux.advice.utils.AdviceUtils;
 import reactor.core.publisher.Mono;
 
-public class ProblemExceptionHandler extends WebFluxResponseStatusExceptionHandler {
+public class ProblemExceptionHandler implements WebExceptionHandler {
 
     private final ObjectMapper mapper;
 
     private final HttpAdviceTrait advice;
 
-    ProblemExceptionHandler(ObjectMapper mapper, HttpAdviceTrait advice) {
+    public ProblemExceptionHandler(ObjectMapper mapper, HttpAdviceTrait advice) {
         this.mapper = mapper;
         this.advice = advice;
     }
@@ -34,17 +32,7 @@ public class ProblemExceptionHandler extends WebFluxResponseStatusExceptionHandl
             } else {
                 entityMono = advice.handleResponseStatusException((ResponseStatusException) throwable, exchange);
             }
-            return entityMono
-                    .flatMap(response -> {
-                        exchange.getResponse().setStatusCode(response.getStatusCode());
-                        exchange.getResponse().getHeaders().addAll(response.getHeaders());
-                        try {
-                            return exchange.getResponse()
-                                    .writeWith(Mono.just(new DefaultDataBufferFactory().wrap(mapper.writeValueAsBytes(response.getBody()))));
-                        } catch (JsonProcessingException e) {
-                            return Mono.error(throwable);
-                        }
-                    });
+            return entityMono.flatMap(entity -> AdviceUtils.setHttpResponse(entity, exchange, mapper));
         }
         return Mono.error(throwable);
     }
