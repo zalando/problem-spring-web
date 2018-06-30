@@ -29,7 +29,6 @@
         <module>problem-violations</module>
         <module>problem-spring-common</module>
         <module>problem-spring-web</module>
-        <module>problem-spring-webflux</module>
     </modules>
 
     <developers>
@@ -384,6 +383,9 @@
                 <spring.version>5.0.7.RELEASE</spring.version>
                 <spring-security.version>5.0.6.RELEASE</spring-security.version>
             </properties>
+            <modules>
+                <module>problem-spring-webflux</module>
+            </modules>
         </profile>
         <profile>
             <id>spring4-junit5</id>
