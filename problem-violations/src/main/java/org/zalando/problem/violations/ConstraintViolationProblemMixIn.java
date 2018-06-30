@@ -4,12 +4,10 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import org.apiguardian.api.API;
-import org.zalando.problem.DefaultProblem;
 import org.zalando.problem.StatusType;
 
 import javax.annotation.Nullable;
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.apiguardian.api.API.Status.INTERNAL;

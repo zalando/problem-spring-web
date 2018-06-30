@@ -69,7 +69,7 @@ final class SecurityAdviceTraitTest {
                 .expectBody()
                 .jsonPath("$.title").isEqualTo("Forbidden")
                 .jsonPath("$.status").isEqualTo(HttpStatus.FORBIDDEN.value())
-                .jsonPath("$.detail").isEqualTo("Access Denied");;
+                .jsonPath("$.detail").isEqualTo("Access Denied");
     }
 
     @Configuration

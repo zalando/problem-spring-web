@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apiguardian.api.API;
 
 import javax.annotation.Nullable;
-import javax.validation.constraints.Null;
 
 import static org.apiguardian.api.API.Status.INTERNAL;
 
@@ -16,6 +15,7 @@ abstract class ViolationMixIn {
     @JsonCreator
     ViolationMixIn(@Nullable @JsonProperty("field") String field,
                    @Nullable @JsonProperty("message") String message) {
+        throw new UnsupportedOperationException(new Violation(field, message).getField());
     }
 
     @JsonProperty("field")
