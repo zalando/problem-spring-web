@@ -6,12 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.codec.CodecConfigurer;
-import org.springframework.http.codec.ServerCodecConfigurer;
-import org.springframework.http.codec.json.Jackson2JsonDecoder;
-import org.springframework.http.codec.json.Jackson2JsonEncoder;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -26,10 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.reactive.config.EnableWebFlux;
 import org.springframework.web.reactive.config.WebFluxConfigurationSupport;
-import org.springframework.web.server.WebExceptionHandler;
 import org.zalando.problem.ProblemModule;
 import org.zalando.problem.spring.common.MediaTypes;
-import org.zalando.problem.spring.webflux.advice.ProblemExceptionHandler;
 import org.zalando.problem.spring.webflux.advice.ProblemHandling;
 
 @SpringJUnitConfig
@@ -93,20 +86,6 @@ final class SecurityAdviceTraitTest {
             return new ObjectMapper().registerModule(new ProblemModule());
         }
 
-        @Override
-        protected void configureHttpMessageCodecs(ServerCodecConfigurer configurer) {
-            final ObjectMapper mapper = mapper();
-            CodecConfigurer.DefaultCodecs defaults = configurer.defaultCodecs();
-            defaults.jackson2JsonDecoder(new Jackson2JsonDecoder(mapper));
-            defaults.jackson2JsonEncoder(new Jackson2JsonEncoder(mapper));
-
-        }
-
-        @Bean
-        @Order(-2)
-        public WebExceptionHandler webExceptionHandler(ObjectMapper mapper, ProblemHandling problemHandling) {
-            return new ProblemExceptionHandler(mapper, problemHandling);
-        }
     }
 
     @Configuration
@@ -120,7 +99,6 @@ final class SecurityAdviceTraitTest {
         public SecurityWebFilterChain securityWebFilterChain(
                 ServerHttpSecurity http) {
             return http.csrf().disable()
-                    .httpBasic().disable()
                     .authorizeExchange()
                     .pathMatchers("/greet").hasRole("ADMIN")
                     .anyExchange().authenticated()
@@ -134,7 +112,7 @@ final class SecurityAdviceTraitTest {
     }
 
     @ControllerAdvice
-    public static class ExceptionHandling implements ProblemHandling {
+    static class ExceptionHandling implements ProblemHandling {
 
     }
 

@@ -1,4 +1,4 @@
-# Problems for Spring Web MVC
+# Problems for Spring MVC and Spring WebFlux
 
 [![Build Status](https://img.shields.io/travis/zalando/problem-spring-web/master.svg)](https://travis-ci.org/zalando/problem-spring-web)
 [![Coverage Status](https://img.shields.io/coveralls/zalando/problem-spring-web/master.svg)](https://coveralls.io/r/zalando/problem-spring-web)
@@ -8,10 +8,11 @@
 [![Maven Central](https://img.shields.io/maven-central/v/org.zalando/problem-spring-web.svg)](https://maven-badges.herokuapp.com/maven-central/org.zalando/problem-spring-web)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/zalando/problem-spring-web/master/LICENSE)
 
-*Problem Spring Web* is a library that makes it easy to produce
+*Problem Spring Web* is a set of libraries that makes it easy to produce
 [`application/problem+json`](http://tools.ietf.org/html/rfc7807) responses from a Spring
-application. It fills a niche, in that it connects the [Problem library](https://github.com/zalando/problem) and
+application. It fills a niche, in that it connects the [Problem library](https://github.com/zalando/problem) and either 
 [Spring Web MVC's exception handling](https://spring.io/blog/2013/11/01/exception-handling-in-spring-mvc#using-controlleradvice-classes)
+or [Spring WebFlux's exception handling](https://docs.spring.io/spring/docs/current/spring-framework-reference/web-reactive.html#webflux-ann-controller-exceptions)
 so that they work seamlessly together, while requiring minimal additional developer effort. In doing so, it aims to
 perform a small but repetitive task — once and for all.
 
@@ -25,6 +26,7 @@ class for your [`@ControllerAdvice`](http://docs.spring.io/spring/docs/current/j
 - lets you choose traits *à la carte*
 - favors composition over inheritance
 - ~20 useful advice traits built in
+- Spring MVC and Spring WebFlux support
 - Spring Security support
 - customizable processing
 
@@ -32,11 +34,13 @@ class for your [`@ControllerAdvice`](http://docs.spring.io/spring/docs/current/j
 
 - Java 8
 - Any build tool using Maven Central, or direct download
-- Servlet Container
+- Servlet Container for problem-spring-web or reactive non-blocking runtime for problem-spring-webflux
 - Spring 4.x **or 5.x**
 - Spring Security 4.x **or 5.x**
 
-## Installation
+## Use with Spring MVC
+
+### Installation
 
 Add the following dependency to your project:
 
@@ -48,7 +52,7 @@ Add the following dependency to your project:
 </dependency>
 ```
 
-## Configuration
+### Configuration
 
 Make sure you register the required modules with your ObjectMapper:
 
@@ -163,7 +167,112 @@ public class SecurityExceptionHandler implements SecurityAdviceTrait {
 
 ```
 
-### Customization
+## Use with Spring WebFlux
+
+### Installation
+
+Add the following dependency to your project:
+
+```xml
+<dependency>
+    <groupId>org.zalando</groupId>
+    <artifactId>problem-spring-webflux</artifactId>
+    <version>${problem-spring-web.version}</version>
+</dependency>
+```
+
+### Configuration
+
+Make sure you register the required modules with your ObjectMapper:
+
+```java
+@Bean
+public ProblemModule problemModule() {
+    return new ProblemModule();
+}
+
+@Bean
+public ConstraintViolationProblemModule constraintViolationProblemModule() {
+    return new ConstraintViolationProblemModule();
+}
+```
+The following table shows all built-in advice traits:
+
+| Advice Trait                                                                                                                                                       | Produces                                                  |
+|--------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------|
+| [**`ProblemHandling`**](problem-spring-webflux/src/main/java/org/zalando/problem/spring/web/advice/ProblemHandling.java)                                                                  |                                                           |
+| `├──`[**`GeneralAdviceTrait`**](problem-spring-webflux/src/main/java/org/zalando/problem/spring/web/advice/general/GeneralAdviceTrait.java)                                               |                                                           |
+| `│   ├──`[`ProblemAdviceTrait`](problem-spring-webflux/src/main/java/org/zalando/problem/spring/web/advice/general/ProblemAdviceTrait.java)                                               | *depends*                                                 |
+| `│   ├──`[`ThrowableAdviceTrait`](problem-spring-webflux/src/main/java/org/zalando/problem/spring/web/advice/general/ThrowableAdviceTrait.java)                                           | [`500 Internal Server Error`](https://httpstatus.es/500)  |
+| `│   └──`[ `UnsupportedOperationAdviceTrait`](problem-spring-webflux/src/main/java/org/zalando/problem/spring/web/advice/general/UnsupportedOperationAdviceTrait.java)                    | [`501 Not Implemented`](https://httpstatus.es/501)        |
+| `├──`[**`HttpAdviceTrait`**](problem-spring-webflux/src/main/java/org/zalando/problem/spring/web/advice/http/HttpAdviceTrait.java)                                                        |                                                           |
+| `│   ├──`[`MethodNotAllowedAdviceTrait`](problem-spring-webflux/src/main/java/org/zalando/problem/spring/web/advice/http/MethodNotAllowedAdviceTrait.java)                                | [`405 Method Not Allowed`](https://httpstatus.es/405)     |
+| `│   ├──`[`NotAcceptableAdviceTrait`](problem-spring-webflux/src/main/java/org/zalando/problem/spring/web/advice/http/NotAcceptableAdviceTrait.java)                                      | [`406 Not Acceptable`](https://httpstatus.es/406)         |
+| `│   ├──`[`ResponseStatusAdviceTrait`](problem-spring-webflux/src/main/java/org/zalando/problem/spring/web/advice/http/ResponseStatusAdviceTrait.java)                                    |                                                           |
+| `│   └──`[`UnsupportedMediaTypeAdviceTrait`](problem-spring-webflux/src/main/java/org/zalando/problem/spring/web/advice/http/UnsupportedMediaTypeAdviceTrait.java)                        | [`415 Unsupported Media Type`](https://httpstatus.es/415) |
+| `├──`[**`SecurityAdviceTrait`**](problem-spring-webflux/src/main/java/org/zalando/problem/spring/web/advice/security/SecurityAdviceTrait.java)                                            |                                                           |
+| `│   ├──`[`AccessDeniedAdviceTrait`](problem-spring-webflux/src/main/java/org/zalando/problem/spring/web/advice/security/AccessDeniedAdviceTrait.java)                                    | [`403 Forbidden`](https://httpstatus.es/403)              |
+| `│   └──`[`AuthenticationAdviceTrait`](problem-spring-webflux/src/main/java/org/zalando/problem/spring/web/advice/security/AuthenticationAdviceTrait.java)                                | [`401 Unauthorized`](https://httpstatus.es/401)           |
+| `└──`[**`ValidationAdviceTrait`**](problem-spring-webflux/src/main/java/org/zalando/problem/spring/web/advice/validation/ValidationAdviceTrait.java)                                      |                                                           |
+| `    └──`[`ConstraintViolationAdviceTrait`](problem-spring-webflux/src/main/java/org/zalando/problem/spring/web/advice/validation/ConstraintViolationAdviceTrait.java)                    | [`400 Bad Request`](https://httpstatus.es/400)            |
+
+You're free to use them either individually or in groups. Future versions of this library may add additional traits to groups. A typical usage would look like this:
+
+```java
+@ControllerAdvice
+class ExceptionHandling implements ProblemHandling {
+
+}
+```
+
+In WebFlux, if a request handler is not called, then the `ControllerAdvice` will not be used. So for
+[`ResponseStatusAdviceTrait`](problem-spring-webflux/src/main/java/org/zalando/problem/spring/web/advice/http/ResponseStatusAdviceTrait.java) for a `404 Not found`, 
+[`MethodNotAllowedAdviceTrait`](problem-spring-webflux/src/main/java/org/zalando/problem/spring/web/advice/http/MethodNotAllowedAdviceTrait.java), 
+[`NotAcceptableAdviceTrait`](problem-spring-webflux/src/main/java/org/zalando/problem/spring/web/advice/http/NotAcceptableAdviceTrait.java), 
+and [`UnsupportedMediaTypeAdviceTrait`](problem-spring-webflux/src/main/java/org/zalando/problem/spring/web/advice/http/UnsupportedMediaTypeAdviceTrait.java)
+it is required to add a specific `WebExceptionHandler`:
+
+```java
+@Bean
+@Order(-2) // The handler must have precedence over WebFluxResponseStatusExceptionHandler and Spring Boot's ErrorWebExceptionHandler
+public WebExceptionHandler problemExceptionHandler(ObjectMapper mapper, ProblemHandling problemHandling) {
+    return new ProblemExceptionHandler(mapper, problemHandling);
+}
+```
+
+### Security
+
+The Spring Security integration requires additional steps:
+
+```java
+@Configuration
+@Import(SecurityProblemSupport.class)
+public static class SecurityConfiguration {
+
+    @Autowired
+    private SecurityProblemSupport problemSupport;
+
+    @Bean
+    public SecurityWebFilterChain securityWebFilterChain(
+            ServerHttpSecurity http) {
+        return http
+                .exceptionHandling()
+                .authenticationEntryPoint(problemSupport)
+                .accessDeniedHandler(problemSupport)
+                .and().build();
+    }
+}
+```
+`SecurityProblemSupport` will need a [`SecurityAdviceTrait`](problem-spring-webflux/src/main/java/org/zalando/problem/spring/web/advice/security/SecurityAdviceTrait.java) bean at startup. For instance:
+
+```java
+@ControllerAdvice
+public class SecurityExceptionHandler implements SecurityAdviceTrait {
+}
+```
+
+
+## Customization
 
 The problem handling process provided by `AdviceTrait` is built in a way that it allows for customization whenever the
 need arises. All of the following aspects can be overridden and tweaked:
