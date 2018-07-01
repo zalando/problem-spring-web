@@ -39,6 +39,7 @@ import static org.springframework.web.context.request.RequestAttributes.SCOPE_RE
 import static org.zalando.fauxpas.FauxPas.throwingSupplier;
 import static org.zalando.problem.spring.common.MediaTypes.PROBLEM;
 import static org.zalando.problem.spring.common.MediaTypes.X_PROBLEM;
+import static org.zalando.problem.spring.common.AdviceTrait.fallback;
 
 /**
  * <p>
