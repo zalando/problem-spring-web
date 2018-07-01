@@ -22,16 +22,14 @@ final class AdviceTraitLoggingTest {
 
     private final TestLogger log = TestLoggerFactory.getTestLogger(AdviceTrait.class);
 
-    private final AdviceTrait unit = new AdviceTrait() {
-    };
-
     @BeforeEach
     @AfterEach
     void reset() {
         TestLoggerFactory.clear();
     }
 
-    static HttpStatus[] data() {
+    @SuppressWarnings("unused")
+    private static HttpStatus[] data() {
         return HttpStatus.values();
     }
 
@@ -39,7 +37,7 @@ final class AdviceTraitLoggingTest {
     @MethodSource("data")
     void shouldLog4xxAsWarn(final HttpStatus status) {
         assumeTrue(status.is4xxClientError());
-        unit.log(new RuntimeException("Test message"), null, status);
+        AdviceTrait.log(new RuntimeException("Test message"), status);
 
         final LoggingEvent event = getOnlyElement(log.getLoggingEvents());
         assertThat(event.getLevel(), is(Level.WARN));
@@ -53,7 +51,7 @@ final class AdviceTraitLoggingTest {
     void shouldLog5xxAsError(final HttpStatus status) {
         assumeTrue(status.is5xxServerError());
         final IOException throwable = new IOException();
-        unit.log(throwable, null, status);
+        AdviceTrait.log(throwable, status);
 
         final LoggingEvent event = getOnlyElement(log.getLoggingEvents());
         assertThat(event.getLevel(), is(Level.ERROR));
@@ -67,7 +65,7 @@ final class AdviceTraitLoggingTest {
     void shouldNotLogNon4xx5xxErrors(final HttpStatus status) {
         assumeFalse(status.is5xxServerError() || status.is4xxClientError());
         final IOException throwable = new IOException();
-        unit.log(throwable, null, status);
+        AdviceTrait.log(throwable, status);
 
         assertThat(log.getLoggingEvents(), iterableWithSize(0));
     }

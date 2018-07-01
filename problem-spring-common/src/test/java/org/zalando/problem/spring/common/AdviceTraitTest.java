@@ -178,8 +178,7 @@ class AdviceTraitTest {
 
     @Test
     void fallsbackProblemWithStatus() {
-        ResponseEntity<Problem> result = unit.fallback(
-            new IllegalStateException("Message"),
+        ResponseEntity<Problem> result = AdviceTrait.fallback(
             Problem.valueOf(Status.RESET_CONTENT),
             new HttpHeaders()
         );
@@ -192,8 +191,7 @@ class AdviceTraitTest {
 
     @Test
     void fallsbackProblemWithoutStatus() {
-        ResponseEntity<Problem> result = unit.fallback(
-                new IllegalStateException("Message"),
+        ResponseEntity<Problem> result = AdviceTrait.fallback(
                 Problem.builder().withTitle("Some title").build(),
                 new HttpHeaders()
         );

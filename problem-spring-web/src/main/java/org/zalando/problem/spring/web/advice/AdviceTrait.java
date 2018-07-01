@@ -33,7 +33,6 @@ import java.util.Optional;
 
 import static javax.servlet.RequestDispatcher.ERROR_EXCEPTION;
 import static org.apiguardian.api.API.Status.STABLE;
-import static org.springframework.core.annotation.AnnotatedElementUtils.findMergedAnnotation;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.web.context.request.RequestAttributes.SCOPE_REQUEST;
 import static org.zalando.fauxpas.FauxPas.throwingSupplier;
@@ -166,11 +165,11 @@ public interface AdviceTrait extends org.zalando.problem.spring.common.AdviceTra
     }
 
     default void log(
-            @SuppressWarnings("UnusedParameters") final Throwable throwable,
+            final Throwable throwable,
             @SuppressWarnings("UnusedParameters") final Problem problem,
             @SuppressWarnings("UnusedParameters") final NativeWebRequest request,
             final HttpStatus status) {
-        log(throwable, problem, status);
+        org.zalando.problem.spring.common.AdviceTrait.log(throwable, status);
     }
 
     @SneakyThrows(HttpMediaTypeNotAcceptableException.class)
@@ -192,10 +191,10 @@ public interface AdviceTrait extends org.zalando.problem.spring.common.AdviceTra
 
     default ResponseEntity<Problem> fallback(
             @SuppressWarnings("UnusedParameters") final Throwable throwable,
-            @SuppressWarnings("UnusedParameters") final Problem problem,
+            final Problem problem,
             @SuppressWarnings("UnusedParameters") final NativeWebRequest request,
-            @SuppressWarnings("UnusedParameters") final HttpHeaders headers) {
-        return fallback(throwable, problem, headers);
+            final HttpHeaders headers) {
+        return org.zalando.problem.spring.common.AdviceTrait.fallback(problem, headers);
     }
 
     default ResponseEntity<Problem> process(

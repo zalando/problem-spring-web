@@ -45,6 +45,28 @@ public interface AdviceTrait {
 
     Logger LOG = LoggerFactory.getLogger(AdviceTrait.class);
 
+    static void log(
+            final Throwable throwable,
+            final HttpStatus status) {
+        if (status.is4xxClientError()) {
+            LOG.warn("{}: {}", status.getReasonPhrase(), throwable.getMessage());
+        } else if (status.is5xxServerError()) {
+            LOG.error(status.getReasonPhrase(), throwable);
+        }
+    }
+
+    static ResponseEntity<Problem> fallback(
+            final Problem problem,
+            final HttpHeaders headers) {
+        return ResponseEntity
+                .status(HttpStatus.valueOf(Optional.ofNullable(problem.getStatus())
+                        .orElse(Status.INTERNAL_SERVER_ERROR)
+                        .getStatusCode()))
+                .headers(headers)
+                .contentType(PROBLEM)
+                .body(problem);
+    }
+
     default ThrowableProblem toProblem(final Throwable throwable) {
         final StatusType status = Optional.ofNullable(resolveResponseStatus(throwable))
                 .<StatusType>map(ResponseStatusAdapter::new)
@@ -101,30 +123,6 @@ public interface AdviceTrait {
 
     default boolean isCausalChainsEnabled() {
         return false;
-    }
-
-    default void log(
-            @SuppressWarnings("UnusedParameters") final Throwable throwable,
-            @SuppressWarnings("UnusedParameters") final Problem problem,
-            final HttpStatus status) {
-        if (status.is4xxClientError()) {
-            LOG.warn("{}: {}", status.getReasonPhrase(), throwable.getMessage());
-        } else if (status.is5xxServerError()) {
-            LOG.error(status.getReasonPhrase(), throwable);
-        }
-    }
-
-    default ResponseEntity<Problem> fallback(
-            @SuppressWarnings("UnusedParameters") final Throwable throwable,
-            @SuppressWarnings("UnusedParameters") final Problem problem,
-            @SuppressWarnings("UnusedParameters") final HttpHeaders headers) {
-        return ResponseEntity
-                .status(HttpStatus.valueOf(Optional.ofNullable(problem.getStatus())
-                        .orElse(Status.INTERNAL_SERVER_ERROR)
-                        .getStatusCode()))
-                .headers(headers)
-                .contentType(PROBLEM)
-                .body(problem);
     }
 
     default ResponseEntity<Problem> process(final ResponseEntity<Problem> entity) {
