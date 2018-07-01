@@ -17,10 +17,15 @@ import uk.org.lidalia.slf4jtest.TestLogger;
 import uk.org.lidalia.slf4jtest.TestLoggerFactory;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 
 import static com.google.common.collect.Iterables.getOnlyElement;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assumptions.assumeFalse;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
@@ -102,4 +107,34 @@ final class AdviceTraitsTest {
         assertThat(result.getBody().getTitle(), is("Some title"));
     }
 
+    @Test
+    void findsJsonMediaType() {
+        List<MediaType> mediaTypes = Arrays.asList(MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaTypes.X_PROBLEM);
+        Optional<MediaType> mediaType = AdviceTraits.getProblemMediaType(mediaTypes);
+        assertTrue(mediaType.isPresent());
+        assertThat(mediaType.get(), is(MediaTypes.PROBLEM));
+    }
+
+    @Test
+    void findsProblemMediaType() {
+        List<MediaType> mediaTypes = Arrays.asList(MediaType.TEXT_PLAIN, MediaTypes.PROBLEM, MediaTypes.X_PROBLEM);
+        Optional<MediaType> mediaType = AdviceTraits.getProblemMediaType(mediaTypes);
+        assertTrue(mediaType.isPresent());
+        assertThat(mediaType.get(), is(MediaTypes.PROBLEM));
+    }
+
+    @Test
+    void findsXProblemMediaType() {
+        List<MediaType> mediaTypes = Arrays.asList(MediaType.TEXT_PLAIN, MediaTypes.X_PROBLEM, MediaTypes.PROBLEM);
+        Optional<MediaType> mediaType = AdviceTraits.getProblemMediaType(mediaTypes);
+        assertTrue(mediaType.isPresent());
+        assertThat(mediaType.get(), is(MediaTypes.X_PROBLEM));
+    }
+
+    @Test
+    void returnsEmptyIfNoProblemCompatibleMediaType() {
+        List<MediaType> mediaTypes = Arrays.asList(MediaType.TEXT_PLAIN, MediaType.IMAGE_PNG);
+        Optional<MediaType> mediaType = AdviceTraits.getProblemMediaType(mediaTypes);
+        assertFalse(mediaType.isPresent());
+    }
 }

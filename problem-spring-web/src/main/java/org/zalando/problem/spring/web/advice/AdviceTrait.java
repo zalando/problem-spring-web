@@ -34,12 +34,8 @@ import java.util.Optional;
 
 import static javax.servlet.RequestDispatcher.ERROR_EXCEPTION;
 import static org.apiguardian.api.API.Status.STABLE;
-import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.web.context.request.RequestAttributes.SCOPE_REQUEST;
 import static org.zalando.fauxpas.FauxPas.throwingSupplier;
-import static org.zalando.problem.spring.common.MediaTypes.PROBLEM;
-import static org.zalando.problem.spring.common.MediaTypes.X_PROBLEM;
-import static org.zalando.problem.spring.common.AdviceTrait.fallback;
 
 /**
  * <p>
@@ -177,18 +173,8 @@ public interface AdviceTrait extends org.zalando.problem.spring.common.AdviceTra
     @SneakyThrows(HttpMediaTypeNotAcceptableException.class)
     default Optional<MediaType> negotiate(final NativeWebRequest request) {
         final ContentNegotiationStrategy negotiator = ContentNegotiation.DEFAULT;
-
         final List<MediaType> mediaTypes = negotiator.resolveMediaTypes(request);
-
-        for (final MediaType mediaType : mediaTypes) {
-            if (mediaType.includes(APPLICATION_JSON) || mediaType.includes(PROBLEM)) {
-                return Optional.of(PROBLEM);
-            } else if (mediaType.includes(X_PROBLEM)) {
-                return Optional.of(X_PROBLEM);
-            }
-        }
-
-        return Optional.empty();
+        return AdviceTraits.getProblemMediaType(mediaTypes);
     }
 
     default ResponseEntity<Problem> fallback(

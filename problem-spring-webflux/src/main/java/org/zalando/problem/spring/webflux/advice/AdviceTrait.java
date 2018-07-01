@@ -15,6 +15,7 @@ import org.zalando.problem.Problem;
 import org.zalando.problem.Status;
 import org.zalando.problem.StatusType;
 import org.zalando.problem.ThrowableProblem;
+import org.zalando.problem.spring.common.AdviceTraits;
 import org.zalando.problem.spring.webflux.advice.custom.CustomAdviceTrait;
 import org.zalando.problem.spring.webflux.advice.general.GeneralAdviceTrait;
 import org.zalando.problem.spring.webflux.advice.http.HttpAdviceTrait;
@@ -27,9 +28,6 @@ import java.util.Optional;
 
 import static javax.servlet.RequestDispatcher.ERROR_EXCEPTION;
 import static org.apiguardian.api.API.Status.STABLE;
-import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.zalando.problem.spring.common.MediaTypes.PROBLEM;
-import static org.zalando.problem.spring.common.MediaTypes.X_PROBLEM;
 
 /**
  * <p>
@@ -130,33 +128,24 @@ public interface AdviceTrait extends org.zalando.problem.spring.common.AdviceTra
     }
 
     default Mono<Void> log(
-            @SuppressWarnings("UnusedParameters") final Throwable throwable,
+            final Throwable throwable,
             @SuppressWarnings("UnusedParameters") final Problem problem,
             @SuppressWarnings("UnusedParameters") final ServerWebExchange request,
             final HttpStatus status) {
-        return Mono.fromRunnable(() -> log(throwable, problem, status));
+        return Mono.fromRunnable(() -> AdviceTraits.log(throwable, status));
     }
 
     default Optional<MediaType> negotiate(final ServerWebExchange request) {
         List<MediaType> mediaTypes = new HeaderContentTypeResolver().resolveMediaTypes(request);
-        // TODO: Move to common
-        for (final MediaType mediaType : mediaTypes) {
-            if (mediaType.includes(APPLICATION_JSON) || mediaType.includes(PROBLEM)) {
-                return Optional.of(PROBLEM);
-            } else if (mediaType.includes(X_PROBLEM)) {
-                return Optional.of(X_PROBLEM);
-            }
-        }
-
-        return Optional.empty();
+        return AdviceTraits.getProblemMediaType(mediaTypes);
     }
 
     default Mono<ResponseEntity<Problem>> fallback(
             @SuppressWarnings("UnusedParameters") final Throwable throwable,
-            @SuppressWarnings("UnusedParameters") final Problem problem,
+            final Problem problem,
             @SuppressWarnings("UnusedParameters") final ServerWebExchange request,
-            @SuppressWarnings("UnusedParameters") final HttpHeaders headers) {
-        return Mono.just(fallback(throwable, problem, headers));
+            final HttpHeaders headers) {
+        return Mono.just(AdviceTraits.fallback(problem, headers));
     }
 
     default Mono<ResponseEntity<Problem>> process(
