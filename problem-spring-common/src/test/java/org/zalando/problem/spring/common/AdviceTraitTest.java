@@ -1,9 +1,7 @@
 package org.zalando.problem.spring.common;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.zalando.problem.Problem;
@@ -174,32 +172,6 @@ class AdviceTraitTest {
 
     private NoSuchElementException newNoSuchElement() {
         throw new NoSuchElementException("No such element");
-    }
-
-    @Test
-    void fallsbackProblemWithStatus() {
-        ResponseEntity<Problem> result = AdviceTrait.fallback(
-            Problem.valueOf(Status.RESET_CONTENT),
-            new HttpHeaders()
-        );
-        assertThat(result.getStatusCode(), is(HttpStatus.RESET_CONTENT));
-        HttpHeaders expectedHeaders = new HttpHeaders();
-        expectedHeaders.setContentType(MediaType.valueOf("application/problem+json"));
-        assertThat(result.getHeaders(), is(expectedHeaders));
-        assertThat(result.getBody().getStatus(), is(Status.RESET_CONTENT));
-    }
-
-    @Test
-    void fallsbackProblemWithoutStatus() {
-        ResponseEntity<Problem> result = AdviceTrait.fallback(
-                Problem.builder().withTitle("Some title").build(),
-                new HttpHeaders()
-        );
-        assertThat(result.getStatusCode(), is(HttpStatus.INTERNAL_SERVER_ERROR));
-        HttpHeaders expectedHeaders = new HttpHeaders();
-        expectedHeaders.setContentType(MediaType.valueOf("application/problem+json"));
-        assertThat(result.getHeaders(), is(expectedHeaders));
-        assertThat(result.getBody().getTitle(), is("Some title"));
     }
 
     @Test

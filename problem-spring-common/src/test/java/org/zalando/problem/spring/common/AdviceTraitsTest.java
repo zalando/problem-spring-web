@@ -2,9 +2,15 @@ package org.zalando.problem.spring.common;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.zalando.problem.Problem;
+import org.zalando.problem.Status;
 import uk.org.lidalia.slf4jext.Level;
 import uk.org.lidalia.slf4jtest.LoggingEvent;
 import uk.org.lidalia.slf4jtest.TestLogger;
@@ -18,7 +24,7 @@ import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assumptions.assumeFalse;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
-final class AdviceTraitLoggingTest {
+final class AdviceTraitsTest {
 
     private final TestLogger log = TestLoggerFactory.getTestLogger(AdviceTrait.class);
 
@@ -37,7 +43,7 @@ final class AdviceTraitLoggingTest {
     @MethodSource("data")
     void shouldLog4xxAsWarn(final HttpStatus status) {
         assumeTrue(status.is4xxClientError());
-        AdviceTrait.log(new RuntimeException("Test message"), status);
+        AdviceTraits.log(new RuntimeException("Test message"), status);
 
         final LoggingEvent event = getOnlyElement(log.getLoggingEvents());
         assertThat(event.getLevel(), is(Level.WARN));
@@ -51,7 +57,7 @@ final class AdviceTraitLoggingTest {
     void shouldLog5xxAsError(final HttpStatus status) {
         assumeTrue(status.is5xxServerError());
         final IOException throwable = new IOException();
-        AdviceTrait.log(throwable, status);
+        AdviceTraits.log(throwable, status);
 
         final LoggingEvent event = getOnlyElement(log.getLoggingEvents());
         assertThat(event.getLevel(), is(Level.ERROR));
@@ -65,9 +71,35 @@ final class AdviceTraitLoggingTest {
     void shouldNotLogNon4xx5xxErrors(final HttpStatus status) {
         assumeFalse(status.is5xxServerError() || status.is4xxClientError());
         final IOException throwable = new IOException();
-        AdviceTrait.log(throwable, status);
+        AdviceTraits.log(throwable, status);
 
         assertThat(log.getLoggingEvents(), iterableWithSize(0));
+    }
+
+    @Test
+    void fallsbackProblemWithStatus() {
+        ResponseEntity<Problem> result = AdviceTraits.fallback(
+                Problem.valueOf(Status.RESET_CONTENT),
+                new HttpHeaders()
+        );
+        assertThat(result.getStatusCode(), is(HttpStatus.RESET_CONTENT));
+        HttpHeaders expectedHeaders = new HttpHeaders();
+        expectedHeaders.setContentType(MediaType.valueOf("application/problem+json"));
+        assertThat(result.getHeaders(), is(expectedHeaders));
+        assertThat(result.getBody().getStatus(), is(Status.RESET_CONTENT));
+    }
+
+    @Test
+    void fallsbackProblemWithoutStatus() {
+        ResponseEntity<Problem> result = AdviceTraits.fallback(
+                Problem.builder().withTitle("Some title").build(),
+                new HttpHeaders()
+        );
+        assertThat(result.getStatusCode(), is(HttpStatus.INTERNAL_SERVER_ERROR));
+        HttpHeaders expectedHeaders = new HttpHeaders();
+        expectedHeaders.setContentType(MediaType.valueOf("application/problem+json"));
+        assertThat(result.getHeaders(), is(expectedHeaders));
+        assertThat(result.getBody().getTitle(), is("Some title"));
     }
 
 }

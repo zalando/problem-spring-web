@@ -19,6 +19,7 @@ import org.zalando.problem.Problem;
 import org.zalando.problem.Status;
 import org.zalando.problem.StatusType;
 import org.zalando.problem.ThrowableProblem;
+import org.zalando.problem.spring.common.AdviceTraits;
 import org.zalando.problem.spring.web.advice.custom.CustomAdviceTrait;
 import org.zalando.problem.spring.web.advice.general.GeneralAdviceTrait;
 import org.zalando.problem.spring.web.advice.http.HttpAdviceTrait;
@@ -169,7 +170,7 @@ public interface AdviceTrait extends org.zalando.problem.spring.common.AdviceTra
             @SuppressWarnings("UnusedParameters") final Problem problem,
             @SuppressWarnings("UnusedParameters") final NativeWebRequest request,
             final HttpStatus status) {
-        org.zalando.problem.spring.common.AdviceTrait.log(throwable, status);
+        AdviceTraits.log(throwable, status);
     }
 
     @SneakyThrows(HttpMediaTypeNotAcceptableException.class)
@@ -194,7 +195,7 @@ public interface AdviceTrait extends org.zalando.problem.spring.common.AdviceTra
             final Problem problem,
             @SuppressWarnings("UnusedParameters") final NativeWebRequest request,
             final HttpHeaders headers) {
-        return org.zalando.problem.spring.common.AdviceTrait.fallback(problem, headers);
+        return AdviceTraits.fallback(problem, headers);
     }
 
     default ResponseEntity<Problem> process(
