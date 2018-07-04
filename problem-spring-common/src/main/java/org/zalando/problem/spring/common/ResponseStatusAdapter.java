@@ -6,11 +6,11 @@ import org.zalando.problem.StatusType;
 /**
  * An implementation of {@link StatusType} to map {@link ResponseStatus}.
  */
-public final class ResponseStatusAdapter implements StatusType {
+final class ResponseStatusAdapter implements StatusType {
 
     private final ResponseStatus status;
 
-    public ResponseStatusAdapter(final ResponseStatus status) {
+    ResponseStatusAdapter(final ResponseStatus status) {
         this.status = status;
     }
 

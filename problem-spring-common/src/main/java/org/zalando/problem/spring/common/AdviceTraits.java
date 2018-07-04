@@ -49,7 +49,7 @@ public final class AdviceTraits {
                 .body(problem);
     }
 
-    public static Optional<MediaType> getProblemMediaType(List<MediaType> mediaTypes) {
+    public static Optional<MediaType> getProblemMediaType(final List<MediaType> mediaTypes) {
         for (final MediaType mediaType : mediaTypes) {
             if (mediaType.includes(APPLICATION_JSON) || mediaType.includes(PROBLEM)) {
                 return Optional.of(PROBLEM);
