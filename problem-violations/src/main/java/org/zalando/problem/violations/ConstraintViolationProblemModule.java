@@ -18,7 +18,7 @@ public final class ConstraintViolationProblemModule extends Module {
     @Override
     public void setupModule(final SetupContext context) {
         final SimpleModule module = new SimpleModule()
-                .setMixInAnnotation(ConstraintViolationProblem.class, ConstraintViolationProblemMixin.class)
+                .setMixInAnnotation(ConstraintViolationProblem.class, ConstraintViolationProblemMixIn.class)
                 .setMixInAnnotation(Violation.class, ViolationMixIn.class);
 
         module.setupModule(context);

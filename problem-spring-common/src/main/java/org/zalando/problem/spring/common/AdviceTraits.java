@@ -5,14 +5,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.zalando.problem.Problem;
 import org.zalando.problem.Status;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.apiguardian.api.API.Status.INTERNAL;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.zalando.problem.spring.common.MediaTypes.PROBLEM;
+import static org.zalando.problem.spring.common.MediaTypes.X_PROBLEM;
 
 @API(status = INTERNAL)
 public final class AdviceTraits {
@@ -43,5 +47,17 @@ public final class AdviceTraits {
                 .headers(headers)
                 .contentType(PROBLEM)
                 .body(problem);
+    }
+
+    public static Optional<MediaType> getProblemMediaType(List<MediaType> mediaTypes) {
+        for (final MediaType mediaType : mediaTypes) {
+            if (mediaType.includes(APPLICATION_JSON) || mediaType.includes(PROBLEM)) {
+                return Optional.of(PROBLEM);
+            } else if (mediaType.includes(X_PROBLEM)) {
+                return Optional.of(X_PROBLEM);
+            }
+        }
+
+        return Optional.empty();
     }
 }
