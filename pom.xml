@@ -60,8 +60,8 @@
 
         <jackson.version>2.9.6</jackson.version>
         <problem.version>0.20.3</problem.version>
-        <spring.version>4.3.17.RELEASE</spring.version>
-        <spring-security.version>4.2.7.RELEASE</spring-security.version>
+        <spring.version>5.0.7.RELEASE</spring.version>
+        <spring-security.version>5.0.6.RELEASE</spring-security.version>
         <junit-platform.version>1.2.0</junit-platform.version>
         <junit-jupiter.version>5.2.0</junit-jupiter.version>
     </properties>
@@ -378,20 +378,11 @@
 
     <profiles>
         <profile>
-            <id>spring5</id>
+            <id>spring4</id>
             <properties>
-                <spring.version>5.0.7.RELEASE</spring.version>
-                <spring-security.version>5.0.6.RELEASE</spring-security.version>
+                <spring.version>4.3.17.RELEASE</spring.version>
+                <spring-security.version>4.2.7.RELEASE</spring-security.version>
             </properties>
-            <modules>
-                <module>problem-spring-webflux</module>
-            </modules>
-        </profile>
-        <profile>
-            <id>spring4-junit5</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
             <dependencies>
                 <dependency>
                     <groupId>com.github.sbrannen</groupId>
@@ -425,7 +416,19 @@
             </repositories>
         </profile>
         <profile>
+            <id>webflux</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <modules>
+                <module>problem-spring-webflux</module>
+            </modules>
+        </profile>
+        <profile>
             <id>release</id>
+            <modules>
+                <module>problem-spring-webflux</module>
+            </modules>
             <build>
                 <plugins>
                     <plugin>

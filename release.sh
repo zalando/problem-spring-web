@@ -10,7 +10,7 @@ next=$(semver ${release} -i minor)
 
 ./mvnw versions:set -D newVersion=${release}
 git commit -am "Release ${release}"
-./mvnw clean deploy scm:tag -P release,spring4-junit5 -D tag=${release} -D pushChanges=false
+./mvnw clean deploy scm:tag -P release -D tag=${release} -D pushChanges=false
 
 ./mvnw versions:set -D newVersion=${next}-SNAPSHOT
 git commit -am "Development ${next}-SNAPSHOT"
