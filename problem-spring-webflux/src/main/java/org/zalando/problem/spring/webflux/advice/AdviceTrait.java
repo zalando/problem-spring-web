@@ -136,7 +136,7 @@ public interface AdviceTrait extends org.zalando.problem.spring.common.AdviceTra
     }
 
     default Optional<MediaType> negotiate(final ServerWebExchange request) {
-        List<MediaType> mediaTypes = new HeaderContentTypeResolver().resolveMediaTypes(request);
+        final List<MediaType> mediaTypes = new HeaderContentTypeResolver().resolveMediaTypes(request);
         return AdviceTraits.getProblemMediaType(mediaTypes);
     }
 

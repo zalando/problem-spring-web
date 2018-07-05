@@ -8,33 +8,38 @@ import org.zalando.problem.spring.webflux.advice.http.HttpAdviceTrait;
 import org.zalando.problem.spring.webflux.advice.utils.AdviceUtils;
 import reactor.core.publisher.Mono;
 
+import javax.annotation.Nonnull;
+
 public class ProblemExceptionHandler implements WebExceptionHandler {
 
     private final ObjectMapper mapper;
-
     private final HttpAdviceTrait advice;
 
-    public ProblemExceptionHandler(ObjectMapper mapper, HttpAdviceTrait advice) {
+    public ProblemExceptionHandler(final ObjectMapper mapper, final HttpAdviceTrait advice) {
         this.mapper = mapper;
         this.advice = advice;
     }
 
+    @Nonnull
     @Override
-    public Mono<Void> handle(ServerWebExchange exchange, Throwable throwable) {
-        Mono<ResponseEntity<Problem>> entityMono;
+    public Mono<Void> handle(final ServerWebExchange exchange, final Throwable throwable) {
         if (throwable instanceof ResponseStatusException) {
-            if (throwable instanceof NotAcceptableStatusException) {
-                entityMono = advice.handleMediaTypeNotAcceptable((NotAcceptableStatusException) throwable, exchange);
-            } else if (throwable instanceof UnsupportedMediaTypeStatusException) {
-                entityMono = advice.handleMediaTypeNotSupportedException((UnsupportedMediaTypeStatusException) throwable, exchange);
-            } else if (throwable instanceof MethodNotAllowedException) {
-                entityMono = advice.handleRequestMethodNotSupportedException((MethodNotAllowedException) throwable, exchange);
-            } else {
-                entityMono = advice.handleResponseStatusException((ResponseStatusException) throwable, exchange);
-            }
+            final Mono<ResponseEntity<Problem>> entityMono = find(exchange, throwable);
             return entityMono.flatMap(entity -> AdviceUtils.setHttpResponse(entity, exchange, mapper));
         }
         return Mono.error(throwable);
+    }
+
+    private Mono<ResponseEntity<Problem>> find(final ServerWebExchange exchange, final Throwable throwable) {
+        if (throwable instanceof NotAcceptableStatusException) {
+            return advice.handleMediaTypeNotAcceptable((NotAcceptableStatusException) throwable, exchange);
+        } else if (throwable instanceof UnsupportedMediaTypeStatusException) {
+            return advice.handleMediaTypeNotSupportedException((UnsupportedMediaTypeStatusException) throwable, exchange);
+        } else if (throwable instanceof MethodNotAllowedException) {
+            return advice.handleRequestMethodNotSupportedException((MethodNotAllowedException) throwable, exchange);
+        } else {
+            return advice.handleResponseStatusException((ResponseStatusException) throwable, exchange);
+        }
     }
 
 }

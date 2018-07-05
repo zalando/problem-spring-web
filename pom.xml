@@ -8,7 +8,7 @@
     <version>0.24.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <name>Problem: Spring parent</name>
+    <name>Problem: Spring Parent</name>
     <url>https://github.com/zalando/problem-spring-web</url>
 
     <organization>

@@ -19,23 +19,22 @@ import static org.apiguardian.api.API.Status.STABLE;
 public class SecurityProblemSupport implements ServerAuthenticationEntryPoint, ServerAccessDeniedHandler {
 
     private final SecurityAdviceTrait advice;
-
     private final ObjectMapper mapper;
 
     @Autowired
-    public SecurityProblemSupport(SecurityAdviceTrait advice, ObjectMapper mapper) {
+    public SecurityProblemSupport(final SecurityAdviceTrait advice, final ObjectMapper mapper) {
         this.advice = advice;
         this.mapper = mapper;
     }
 
     @Override
-    public Mono<Void> commence(ServerWebExchange exchange, AuthenticationException e) {
+    public Mono<Void> commence(final ServerWebExchange exchange, final AuthenticationException e) {
         return advice.handleAuthentication(e, exchange)
                 .flatMap(entity -> AdviceUtils.setHttpResponse(entity, exchange, mapper));
     }
 
     @Override
-    public Mono<Void> handle(ServerWebExchange exchange, AccessDeniedException e) {
+    public Mono<Void> handle(final ServerWebExchange exchange, final AccessDeniedException e) {
         return advice.handleAccessDenied(e, exchange)
                 .flatMap(entity -> AdviceUtils.setHttpResponse(entity, exchange, mapper));
     }

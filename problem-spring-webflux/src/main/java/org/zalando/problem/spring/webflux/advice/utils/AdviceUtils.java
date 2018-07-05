@@ -16,16 +16,17 @@ public final class AdviceUtils {
 
     }
 
-    public static Mono<Void> setHttpResponse(ResponseEntity<Problem> entity, ServerWebExchange exchange, ObjectMapper mapper) {
-        ServerHttpResponse response = exchange.getResponse();
+    public static Mono<Void> setHttpResponse(final ResponseEntity<Problem> entity, final ServerWebExchange exchange,
+            final ObjectMapper mapper) {
+        final ServerHttpResponse response = exchange.getResponse();
         response.setStatusCode(entity.getStatusCode());
         response.getHeaders().addAll(entity.getHeaders());
         try {
-            DataBuffer buffer = response.bufferFactory()
+            final DataBuffer buffer = response.bufferFactory()
                     .wrap(mapper.writeValueAsBytes(entity.getBody()));
             return response.writeWith(Mono.just(buffer))
                     .doOnError(error -> DataBufferUtils.release(buffer));
-        } catch (JsonProcessingException ex) {
+        } catch (final JsonProcessingException ex) {
             return Mono.error(ex);
         }
     }

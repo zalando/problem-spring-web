@@ -96,8 +96,7 @@ final class SecurityAdviceTraitTest {
         private SecurityProblemSupport problemSupport;
 
         @Bean
-        public SecurityWebFilterChain securityWebFilterChain(
-                ServerHttpSecurity http) {
+        public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
             return http.csrf().disable()
                     .authorizeExchange()
                     .pathMatchers("/greet").hasRole("ADMIN")

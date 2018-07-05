@@ -2,7 +2,7 @@ package org.zalando.problem.spring.common;
 
 import java.util.List;
 
-public final class Lists {
+final class Lists {
 
     private Lists() {
 
@@ -23,7 +23,7 @@ public final class Lists {
      * target list within the specified source list, or 0 if there is no such occurrence.
      * @since 1.4
      */
-    public static int lengthOfTrailingPartialSubList(final List<?> source, final List<?> target) {
+    static int lengthOfTrailingPartialSubList(final List<?> source, final List<?> target) {
         final int s = source.size() - 1;
         final int t = target.size() - 1;
         int l = 0;
