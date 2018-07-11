@@ -16,7 +16,7 @@ final class ResponseStatusAdviceTraitTest implements AdviceTraitTesting {
 
     @Test
     void missingRequestBody() {
-        Problem problem = webTestClient().put().uri("http://localhost/api/handler-put")
+        final Problem problem = webTestClient().put().uri("http://localhost/api/handler-put")
                 .contentType(MediaType.APPLICATION_JSON)
                 .exchange()
                 .expectStatus().isBadRequest()
@@ -31,7 +31,7 @@ final class ResponseStatusAdviceTraitTest implements AdviceTraitTesting {
 
     @Test
     void malformedJsonRequestBody() {
-        Problem problem = webTestClient().put().uri("http://localhost/api/json-object")
+        final Problem problem = webTestClient().put().uri("http://localhost/api/json-object")
                 .contentType(MediaType.APPLICATION_JSON)
                 .syncBody("{")
                 .exchange()
@@ -47,7 +47,7 @@ final class ResponseStatusAdviceTraitTest implements AdviceTraitTesting {
 
     @Test
     void invalidFormat() {
-        Problem problem = webTestClient().put().uri("http://localhost/api/json-decimal")
+        final Problem problem = webTestClient().put().uri("http://localhost/api/json-decimal")
                 .contentType(MediaType.APPLICATION_JSON)
                 .syncBody("\"foobar\"")
                 .exchange()
@@ -64,7 +64,7 @@ final class ResponseStatusAdviceTraitTest implements AdviceTraitTesting {
 
     @Test
     void noConstructor() {
-        Problem problem = webTestClient().put().uri("http://localhost/api/json-user")
+        final Problem problem = webTestClient().put().uri("http://localhost/api/json-user")
                 .contentType(MediaType.APPLICATION_JSON)
                 .syncBody("{}")
                 .exchange()
@@ -80,7 +80,7 @@ final class ResponseStatusAdviceTraitTest implements AdviceTraitTesting {
 
     @Test
     void wrongJsonTypeRequestBody() {
-        Problem problem = webTestClient().put().uri("http://localhost/api/json-object")
+        final Problem problem = webTestClient().put().uri("http://localhost/api/json-object")
                 .contentType(MediaType.APPLICATION_JSON)
                 .syncBody("[]")
                 .exchange()
@@ -98,7 +98,7 @@ final class ResponseStatusAdviceTraitTest implements AdviceTraitTesting {
 
     @Test
     void multipart() {
-        Problem problem = webTestClient().post().uri("http://localhost/api/handler-multipart")
+        final Problem problem = webTestClient().post().uri("http://localhost/api/handler-multipart")
                 .exchange()
                 .expectStatus().isBadRequest()
                 .expectHeader().contentType(MediaTypes.PROBLEM)
@@ -113,7 +113,7 @@ final class ResponseStatusAdviceTraitTest implements AdviceTraitTesting {
 
     @Test
     void multipartMissingPart() {
-        Problem problem = webTestClient().post().uri("http://localhost/api/handler-multipart")
+        final Problem problem = webTestClient().post().uri("http://localhost/api/handler-multipart")
                 .body(BodyInserters.fromMultipartData("payload1", new byte[]{0x1}))
                 .exchange()
                 .expectStatus().isBadRequest()
@@ -129,7 +129,7 @@ final class ResponseStatusAdviceTraitTest implements AdviceTraitTesting {
 
     @Test
     void typeMismatch() {
-        Problem problem = webTestClient().get().uri("http://localhost/api/handler-conversion?dateTime=abc")
+        final Problem problem = webTestClient().get().uri("http://localhost/api/handler-conversion?dateTime=abc")
                 .exchange()
                 .expectStatus().isBadRequest()
                 .expectHeader().contentType(MediaTypes.PROBLEM)
@@ -143,7 +143,7 @@ final class ResponseStatusAdviceTraitTest implements AdviceTraitTesting {
 
     @Test
     void missingServletRequestParameter() {
-        Problem problem = webTestClient().get().uri("http://localhost/api/handler-params")
+        final Problem problem = webTestClient().get().uri("http://localhost/api/handler-params")
                 .exchange()
                 .expectStatus().isBadRequest()
                 .expectHeader().contentType(MediaTypes.PROBLEM)
@@ -157,7 +157,7 @@ final class ResponseStatusAdviceTraitTest implements AdviceTraitTesting {
 
     @Test
     void servletRequestBinding() {
-        Problem problem = webTestClient().get().uri("http://localhost/api/handler-headers")
+        final Problem problem = webTestClient().get().uri("http://localhost/api/handler-headers")
                 .exchange()
                 .expectStatus().isBadRequest()
                 .expectHeader().contentType(MediaTypes.PROBLEM)
@@ -172,7 +172,7 @@ final class ResponseStatusAdviceTraitTest implements AdviceTraitTesting {
 
     @Test
     void noHandlerInController() {
-        Problem problem = webTestClient().get().uri("http://localhost/api/no-handler")
+        final Problem problem = webTestClient().get().uri("http://localhost/api/no-handler")
                 .exchange()
                 .expectStatus().isNotFound()
                 .expectBody(Problem.class).returnResult().getResponseBody();
@@ -185,7 +185,7 @@ final class ResponseStatusAdviceTraitTest implements AdviceTraitTesting {
 
     @Test
     void noHandler() {
-        Problem problem = webTestClient().get().uri("http://localhost/no-handler")
+        final Problem problem = webTestClient().get().uri("http://localhost/no-handler")
                 .exchange()
                 .expectStatus().isNotFound()
                 .expectBody(Problem.class).returnResult().getResponseBody();

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Constraint;
 import javax.validation.ConstraintValidator;
@@ -61,6 +62,11 @@ public class ExampleRestController {
     @RequestMapping(path = "/handler-throwable", method = GET)
     public ResponseEntity<String> throwable() {
         throw new IllegalArgumentException("expected", new IllegalStateException());
+    }
+
+    @RequestMapping(path = "/handler-custom-throwable", method = GET)
+    public ResponseEntity<String> customThrowable() {
+        throw new ResponseStatusException(HttpStatus.CONFLICT, "Won't work");
     }
 
     @RequestMapping(path = "/handler-throwable-annotated", method = GET)

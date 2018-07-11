@@ -12,6 +12,7 @@ import static org.apiguardian.api.API.Status.STABLE;
 public interface HttpAdviceTrait extends
         NotAcceptableAdviceTrait,
         UnsupportedMediaTypeAdviceTrait,
-        MethodNotAllowedAdviceTrait {
+        MethodNotAllowedAdviceTrait,
+        ResponseStatusAdviceTrait {
 
 }
