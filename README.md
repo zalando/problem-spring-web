@@ -1,5 +1,6 @@
 # Problems for Spring MVC and Spring WebFlux
 
+[![Stability: Sustained](https://masterminds.github.io/stability/sustained.svg)](https://masterminds.github.io/stability/sustained.html)
 [![Build Status](https://img.shields.io/travis/zalando/problem-spring-web/master.svg)](https://travis-ci.org/zalando/problem-spring-web)
 [![Coverage Status](https://img.shields.io/coveralls/zalando/problem-spring-web/master.svg)](https://coveralls.io/r/zalando/problem-spring-web)
 [![Code Quality](https://img.shields.io/codacy/grade/0236149bf46749b1a582f9fbbde2a4eb/master.svg)](https://www.codacy.com/app/whiskeysierra/problem-spring-web)
