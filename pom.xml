@@ -386,7 +386,7 @@
         <profile>
             <id>spring4</id>
             <properties>
-                <spring.version>4.3.17.RELEASE</spring.version>
+                <spring.version>4.3.18.RELEASE</spring.version>
                 <spring-security.version>4.2.7.RELEASE</spring-security.version>
             </properties>
             <dependencies>
