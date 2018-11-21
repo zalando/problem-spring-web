@@ -270,7 +270,7 @@
                             <failBuildInCaseOfDifferentContentConflict>true</failBuildInCaseOfDifferentContentConflict>
                             <failBuildInCaseOfEqualContentConflict>false</failBuildInCaseOfEqualContentConflict>
                             <ignoredClassPatterns>
-                                <ignoredClassPattern>.*/module-info</ignoredClassPattern>
+                                <ignoredClassPattern>.*\.module-info</ignoredClassPattern>
                             </ignoredClassPatterns>
                             <ignoredResourcePatterns>
                                 <ignoredResourcePattern>.*</ignoredResourcePattern>
