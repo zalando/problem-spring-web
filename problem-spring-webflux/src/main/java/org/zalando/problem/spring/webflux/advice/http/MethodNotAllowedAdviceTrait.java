@@ -12,7 +12,6 @@ import org.zalando.problem.Status;
 import org.zalando.problem.spring.webflux.advice.AdviceTrait;
 import reactor.core.publisher.Mono;
 
-import javax.annotation.Nullable;
 import java.util.Set;
 
 import static org.apiguardian.api.API.Status.INTERNAL;
@@ -27,7 +26,7 @@ public interface MethodNotAllowedAdviceTrait extends AdviceTrait {
             final MethodNotAllowedException exception,
             final ServerWebExchange request) {
 
-        @Nullable final Set<HttpMethod> methods = exception.getSupportedMethods();
+        final Set<HttpMethod> methods = exception.getSupportedMethods();
 
         if (methods.isEmpty()) {
             return create(Status.METHOD_NOT_ALLOWED, exception, request);

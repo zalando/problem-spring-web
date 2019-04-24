@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Constraint;
 import javax.validation.ConstraintValidator;
@@ -80,20 +81,31 @@ public class ExampleRestController {
         throw new MyExceptionWithReason(new IllegalArgumentException("expected", new IllegalStateException()));
     }
 
+    @RequestMapping(path = "/handler-throwable-extended", method = GET)
+    public ResponseEntity<String> throwableExtended() {
+        throw new MyResponseStatusException();
+    }
+
     @ResponseStatus(HttpStatus.NOT_IMPLEMENTED)
     private static final class MyException extends RuntimeException {
-        public MyException() {
+        MyException() {
         }
 
-        public MyException(final Throwable cause) {
+        MyException(final Throwable cause) {
             super(cause);
         }
     }
 
     @ResponseStatus(code = HttpStatus.NOT_IMPLEMENTED, reason = "Test reason")
     private static final class MyExceptionWithReason extends RuntimeException {
-        public MyExceptionWithReason(final Throwable cause) {
+        MyExceptionWithReason(final Throwable cause) {
             super(cause);
+        }
+    }
+
+    private static final class MyResponseStatusException extends ResponseStatusException {
+        MyResponseStatusException() {
+            super(HttpStatus.NOT_IMPLEMENTED);
         }
     }
 
@@ -251,15 +263,14 @@ public class ExampleRestController {
             this.name = name;
         }
 
-        @Size(min = 3, max = 10)
-        public String getName() {
+        @Size(min = 3, max = 10) String getName() {
             return name;
         }
 
     }
 
     @Data
-    static final class PageRequest {
+    private static final class PageRequest {
 
         @Min(value = 0)
         private int page = 0;

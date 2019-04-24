@@ -37,8 +37,8 @@ class for your [`@ControllerAdvice`](http://docs.spring.io/spring/docs/current/j
 - Any build tool using Maven Central, or direct download
 - Servlet Container for [problem-spring-web](problem-spring-web) or
 - Reactive, non-blocking runtime for [problem-spring-webflux](problem-spring-webflux)
-- Spring 4.x **or 5.x**
-- Spring Security 4.x **or 5.x**
+- Spring 5
+- Spring Security 5
 
 ## Installation and Configuration
 
