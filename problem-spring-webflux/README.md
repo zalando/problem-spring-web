@@ -42,9 +42,6 @@ The following table shows all built-in advice traits:
 | `│   ├──`[`NotAcceptableAdviceTrait`](src/main/java/org/zalando/problem/spring/webflux/advice/http/NotAcceptableAdviceTrait.java)                                      | [`406 Not Acceptable`](https://httpstatus.es/406)         |
 | `│   ├──`[`ResponseStatusAdviceTrait`](src/main/java/org/zalando/problem/spring/webflux/advice/http/ResponseStatusAdviceTrait.java)                                    |                                                           |
 | `│   └──`[`UnsupportedMediaTypeAdviceTrait`](src/main/java/org/zalando/problem/spring/webflux/advice/http/UnsupportedMediaTypeAdviceTrait.java)                        | [`415 Unsupported Media Type`](https://httpstatus.es/415) |
-| `├──`[**`SecurityAdviceTrait`**](src/main/java/org/zalando/problem/spring/webflux/advice/security/SecurityAdviceTrait.java)                                            |                                                           |
-| `│   ├──`[`AccessDeniedAdviceTrait`](src/main/java/org/zalando/problem/spring/webflux/advice/security/AccessDeniedAdviceTrait.java)                                    | [`403 Forbidden`](https://httpstatus.es/403)              |
-| `│   └──`[`AuthenticationAdviceTrait`](src/main/java/org/zalando/problem/spring/webflux/advice/security/AuthenticationAdviceTrait.java)                                | [`401 Unauthorized`](https://httpstatus.es/401)           |
 | `└──`[**`ValidationAdviceTrait`**](src/main/java/org/zalando/problem/spring/webflux/advice/validation/ValidationAdviceTrait.java)                                      |                                                           |
 | `    └──`[`ConstraintViolationAdviceTrait`](src/main/java/org/zalando/problem/spring/webflux/advice/validation/ConstraintViolationAdviceTrait.java)                    | [`400 Bad Request`](https://httpstatus.es/400)            |
 
@@ -75,6 +72,13 @@ public WebExceptionHandler problemExceptionHandler(ObjectMapper mapper, ProblemH
 ### Security
 
 The Spring Security integration requires additional steps:
+
+```java
+@ControllerAdvice
+class ExceptionHandling implements ProblemHandling, SecurityAdviceTrait {
+
+}
+```
 
 ```java
 @Configuration

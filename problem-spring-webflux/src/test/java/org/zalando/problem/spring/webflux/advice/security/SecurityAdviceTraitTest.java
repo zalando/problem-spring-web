@@ -111,7 +111,7 @@ final class SecurityAdviceTraitTest {
     }
 
     @ControllerAdvice
-    static class ExceptionHandling implements ProblemHandling {
+    static class ExceptionHandling implements ProblemHandling, SecurityAdviceTrait {
 
     }
 

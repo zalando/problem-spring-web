@@ -51,9 +51,6 @@ The following table shows all built-in advice traits:
 | `│   ├──`[`NoHandlerFoundAdviceTrait`](src/main/java/org/zalando/problem/spring/web/advice/routing/NoHandlerFoundAdviceTrait.java)                                 | [`404 Not Found`](https://httpstatus.es/404)              |
 | `│   ├──`[`NoSuchRequestHandlingMethodAdviceTrait`](src/main/java/org/zalando/problem/spring/web/advice/routing/NoSuchRequestHandlingMethodAdviceTrait.java)       | [`404 Not Found`](https://httpstatus.es/404)              |
 | `│   └──`[`ServletRequestBindingAdviceTrait`](src/main/java/org/zalando/problem/spring/web/advice/routing/ServletRequestBindingAdviceTrait.java)                   | [`400 Bad Request`](https://httpstatus.es/400)            |
-| `├──`[**`SecurityAdviceTrait`**](src/main/java/org/zalando/problem/spring/web/advice/security/SecurityAdviceTrait.java)                                            |                                                           |
-| `│   ├──`[`AccessDeniedAdviceTrait`](src/main/java/org/zalando/problem/spring/web/advice/security/AccessDeniedAdviceTrait.java)                                    | [`403 Forbidden`](https://httpstatus.es/403)              |
-| `│   └──`[`AuthenticationAdviceTrait`](src/main/java/org/zalando/problem/spring/web/advice/security/AuthenticationAdviceTrait.java)                                | [`401 Unauthorized`](https://httpstatus.es/401)           |
 | `└──`[**`ValidationAdviceTrait`**](src/main/java/org/zalando/problem/spring/web/advice/validation/ValidationAdviceTrait.java)                                      |                                                           |
 | `    ├──`[`ConstraintViolationAdviceTrait`](src/main/java/org/zalando/problem/spring/web/advice/validation/ConstraintViolationAdviceTrait.java)                    | [`400 Bad Request`](https://httpstatus.es/400)            |
 | `    └──`[`MethodArgumentNotValidAdviceTrait`](src/main/java/org/zalando/problem/spring/web/advice/validation/MethodArgumentNotValidAdviceTrait.java)              | [`400 Bad Request`](https://httpstatus.es/400)            |
@@ -87,6 +84,13 @@ If you're using Spring Boot, make sure you disable the `ErrorMvcAutoConfiguratio
 ### Security
 
 The Spring Security integration requires additional steps:
+
+```java
+@ControllerAdvice
+class ExceptionHandling implements ProblemHandling, SecurityAdviceTrait {
+
+}
+```
 
 ```java
 @Configuration
