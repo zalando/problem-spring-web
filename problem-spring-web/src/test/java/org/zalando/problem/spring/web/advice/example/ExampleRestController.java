@@ -6,6 +6,8 @@ import com.google.gag.annotation.remark.Facepalm;
 import com.google.gag.annotation.remark.Hack;
 import com.google.gag.annotation.remark.OhNoYouDidnt;
 import lombok.Data;
+import net.jodah.failsafe.CircuitBreaker;
+import net.jodah.failsafe.Failsafe;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -178,6 +180,15 @@ public class ExampleRestController {
         final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
         final Set<ConstraintViolation<UserRequest>> violations = validator.validate(user);
         throw new ConstraintViolationException(violations);
+    }
+
+    @RequestMapping("/handler-circuit-breaker-open")
+    public void circuitBreakerOpen() {
+        final CircuitBreaker<Object> breaker = new CircuitBreaker<>();
+        breaker.open();
+
+        Failsafe.with(breaker)
+                .run(() -> {});
     }
 
     @RequestMapping("/handler-secured")

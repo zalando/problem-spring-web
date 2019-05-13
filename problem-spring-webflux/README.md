@@ -83,7 +83,7 @@ class ExceptionHandling implements ProblemHandling, SecurityAdviceTrait {
 ```java
 @Configuration
 @Import(SecurityProblemSupport.class)
-public static class SecurityConfiguration {
+public class SecurityConfiguration {
 
     @Autowired
     private SecurityProblemSupport problemSupport;
@@ -104,5 +104,28 @@ public static class SecurityConfiguration {
 ```java
 @ControllerAdvice
 public class SecurityExceptionHandler implements SecurityAdviceTrait {
+}
+```
+
+### Failsafe
+
+The optional failsafe integration adds support for `CircuitBreakerOpenException` in the form of an advice trait:
+
+```java
+@ControllerAdvice
+class ExceptionHandling implements ProblemHandling, CircuitBreakerOpenAdviceTrait {
+
+}
+```
+
+An open circuit breaker will be translated into a `503 Service Unavailable`:
+
+```http
+HTTP/1.1 503 Service Unavailable
+Content-Type: application/problem+json
+
+{
+  "title": "Service Unavailable",
+  "status": 503
 }
 ```
