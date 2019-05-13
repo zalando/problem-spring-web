@@ -6,7 +6,6 @@ import org.zalando.problem.spring.web.advice.general.GeneralAdviceTrait;
 import org.zalando.problem.spring.web.advice.http.HttpAdviceTrait;
 import org.zalando.problem.spring.web.advice.io.IOAdviceTrait;
 import org.zalando.problem.spring.web.advice.routing.RoutingAdviceTrait;
-import org.zalando.problem.spring.web.advice.security.SecurityAdviceTrait;
 import org.zalando.problem.spring.web.advice.validation.ValidationAdviceTrait;
 
 import static org.apiguardian.api.API.Status.STABLE;
@@ -26,7 +25,6 @@ import static org.apiguardian.api.API.Status.STABLE;
  * @see HttpAdviceTrait
  * @see IOAdviceTrait
  * @see RoutingAdviceTrait
- * @see SecurityAdviceTrait
  * @see ValidationAdviceTrait
  */
 @API(status = STABLE)
@@ -35,7 +33,6 @@ public interface ProblemHandling extends
         HttpAdviceTrait,
         IOAdviceTrait,
         RoutingAdviceTrait,
-        SecurityAdviceTrait,
         ValidationAdviceTrait {
 
 }
