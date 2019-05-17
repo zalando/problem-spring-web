@@ -7,8 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationServiceException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -32,6 +36,7 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.is;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.anonymous;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -93,6 +98,14 @@ final class SecurityAdviceTraitTest {
                     .accessDeniedHandler(problemSupport);
         }
 
+        @Bean
+        @Override
+        public AuthenticationManager authenticationManager() {
+            return authentication -> {
+                throw new AuthenticationServiceException("Something went wrong");
+            };
+        }
+
     }
 
     @ControllerAdvice
@@ -131,6 +144,24 @@ final class SecurityAdviceTraitTest {
                 .andExpect(jsonPath("$.title", is("Forbidden")))
                 .andExpect(jsonPath("$.status", is(403)))
                 .andExpect(jsonPath("$.detail", is("Access is denied")));
+    }
+
+    @Test
+    void authorized() throws Exception {
+        mvc.perform(get("/greet").param("name", "Alice").with(user("user").roles("ADMIN")))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(jsonPath("$", is("Hello Alice!")));
+    }
+
+    @Test
+    void notAbleToAuthenticate() throws Exception {
+        mvc.perform(post("/").with(authentication(new UsernamePasswordAuthenticationToken("user", "password"))))
+                .andExpect(status().isInternalServerError())
+                .andExpect(content().contentType(MediaTypes.PROBLEM))
+                .andExpect(jsonPath("$.title", is("Internal Server Error")))
+                .andExpect(jsonPath("$.status", is(500)))
+                .andExpect(jsonPath("$.detail", is("Something went wrong")));
     }
 
 }
