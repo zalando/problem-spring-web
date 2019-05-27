@@ -11,6 +11,7 @@ import static org.apiguardian.api.API.Status.STABLE;
 @API(status = STABLE)
 public interface GeneralAdviceTrait extends
         ProblemAdviceTrait,
+        ResponseStatusAdviceTrait,
         ThrowableAdviceTrait,
         UnsupportedOperationAdviceTrait {
 }

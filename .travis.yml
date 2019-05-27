@@ -14,12 +14,7 @@ cache:
   directories:
     - $HOME/.m2
 
-env:
-  matrix:
-    -
-    - PROFILE='-P spring4'
-
-script: ./mvnw clean verify $PROFILE
+script: ./mvnw clean verify
 
 after_success:
   - ./mvnw coveralls:report

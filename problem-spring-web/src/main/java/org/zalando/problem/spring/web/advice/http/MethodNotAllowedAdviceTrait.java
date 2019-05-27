@@ -14,6 +14,7 @@ import org.zalando.problem.spring.web.advice.AdviceTrait;
 
 import javax.annotation.Nullable;
 
+import static java.util.Objects.requireNonNull;
 import static org.apiguardian.api.API.Status.INTERNAL;
 import static org.apiguardian.api.API.Status.STABLE;
 
@@ -35,7 +36,7 @@ public interface MethodNotAllowedAdviceTrait extends AdviceTrait {
         }
 
         final HttpHeaders headers = new HttpHeaders();
-        headers.setAllow(exception.getSupportedHttpMethods());
+        headers.setAllow(requireNonNull(exception.getSupportedHttpMethods()));
 
         return create(Status.METHOD_NOT_ALLOWED, exception, request, headers);
     }
