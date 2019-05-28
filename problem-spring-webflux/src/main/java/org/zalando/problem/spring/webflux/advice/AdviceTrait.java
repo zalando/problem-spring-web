@@ -19,6 +19,7 @@ import org.zalando.problem.spring.common.AdviceTraits;
 import org.zalando.problem.spring.webflux.advice.custom.CustomAdviceTrait;
 import org.zalando.problem.spring.webflux.advice.general.GeneralAdviceTrait;
 import org.zalando.problem.spring.webflux.advice.http.HttpAdviceTrait;
+import org.zalando.problem.spring.webflux.advice.network.NetworkAdviceTrait;
 import org.zalando.problem.spring.webflux.advice.validation.ValidationAdviceTrait;
 import reactor.core.publisher.Mono;
 
@@ -51,6 +52,7 @@ import static org.apiguardian.api.API.Status.STABLE;
  * @see CustomAdviceTrait
  * @see GeneralAdviceTrait
  * @see HttpAdviceTrait
+ * @see NetworkAdviceTrait
  * @see ValidationAdviceTrait
  */
 @API(status = STABLE)
