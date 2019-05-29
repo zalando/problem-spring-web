@@ -21,7 +21,7 @@ import static org.zalando.problem.spring.common.MediaTypes.X_PROBLEM;
 @API(status = INTERNAL)
 public final class AdviceTraits {
 
-    private static final Logger LOG = LoggerFactory.getLogger(AdviceTrait.class);
+    private static final Logger LOG = LoggerFactory.getLogger(AdviceTraits.class);
 
     private AdviceTraits() {
 

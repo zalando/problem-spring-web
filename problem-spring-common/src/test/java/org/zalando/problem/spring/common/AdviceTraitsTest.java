@@ -31,7 +31,7 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 final class AdviceTraitsTest {
 
-    private final TestLogger log = TestLoggerFactory.getTestLogger(AdviceTrait.class);
+    private final TestLogger log = TestLoggerFactory.getTestLogger(AdviceTraits.class);
 
     @BeforeEach
     @AfterEach
