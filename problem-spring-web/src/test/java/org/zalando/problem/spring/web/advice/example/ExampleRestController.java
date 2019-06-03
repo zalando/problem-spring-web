@@ -39,6 +39,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.math.BigDecimal;
+import java.net.SocketTimeoutException;
 import java.time.OffsetDateTime;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -120,6 +121,11 @@ public class ExampleRestController {
         } catch (final IllegalArgumentException e) {
             throw newIllegalState(e);
         }
+    }
+
+    @RequestMapping(method = GET, path = "/socket-timeout")
+    public ResponseEntity<String> socketTimeout() throws SocketTimeoutException {
+        throw new SocketTimeoutException();
     }
 
     private IllegalStateException newIllegalState(final Exception e) {

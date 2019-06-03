@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 class CircuitBreakerOpenAdviceTraitTest implements AdviceTraitTesting {
 
     @Test
-    void typeMismatch() {
+    void circuitBreakerOpen() {
         @Nullable final Problem problem = webTestClient().post().uri("http://localhost/api/handler-circuit-breaker-open")
                 .exchange()
                 .expectStatus().isEqualTo(HttpStatus.SERVICE_UNAVAILABLE)
