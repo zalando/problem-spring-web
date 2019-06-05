@@ -131,3 +131,15 @@ Content-Type: application/problem+json
   "status": 503
 }
 ```
+
+### Swagger/OpenAPI Request Validator
+
+The optional integration for [Atlassian's Swagger Request Validator](https://bitbucket.org/atlassian/swagger-request-validator)
+adds support for invalid request/response exceptions as a dedicated advice trait:
+
+```java
+@ControllerAdvice
+class ExceptionHandling implements ProblemHandling, OpenApiValidationAdviceTrait {
+
+}
+```

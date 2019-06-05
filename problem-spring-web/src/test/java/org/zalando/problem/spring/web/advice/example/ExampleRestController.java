@@ -1,5 +1,9 @@
 package org.zalando.problem.spring.web.advice.example;
 
+import com.atlassian.oai.validator.report.ValidationReport;
+import com.atlassian.oai.validator.report.ValidationReport.Message;
+import com.atlassian.oai.validator.springmvc.InvalidRequestException;
+import com.atlassian.oai.validator.springmvc.InvalidResponseException;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gag.annotation.remark.Facepalm;
@@ -207,6 +211,18 @@ public class ExampleRestController {
 
         Failsafe.with(breaker)
                 .run(() -> {});
+    }
+
+    @RequestMapping(method = POST, path = "/openapi/invalid-request")
+    public void invalidRequest() {
+        throw new InvalidRequestException(ValidationReport.from(
+                Message.create("foo", "not null").build()));
+    }
+
+    @RequestMapping(method = POST, path = "/openapi/invalid-response")
+    public void invalidResponse() {
+        throw new InvalidResponseException(ValidationReport.from(
+                Message.create("foo", "not null").build()));
     }
 
     @RequestMapping("/handler-secured")

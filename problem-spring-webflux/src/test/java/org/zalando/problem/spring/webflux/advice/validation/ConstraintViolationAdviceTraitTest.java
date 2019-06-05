@@ -10,12 +10,13 @@ import org.zalando.problem.violations.ConstraintViolationProblem;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 
 final class ConstraintViolationAdviceTraitTest implements AdviceTraitTesting {
 
     @Test
     void invalidRequestParam() {
-        ConstraintViolationProblem problem = webTestClient().post().uri("http://localhost/api/handler-invalid-param")
+        final ConstraintViolationProblem problem = webTestClient().post().uri("http://localhost/api/handler-invalid-param")
                 .contentType(MediaType.APPLICATION_JSON)
                 .syncBody("{\"name\":\"Bob\"}")
                 .exchange()
@@ -23,6 +24,7 @@ final class ConstraintViolationAdviceTraitTest implements AdviceTraitTesting {
                 .expectHeader().contentType(MediaTypes.PROBLEM)
                 .expectBody(ConstraintViolationProblem.class).returnResult().getResponseBody();
 
+        assertThat(problem, is(notNullValue()));
         assertThat(problem.getType().toString(), is("https://zalando.github.io/problem/constraint-violation"));
         assertThat(problem.getTitle(), is("Constraint Violation"));
         assertThat(problem.getStatus(), is(Status.BAD_REQUEST));
