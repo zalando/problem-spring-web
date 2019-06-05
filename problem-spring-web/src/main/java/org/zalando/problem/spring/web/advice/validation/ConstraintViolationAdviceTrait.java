@@ -26,10 +26,6 @@ import static org.apiguardian.api.API.Status.STABLE;
 @API(status = STABLE)
 public interface ConstraintViolationAdviceTrait extends BaseValidationAdviceTrait {
 
-    default Violation createViolation(final ConstraintViolation violation) {
-        return new Violation(formatFieldName(violation.getPropertyPath().toString()), violation.getMessage());
-    }
-
     @API(status = INTERNAL)
     @ExceptionHandler
     default ResponseEntity<Problem> handleConstraintViolation(
@@ -41,6 +37,10 @@ public interface ConstraintViolationAdviceTrait extends BaseValidationAdviceTrai
                 .collect(toList());
 
         return newConstraintViolationProblem(exception, violations, request);
+    }
+
+    default Violation createViolation(final ConstraintViolation violation) {
+        return new Violation(formatFieldName(violation.getPropertyPath().toString()), violation.getMessage());
     }
 
 }
