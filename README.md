@@ -38,6 +38,7 @@ class for your [`@ControllerAdvice`](http://docs.spring.io/spring/docs/current/j
 - Servlet Container for [problem-spring-web](problem-spring-web) or
 - Reactive, non-blocking runtime for [problem-spring-webflux](problem-spring-webflux)
 - Spring 5
+  - Spring 4 (or Spring Boot 1.5) users may use version [0.23.0](https://github.com/zalando/problem-spring-web/releases/tag/0.23.0)
 - Spring Security 5
 
 ## Installation and Configuration
