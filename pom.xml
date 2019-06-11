@@ -214,7 +214,7 @@
         <dependency>
             <groupId>org.apache.tomcat.embed</groupId>
             <artifactId>tomcat-embed-el</artifactId>
-            <version>9.0.20</version>
+            <version>9.0.21</version>
             <scope>test</scope>
         </dependency>
         <dependency>
