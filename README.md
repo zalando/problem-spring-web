@@ -39,7 +39,7 @@ class for your [`@ControllerAdvice`](http://docs.spring.io/spring/docs/current/j
 - Reactive, non-blocking runtime for [problem-spring-webflux](problem-spring-webflux)
 - Spring 5
   - Spring 4 (or Spring Boot 1.5) users may use version [0.23.0](https://github.com/zalando/problem-spring-web/releases/tag/0.23.0)
-- Spring Security 5
+- Spring Security 5 (Optional)
 
 ## Installation and Configuration
 
@@ -205,6 +205,7 @@ Enabling both features, causal chains and stacktraces, will yield:
 ```
 
 ## Known Issues
+### Restricted usage of `@ControllerAdvice`
 
 Spring allows to restrict the scope of a `@ControllerAdvice` to a certain subset of controllers:
 
@@ -221,6 +222,15 @@ By doing this you'll loose the capability to handle certain types of exceptions 
 - `NoHandlerFoundException`
 
 We inherit this restriction from Spring and therefore recommend to use an unrestricted `@ControllerAdvice`.
+
+### Usage without spring-security
+When used without spring-security, if you implement `ProblemHandling` class directly, you'll get a `ClassNotFoundException`.
+Instead of implementing ProblemHandling, extend all wanted traits yourself (i.e. everything except SecurityAdviceTrait)
+
+```java
+public interface ZalandoProblemHandling extends GeneralAdviceTrait, HttpAdviceTrait, IOAdviceTrait, RoutingAdviceTrait, ValidationAdviceTrait {
+}
+```
 
 ## Getting Help
 
