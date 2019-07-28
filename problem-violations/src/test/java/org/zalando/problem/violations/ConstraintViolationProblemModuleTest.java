@@ -3,6 +3,7 @@ package org.zalando.problem.violations;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.zalando.problem.ProblemModule;
@@ -22,12 +23,13 @@ final class ConstraintViolationProblemModuleTest {
 
     @Test
     void shouldSerializeWithoutAutoDetect() throws JsonProcessingException {
-        final ObjectMapper mapper = new ObjectMapper()
+        final JsonMapper mapper = JsonMapper.builder()
                 .disable(MapperFeature.AUTO_DETECT_FIELDS)
                 .disable(MapperFeature.AUTO_DETECT_GETTERS)
                 .disable(MapperFeature.AUTO_DETECT_IS_GETTERS)
-                .registerModule(new ProblemModule())
-                .registerModule(new ConstraintViolationProblemModule());
+                .addModule(new ProblemModule())
+                .addModule(new ConstraintViolationProblemModule())
+                .build();
 
         final Violation violation = new Violation("bob", "was missing");
         final ConstraintViolationProblem unit = new ConstraintViolationProblem(BAD_REQUEST, singletonList(violation));
