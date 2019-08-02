@@ -3,5 +3,5 @@ approvals:
   minimum: 1
   from:
     orgs:
-      - balance
+      - zalando
     collaborators: true
