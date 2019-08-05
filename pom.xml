@@ -60,7 +60,7 @@
 
         <jackson.version>2.10.0.pr1</jackson.version>
         <problem.version>0.23.0</problem.version>
-        <spring.version>5.1.8.RELEASE</spring.version>
+        <spring.version>5.1.9.RELEASE</spring.version>
         <spring-security.version>5.1.5.RELEASE</spring-security.version>
         <junit-jupiter.version>5.5.1</junit-jupiter.version>
     </properties>
