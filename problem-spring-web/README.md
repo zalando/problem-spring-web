@@ -2,7 +2,20 @@
 
 ## Installation
 
-Add the following dependency to your project:
+### Spring boot
+
+Add the starter module to your dependencies. That is all you will need to get a default working configuration (you can customize it by implementing advice traits):
+```xml
+<dependency>
+    <groupId>org.zalando</groupId>
+    <artifactId>problem-spring-web-starter</artifactId>
+    <version>${problem-spring-web.version}</version>
+</dependency>
+```
+The autoconfiguration will configure problem-spring-web to handle all problems plus Spring Security problems if Spring Security is detected
+
+### WebMVC
+If you're not using Spring Boot, add the following dependency to your project:
 
 ```xml
 <dependency>
@@ -12,9 +25,9 @@ Add the following dependency to your project:
 </dependency>
 ```
 
-## Configuration
+## Configuration  
 
-Make sure you register the required modules with your ObjectMapper:
+If not using the starter module, make sure you register the required modules with your ObjectMapper:
 
 ```java
 @Bean
@@ -85,7 +98,7 @@ If you're using Spring Boot, make sure you disable the `ErrorMvcAutoConfiguratio
 
 ### Security
 
-The Spring Security integration requires additional steps:
+If not using the starter module, the Spring Security integration requires additional steps:
 
 ```java
 @ControllerAdvice
