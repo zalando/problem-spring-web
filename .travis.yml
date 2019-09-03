@@ -9,10 +9,10 @@ cache:
   directories:
     - $HOME/.m2
 
-script: ./mvnw clean verify
+script: ./mvnw clean verify --no-transfer-progress
 
 after_success:
-  - ./mvnw coveralls:report
+  - ./mvnw coveralls:report --no-transfer-progress
 
 notifications:
   email:
