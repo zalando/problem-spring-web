@@ -15,8 +15,14 @@ import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
 @ConditionalOnClass(WebSecurityConfigurerAdapter.class) //only when spring-security is in classpath
 @Import(SecurityProblemSupport.class)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+
+    private final SecurityProblemSupport problemSupport;
+
     @Autowired
-    private SecurityProblemSupport problemSupport;
+    public SecurityConfiguration(SecurityProblemSupport problemSupport) {
+        super(true);
+        this.problemSupport = problemSupport;
+    }
 
     @Override
     public void configure(final HttpSecurity http) throws Exception {
