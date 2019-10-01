@@ -18,7 +18,7 @@ final class ConstraintViolationAdviceTraitTest implements AdviceTraitTesting {
     void invalidRequestParam() {
         final ConstraintViolationProblem problem = webTestClient().post().uri("http://localhost/api/handler-invalid-param")
                 .contentType(MediaType.APPLICATION_JSON)
-                .syncBody("{\"name\":\"Bob\"}")
+                .bodyValue("{\"name\":\"Bob\"}")
                 .exchange()
                 .expectStatus().isBadRequest()
                 .expectHeader().contentType(MediaTypes.PROBLEM)
