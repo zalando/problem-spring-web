@@ -36,7 +36,7 @@ final class BindAdviceTraitTest implements AdviceTraitTesting {
     void invalidRequestBodyField() {
         ConstraintViolationProblem problem = webTestClient().post().uri("http://localhost/api/handler-invalid-body")
                 .contentType(MediaType.APPLICATION_JSON)
-                .syncBody("{\"name\":\"Jo\"}")
+                .bodyValue("{\"name\":\"Jo\"}")
                 .exchange()
                 .expectStatus().isBadRequest()
                 .expectHeader().contentType(MediaTypes.PROBLEM)
@@ -54,7 +54,7 @@ final class BindAdviceTraitTest implements AdviceTraitTesting {
     void invalidRequestBody() {
         ConstraintViolationProblem problem = webTestClient().post().uri("http://localhost/api/handler-invalid-body")
                 .contentType(MediaType.APPLICATION_JSON)
-                .syncBody("{\"name\":\"Bob\"}")
+                .bodyValue("{\"name\":\"Bob\"}")
                 .exchange()
                 .expectStatus().isBadRequest()
                 .expectHeader().contentType(MediaTypes.PROBLEM)

@@ -33,7 +33,7 @@ final class ResponseStatusAdviceTraitTest implements AdviceTraitTesting {
     void malformedJsonRequestBody() {
         Problem problem = webTestClient().put().uri("http://localhost/api/json-object")
                 .contentType(MediaType.APPLICATION_JSON)
-                .syncBody("{")
+                .bodyValue("{")
                 .exchange()
                 .expectStatus().isBadRequest()
                 .expectHeader().contentType(MediaTypes.PROBLEM)
@@ -49,7 +49,7 @@ final class ResponseStatusAdviceTraitTest implements AdviceTraitTesting {
     void invalidFormat() {
         Problem problem = webTestClient().put().uri("http://localhost/api/json-decimal")
                 .contentType(MediaType.APPLICATION_JSON)
-                .syncBody("\"foobar\"")
+                .bodyValue("\"foobar\"")
                 .exchange()
                 .expectStatus().isBadRequest()
                 .expectHeader().contentType(MediaTypes.PROBLEM)
@@ -66,7 +66,7 @@ final class ResponseStatusAdviceTraitTest implements AdviceTraitTesting {
     void noConstructor() {
         Problem problem = webTestClient().put().uri("http://localhost/api/json-user")
                 .contentType(MediaType.APPLICATION_JSON)
-                .syncBody("{}")
+                .bodyValue("{}")
                 .exchange()
                 .expectStatus().isBadRequest()
                 .expectHeader().contentType(MediaTypes.PROBLEM)
@@ -82,7 +82,7 @@ final class ResponseStatusAdviceTraitTest implements AdviceTraitTesting {
     void wrongJsonTypeRequestBody() {
         Problem problem = webTestClient().put().uri("http://localhost/api/json-object")
                 .contentType(MediaType.APPLICATION_JSON)
-                .syncBody("[]")
+                .bodyValue("[]")
                 .exchange()
                 .expectStatus().isBadRequest()
                 .expectHeader().contentType(MediaTypes.PROBLEM)
