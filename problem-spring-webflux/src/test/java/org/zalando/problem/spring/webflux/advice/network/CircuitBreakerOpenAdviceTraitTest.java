@@ -12,6 +12,7 @@ import org.zalando.problem.spring.webflux.advice.ProblemHandling;
 import javax.annotation.Nullable;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -23,6 +24,7 @@ class CircuitBreakerOpenAdviceTraitTest implements AdviceTraitTesting {
                 .exchange()
                 .expectStatus().isEqualTo(HttpStatus.SERVICE_UNAVAILABLE)
                 .expectHeader().contentType(MediaTypes.PROBLEM)
+                .expectHeader().value("Retry-After", equalTo("60"))
                 .expectBody(Problem.class).returnResult().getResponseBody();
 
         assertNotNull(problem);
