@@ -19,6 +19,7 @@ final class CircuitBreakerOpenAdviceTraitTest implements AdviceTraitTesting {
         mvc().perform(request(GET, "http://localhost/api/handler-circuit-breaker-open"))
                 .andExpect(status().isServiceUnavailable())
                 .andExpect(header().string("Content-Type", is("application/problem+json")))
+                .andExpect(header().longValue("Retry-After", 60))
                 .andExpect(jsonPath("$.type").doesNotExist())
                 .andExpect(jsonPath("$.title", is("Service Unavailable")))
                 .andExpect(jsonPath("$.status", is(503)))
