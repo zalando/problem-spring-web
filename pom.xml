@@ -155,6 +155,10 @@
                     <artifactId>jaxb-api</artifactId>
                 </exclusion>
                 <exclusion>
+                    <groupId>javax.activation</groupId>
+                    <artifactId>activation</artifactId>
+                </exclusion>
+                <exclusion>
                     <groupId>com.github.fge</groupId>
                     <artifactId>jackson-coreutils</artifactId>
                 </exclusion>
