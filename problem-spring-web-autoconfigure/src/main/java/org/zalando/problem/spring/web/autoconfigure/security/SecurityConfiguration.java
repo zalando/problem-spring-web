@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
@@ -14,6 +16,7 @@ import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
 @Configuration
 @ConditionalOnClass(WebSecurityConfigurerAdapter.class) //only when spring-security is in classpath
 @Import(SecurityProblemSupport.class)
+@Order(Ordered.LOWEST_PRECEDENCE - 21)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     private SecurityProblemSupport problemSupport;
