@@ -11,10 +11,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 import static org.apiguardian.api.API.Status.INTERNAL;
 import static org.apiguardian.api.API.Status.STABLE;
@@ -24,8 +22,6 @@ import static org.apiguardian.api.API.Status.STABLE;
  * Spring WebMVC's {@link HandlerExceptionResolver} as defined in {@link WebMvcConfigurationSupport}.
  *
  * Compatible with spring-webmvc 4.3.3.
- *
- * @see WebMvcConfigurationSupport#handlerExceptionResolver()
  */
 @API(status = STABLE)
 @Component
@@ -42,13 +38,13 @@ public class SecurityProblemSupport implements AuthenticationEntryPoint, AccessD
 
     @Override
     public void commence(final HttpServletRequest request, final HttpServletResponse response,
-            final AuthenticationException exception) throws IOException, ServletException {
+            final AuthenticationException exception) {
         resolver.resolveException(request, response, null, exception);
     }
 
     @Override
     public void handle(final HttpServletRequest request, final HttpServletResponse response,
-            final AccessDeniedException exception) throws IOException, ServletException {
+            final AccessDeniedException exception) {
         resolver.resolveException(request, response, null, exception);
     }
 
