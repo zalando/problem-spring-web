@@ -16,7 +16,7 @@ import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
 @Configuration
 @ConditionalOnClass(WebSecurityConfigurerAdapter.class) //only when spring-security is in classpath
 @Import(SecurityProblemSupport.class)
-@Order(Ordered.LOWEST_PRECEDENCE - 21)
+@Order(Ordered.LOWEST_PRECEDENCE - 21) //subtract random, uncommon number to reduce chances of collision with a user-selected order
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     private SecurityProblemSupport problemSupport;
