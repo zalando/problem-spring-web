@@ -10,18 +10,11 @@
     </parent>
 
     <artifactId>problem-spring-web-starter</artifactId>
-    <packaging>pom</packaging>
 
     <name>Problem: Spring Web Starter</name>
     <description>Spring starter module for Problem Spring Web</description>
 
     <dependencies>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-            <version>${spring-boot.version}</version>
-        </dependency>
-
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>problem-spring-web-autoconfigure</artifactId>
