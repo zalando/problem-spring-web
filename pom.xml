@@ -60,6 +60,7 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
 
+        <slf4j.version>1.7.29</slf4j.version>
         <jackson.version>2.10.0</jackson.version>
         <problem.version>0.23.0</problem.version>
         <spring.version>5.2.0.RELEASE</spring.version>
@@ -88,7 +89,7 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>1.7.29</version>
+            <version>${slf4j.version}</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -167,7 +168,7 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-ext</artifactId>
-            <version>1.7.29</version>
+            <version>${slf4j.version}</version>
             <optional>true</optional>
         </dependency>
         <dependency>
@@ -208,7 +209,7 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>jcl-over-slf4j</artifactId>
-            <version>1.7.29</version>
+            <version>${slf4j.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
