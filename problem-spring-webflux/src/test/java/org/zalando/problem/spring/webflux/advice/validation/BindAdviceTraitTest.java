@@ -7,6 +7,8 @@ import org.zalando.problem.spring.common.MediaTypes;
 import org.zalando.problem.spring.webflux.advice.AdviceTraitTesting;
 import org.zalando.problem.violations.ConstraintViolationProblem;
 
+import java.util.Locale;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -16,6 +18,7 @@ final class BindAdviceTraitTest implements AdviceTraitTesting {
 
     @Test
     void invalidRequestQueryParams() {
+        Locale.setDefault(Locale.ENGLISH);
         ConstraintViolationProblem problem = webTestClient().get().uri("http://localhost/api/handler-invalid-query-strings?page=-1&size=0")
                 .exchange()
                 .expectStatus().isBadRequest()
@@ -52,6 +55,7 @@ final class BindAdviceTraitTest implements AdviceTraitTesting {
 
     @Test
     void invalidRequestBody() {
+        Locale.setDefault(Locale.ENGLISH);
         ConstraintViolationProblem problem = webTestClient().post().uri("http://localhost/api/handler-invalid-body")
                 .contentType(MediaType.APPLICATION_JSON)
                 .syncBody("{\"name\":\"Bob\"}")

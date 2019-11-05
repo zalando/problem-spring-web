@@ -8,15 +8,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationServiceException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.security.test.context.support.WithSecurityContext;
-import org.springframework.security.test.context.support.WithSecurityContextFactory;
 import org.springframework.security.web.server.SecurityWebFilterChain;
+import org.springframework.security.web.server.authentication.ServerAuthenticationEntryPointFailureHandler;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.reactive.server.WebTestClient;
@@ -30,14 +26,7 @@ import org.springframework.web.reactive.config.WebFluxConfigurationSupport;
 import org.zalando.problem.ProblemModule;
 import org.zalando.problem.spring.common.MediaTypes;
 import org.zalando.problem.spring.webflux.advice.ProblemHandling;
-
-import java.lang.annotation.Annotation;
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import reactor.core.publisher.Mono;
 
 @SpringJUnitConfig
 @WebAppConfiguration
@@ -82,9 +71,9 @@ final class SecurityAdviceTraitTest {
     }
 
     @Test
-    @WithBrokenUser
     void notAbleToAuthenticate() {
-        webTestClient.get().uri("/")
+        webTestClient
+                .post().uri("/login")
                 .exchange()
                 .expectStatus().is5xxServerError()
                 .expectHeader().contentType(MediaTypes.PROBLEM)
@@ -92,24 +81,6 @@ final class SecurityAdviceTraitTest {
                 .jsonPath("$.title").isEqualTo("Internal Server Error")
                 .jsonPath("$.status").isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR.value())
                 .jsonPath("$.detail").isEqualTo("Something went wrong");
-    }
-
-    @Target({ ElementType.METHOD, ElementType.TYPE })
-    @Retention(RetentionPolicy.RUNTIME)
-    @Inherited
-    @Documented
-    @WithSecurityContext(factory = Foo.class)
-    @interface WithBrokenUser {
-
-    }
-
-    private static final class Foo implements WithSecurityContextFactory<Annotation> {
-        @Override
-        public SecurityContext createSecurityContext(final Annotation annotation) {
-            final SecurityContext context = SecurityContextHolder.createEmptyContext();
-            context.setAuthentication(new UsernamePasswordAuthenticationToken("user", "password"));
-            return context;
-        }
     }
 
     @Configuration
@@ -145,9 +116,11 @@ final class SecurityAdviceTraitTest {
         @Bean
         public SecurityWebFilterChain securityWebFilterChain(final ServerHttpSecurity http) {
             return http
-                    .authenticationManager(authentication -> {
-                        throw new AuthenticationServiceException("Something went wrong");
-                    })
+                    .formLogin()
+                    .loginPage("/login")
+                    .authenticationManager(authentication -> Mono.error(new AuthenticationServiceException("Something went wrong")))
+                    .authenticationFailureHandler(new ServerAuthenticationEntryPointFailureHandler(problemSupport))
+                    .and()
                     .csrf().disable()
                     .authorizeExchange()
                     .pathMatchers("/greet").hasRole("ADMIN")

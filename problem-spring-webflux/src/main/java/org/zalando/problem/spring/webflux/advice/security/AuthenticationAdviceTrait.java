@@ -26,6 +26,9 @@ public interface AuthenticationAdviceTrait extends AdviceTrait {
     @ExceptionHandler
     default Mono<ResponseEntity<Problem>> handleAuthentication(final AuthenticationException e,
             final ServerWebExchange request) {
+        if (e instanceof AuthenticationServiceException) {
+            return handleAuthenticationService((AuthenticationServiceException) e, request);
+        }
         return create(UNAUTHORIZED, e, request);
     }
 
