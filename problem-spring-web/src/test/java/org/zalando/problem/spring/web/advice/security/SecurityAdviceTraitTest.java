@@ -1,12 +1,15 @@
 package org.zalando.problem.spring.web.advice.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -29,6 +32,7 @@ import org.zalando.problem.spring.common.MediaTypes;
 import org.zalando.problem.spring.web.advice.ProblemHandling;
 
 import java.util.List;
+import java.util.Locale;
 
 import static org.hamcrest.Matchers.is;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.anonymous;
@@ -45,12 +49,21 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebAppConfiguration
 final class SecurityAdviceTraitTest {
 
+    @BeforeEach
+    void setUp() {
+        LocaleContextHolder.setLocale(Locale.ENGLISH);
+    }
+
+    @AfterEach
+    void tearDown() {
+        LocaleContextHolder.resetLocaleContext();
+    }
+
     @Configuration
     @EnableWebMvc
     @EnableWebSecurity
     @Import({MvcConfiguration.class, SecurityConfiguration.class})
     public static class TestConfiguration extends WebMvcConfigurationSupport {
-
         @Bean
         public MockMvc mvc(final WebApplicationContext context) {
             return MockMvcBuilders
