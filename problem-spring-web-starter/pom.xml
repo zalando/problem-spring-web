@@ -8,12 +8,7 @@
         <groupId>org.zalando</groupId>
         <version>0.26.0-SNAPSHOT</version>
     </parent>
-
     <artifactId>problem-spring-web-starter</artifactId>
-
-    <name>Problem: Spring Web Starter</name>
-    <description>Spring starter module for Problem Spring Web</description>
-
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
@@ -26,4 +21,15 @@
             <version>${project.version}</version>
         </dependency>
     </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <failIfNoTests>false</failIfNoTests>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>
