@@ -1,1 +1,5 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=org.zalando.problem.spring.web.autoconfigure.BasicExceptionHandling, org.zalando.problem.spring.web.autoconfigure.JacksonModulesRegistratorWithoutMvcAutoConfig, org.zalando.problem.spring.web.autoconfigure.JacksonModulesRegistrator, org.zalando.problem.spring.web.autoconfigure.security.SpringSecurityExceptionHandling, org.zalando.problem.spring.web.autoconfigure.security.SecurityConfiguration
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  org.zalando.problem.spring.web.autoconfigure.ProblemAutoConfiguration,\
+  org.zalando.problem.spring.web.autoconfigure.ProblemJacksonWebMvcAutoConfiguration, \
+  org.zalando.problem.spring.web.autoconfigure.ProblemJacksonAutoConfiguration, \
+  org.zalando.problem.spring.web.autoconfigure.security.ProblemSecurityAutoConfiguration
