@@ -1,5 +1,8 @@
 # Problem: Spring WebFlux
 
+[![Javadoc](http://javadoc.io/badge/org.zalando/problem-spring-webflux.svg)](http://www.javadoc.io/doc/org.zalando/problem-spring-webflux)
+[![Maven Central](https://img.shields.io/maven-central/v/org.zalando/problem-spring-webflux.svg)](https://maven-badges.herokuapp.com/maven-central/org.zalando/problem-spring-webflux)
+
 ## Installation
 
 Add the following dependency to your project:
@@ -8,7 +11,7 @@ Add the following dependency to your project:
 <dependency>
     <groupId>org.zalando</groupId>
     <artifactId>problem-spring-webflux</artifactId>
-    <version>${problem-spring-web.version}</version>
+    <version>${problem-spring-webflux.version}</version>
 </dependency>
 ```
 
