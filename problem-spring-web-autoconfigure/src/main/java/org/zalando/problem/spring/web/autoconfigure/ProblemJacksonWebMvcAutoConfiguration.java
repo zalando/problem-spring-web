@@ -25,7 +25,7 @@ import static org.apiguardian.api.API.Status.INTERNAL;
  * deactivates {@link WebMvcAutoConfiguration}.
  */
 @API(status = INTERNAL)
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @ConditionalOnWebApplication
 @ConditionalOnBean(WebMvcConfigurationSupport.class)
 @AutoConfigureBefore(WebMvcAutoConfiguration.class)

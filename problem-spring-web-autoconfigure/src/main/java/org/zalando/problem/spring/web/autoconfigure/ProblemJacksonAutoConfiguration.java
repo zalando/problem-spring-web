@@ -16,7 +16,7 @@ import static org.apiguardian.api.API.Status.INTERNAL;
  * enabled.
  */
 @API(status = INTERNAL)
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @ConditionalOnWebApplication
 @ConditionalOnMissingBean(ProblemJacksonWebMvcAutoConfiguration.class)
 public class ProblemJacksonAutoConfiguration {
