@@ -30,4 +30,5 @@ jobs:
     - name: Test
       run: ./mvnw verify -B
     - name: Coverage
+      if: github.event_name != 'pull_request'
       run: ./mvnw coveralls:report -B -D repoToken=${{ secrets.COVERALLS_TOKEN }}
