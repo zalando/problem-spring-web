@@ -58,6 +58,17 @@
         <spring-boot.version>2.2.4.RELEASE</spring-boot.version>
         <junit-jupiter.version>5.6.0</junit-jupiter.version>
     </properties>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-framework-bom</artifactId>
+                <version>${spring.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
     <dependencies>
         <dependency>
             <groupId>org.apiguardian</groupId>
