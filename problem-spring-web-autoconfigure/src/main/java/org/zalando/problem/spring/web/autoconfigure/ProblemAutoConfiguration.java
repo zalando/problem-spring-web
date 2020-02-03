@@ -12,7 +12,7 @@ import org.zalando.problem.spring.web.advice.AdviceTrait;
 import static org.apiguardian.api.API.Status.INTERNAL;
 
 @API(status = INTERNAL)
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @ConditionalOnWebApplication
 @ConditionalOnClass(WebSecurityConfigurer.class)
 public class ProblemAutoConfiguration {

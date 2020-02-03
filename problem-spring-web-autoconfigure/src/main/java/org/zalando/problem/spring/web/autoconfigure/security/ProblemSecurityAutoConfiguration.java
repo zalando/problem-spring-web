@@ -27,7 +27,7 @@ import static org.apiguardian.api.API.Status.INTERNAL;
 
 @API(status = INTERNAL)
 @AllArgsConstructor(onConstructor = @__(@Autowired))
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @ConditionalOnWebApplication
 @ConditionalOnClass(WebSecurityConfigurer.class)
 @ConditionalOnBean(WebSecurityConfiguration.class)
