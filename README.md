@@ -37,13 +37,13 @@ class for your [`@ControllerAdvice`](http://docs.spring.io/spring/docs/current/j
 - Reactive, non-blocking runtime for [problem-spring-webflux](problem-spring-webflux)
 - Spring 5
   - Spring 4 (or Spring Boot 1.5) users may use version [0.23.0](https://github.com/zalando/problem-spring-web/releases/tag/0.23.0)
-- Spring Security 5
+- Spring Security 5 (optional)
+- Failsafe 2.3.3 (optional)
 
 ## Installation and Configuration
 
 - [Spring Web MVC](problem-spring-web)
 - [Spring WebFlux](problem-spring-webflux)
-
 
 ## Customization
 

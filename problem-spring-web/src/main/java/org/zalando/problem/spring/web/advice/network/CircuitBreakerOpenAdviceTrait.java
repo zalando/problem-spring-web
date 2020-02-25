@@ -10,8 +10,6 @@ import org.zalando.problem.Problem;
 import org.zalando.problem.Status;
 import org.zalando.problem.spring.web.advice.AdviceTrait;
 
-import java.time.Duration;
-
 import static org.apiguardian.api.API.Status.EXPERIMENTAL;
 import static org.apiguardian.api.API.Status.INTERNAL;
 
@@ -24,8 +22,9 @@ public interface CircuitBreakerOpenAdviceTrait extends AdviceTrait {
             final CircuitBreakerOpenException exception,
             final NativeWebRequest request) {
 
-        final Duration delay = exception.getCircuitBreaker().getDelay();
-        final HttpHeaders headers = retryAfter(delay.getSeconds());
+        final long delay = exception.getCircuitBreaker()
+                .getRemainingDelay().getSeconds();
+        final HttpHeaders headers = retryAfter(delay);
         return create(Status.SERVICE_UNAVAILABLE, exception, request, headers);
     }
 
