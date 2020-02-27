@@ -20,6 +20,8 @@ The way this library works is based on what we call *advice traits*. An advice t
 placed in a single method interface. Those advice traits can be combined freely and don't require to use a common base
 class for your [`@ControllerAdvice`](http://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/web/bind/annotation/ControllerAdvice.html).
 
+:mag_right: Please check out [Baeldung: A Guide to the Problem Spring Web Library](https://www.baeldung.com/problem-spring-web) for a detailed introduction!
+
 ## Features
 
 - lets you choose traits *à la carte*
@@ -231,6 +233,7 @@ more details, check the [contribution guidelines](.github/CONTRIBUTING.md).
 
 ## Credits and references
 
+- [Baeldung: A Guide to the Problem Spring Web Library](https://www.baeldung.com/problem-spring-web)
 - [Problem Details for HTTP APIs](http://tools.ietf.org/html/rfc7807)
 - [Problem library](https://github.com/zalando/problem)
 - [Exception Handling in Spring MVC](https://spring.io/blog/2013/11/01/exception-handling-in-spring-mvc#using-controlleradvice-classes)
