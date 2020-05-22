@@ -60,6 +60,23 @@ need arises. All of the following aspects can be overridden and tweaked:
 | Fallback            | `AdviceTrait.fallback(..)`  | `application/problem+json`                                                                            |
 | Post-Processing     | `AdviceTrait.process(..)`   | n/a                                                                                                   |
 
+The following example customizes the `MissingServletRequestParameterAdviceTrait` by adding a `parameter` extension field to the `Problem`:
+
+```java
+@ControllerAdvice
+public class MissingRequestParameterExceptionHandler implements MissingServletRequestParameterAdviceTrait {
+    @Override
+    public ProblemBuilder prepare(Throwable throwable, StatusType status, URI type) {
+        var exception = (MissingServletRequestParameterException) throwable;
+        return Problem.builder()
+                      .withTitle(status.getReasonPhrase())
+                      .withStatus(status)
+                      .withDetail(exception.getMessage())
+                      .with("parameter", exception.getParameterName());
+    }
+}
+```
+
 ## Usage
 
 Assuming there is a controller like this:
