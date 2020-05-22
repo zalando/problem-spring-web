@@ -49,8 +49,8 @@ class for your [`@ControllerAdvice`](http://docs.spring.io/spring/docs/current/j
 
 ## Customization
 
-The problem handling process provided by `AdviceTrait` is built in a way that it allows for customization whenever the
-need arises. All of the following aspects can be overridden and tweaked:
+The problem handling process provided by `AdviceTrait` is built in a way that allows for customization whenever the
+need arises. All of the following aspects (and more) can be customized by implementing the appropriate advice trait interface:
 
 | Aspect              | Method(s)                   | Default                                                                                               |
 |---------------------|-----------------------------|-------------------------------------------------------------------------------------------------------|
