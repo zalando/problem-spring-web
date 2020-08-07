@@ -19,11 +19,11 @@
         </license>
     </licenses>
     <modules>
-        <module>problem-violations</module>
         <module>problem-spring-common</module>
         <module>problem-spring-web</module>
-        <module>problem-spring-web-starter</module>
         <module>problem-spring-web-autoconfigure</module>
+        <module>problem-spring-web-starter</module>
+        <module>problem-violations</module>
     </modules>
     <developers>
         <developer>
@@ -140,28 +140,32 @@
         <dependency>
             <groupId>com.atlassian.oai</groupId>
             <artifactId>swagger-request-validator-springmvc</artifactId>
-            <version>2.9.0</version>
+            <version>2.11.0</version>
             <optional>true</optional>
             <exclusions>
                 <exclusion>
+                    <groupId>com.github.fge</groupId>
+                    <artifactId>jackson-coreutils</artifactId>
+                </exclusion>
+                <exclusion>
                     <groupId>commons-logging</groupId>
                     <artifactId>commons-logging</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>javax.mail</groupId>
-                    <artifactId>mailapi</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>javax.xml.bind</groupId>
-                    <artifactId>jaxb-api</artifactId>
                 </exclusion>
                 <exclusion>
                     <groupId>javax.activation</groupId>
                     <artifactId>activation</artifactId>
                 </exclusion>
                 <exclusion>
-                    <groupId>com.github.fge</groupId>
-                    <artifactId>jackson-coreutils</artifactId>
+                    <groupId>javax.mail</groupId>
+                    <artifactId>mailapi</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>jakarta.validation</groupId>
+                    <artifactId>jakarta.validation-api</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>javax.xml.bind</groupId>
+                    <artifactId>jaxb-api</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
