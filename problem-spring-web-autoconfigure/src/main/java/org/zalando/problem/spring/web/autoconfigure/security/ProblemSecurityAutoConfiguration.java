@@ -2,7 +2,6 @@ package org.zalando.problem.spring.web.autoconfigure.security;
 
 import lombok.AllArgsConstructor;
 import org.apiguardian.api.API;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -26,7 +25,7 @@ import org.zalando.problem.spring.web.autoconfigure.ProblemAutoConfiguration;
 import static org.apiguardian.api.API.Status.INTERNAL;
 
 @API(status = INTERNAL)
-@AllArgsConstructor(onConstructor = @__(@Autowired))
+@AllArgsConstructor
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnWebApplication
 @ConditionalOnClass(WebSecurityConfigurer.class)
