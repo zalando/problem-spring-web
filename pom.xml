@@ -173,7 +173,7 @@
             <!-- CVE-2017-18640 -->
             <groupId>org.yaml</groupId>
             <artifactId>snakeyaml</artifactId>
-            <version>1.26</version>
+            <version>1.27</version>
             <optional>true</optional>
         </dependency>
         <dependency>
