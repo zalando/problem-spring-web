@@ -56,7 +56,7 @@
         <spring.version>5.2.9.RELEASE</spring.version>
         <spring-security.version>5.3.4.RELEASE</spring-security.version>
         <spring-boot.version>2.3.4.RELEASE</spring-boot.version>
-        <junit-jupiter.version>5.6.2</junit-jupiter.version>
+        <junit-jupiter.version>5.7.0</junit-jupiter.version>
     </properties>
     <dependencyManagement>
         <dependencies>
