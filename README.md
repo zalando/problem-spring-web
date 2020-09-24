@@ -140,9 +140,9 @@ Content-Type: application/problem+json
 
 ### Stack traces and causal chains
 
-**Before you continue**, please read the section about [*Stack traces and causal chains*]
-(https://github.com/zalando/problem#stack-traces-and-causal-chains) in [zalando/problem]
-(https://github.com/zalando/problem).
+**Before you continue**, please read the section about 
+[*Stack traces and causal chains*](https://github.com/zalando/problem#stack-traces-and-causal-chains) 
+in [zalando/problem](https://github.com/zalando/problem).
 
 In case you want to enable stack traces, please configure your `ProblemModule` as follows:
 
