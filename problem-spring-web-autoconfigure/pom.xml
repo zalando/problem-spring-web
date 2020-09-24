@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.zalando</groupId>
         <artifactId>problem-spring-parent</artifactId>
-        <version>0.26.2</version>
+        <version>0.27.0-SNAPSHOT</version>
     </parent>
     <artifactId>problem-spring-web-autoconfigure</artifactId>
     <dependencies>
