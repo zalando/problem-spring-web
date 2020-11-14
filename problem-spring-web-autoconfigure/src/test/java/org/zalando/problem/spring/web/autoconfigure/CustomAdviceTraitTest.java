@@ -3,6 +3,7 @@ package org.zalando.problem.spring.web.autoconfigure;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,7 +14,7 @@ import org.zalando.problem.spring.web.advice.ProblemHandling;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-@EnableAutoConfiguration
+@EnableAutoConfiguration(exclude = SecurityAutoConfiguration.class)
 final class CustomAdviceTraitTest {
 
     @Configuration
