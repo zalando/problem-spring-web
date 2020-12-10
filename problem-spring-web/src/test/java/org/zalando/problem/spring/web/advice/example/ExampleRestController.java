@@ -189,6 +189,13 @@ public class ExampleRestController {
 
     @RequestMapping(path = "/handler-multipart", method = POST)
     public ResponseEntity<Void> conversion(
+            @RequestPart("payload1") final byte[] payload1,
+            @RequestPart("payload2") final byte[] payload2) {
+        return ResponseEntity.ok().build();
+    }
+
+    @RequestMapping(path = "/handler-multipart-files", method = POST)
+    public ResponseEntity<Void> conversion(
             @RequestPart("payload1") final MultipartFile payload1,
             @RequestPart("payload2") final MultipartFile payload2) {
         return ResponseEntity.ok().build();

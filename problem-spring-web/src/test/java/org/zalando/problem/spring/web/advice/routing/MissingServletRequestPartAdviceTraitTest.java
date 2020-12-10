@@ -5,7 +5,7 @@ import org.zalando.problem.spring.web.advice.AdviceTraitTesting;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.fileUpload;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -13,9 +13,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 final class MissingServletRequestPartAdviceTraitTest implements AdviceTraitTesting {
 
     @Test
-    @SuppressWarnings("deprecation") // TODO use multipart(String) when Spring 4 support is no longer needed
-    void multipart() throws Exception {
-        mvc().perform(fileUpload("http://localhost/api/handler-multipart")
+    void handlesMultipart() throws Exception {
+        mvc().perform(multipart("http://localhost/api/handler-multipart")
                 .file("payload1", new byte[]{0x1}))
                 .andExpect(status().isBadRequest())
                 .andExpect(header().string("Content-Type", is("application/problem+json")))

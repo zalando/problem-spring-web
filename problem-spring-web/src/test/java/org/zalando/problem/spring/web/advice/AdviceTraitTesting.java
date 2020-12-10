@@ -1,6 +1,7 @@
 package org.zalando.problem.spring.web.advice;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.http.converter.ByteArrayHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.http.converter.xml.MappingJackson2XmlHttpMessageConverter;
 import org.springframework.test.web.servlet.MockMvc;
@@ -29,7 +30,8 @@ public interface AdviceTraitTesting {
                 .setControllerAdvice(unit())
                 .setMessageConverters(
                         new MappingJackson2HttpMessageConverter(mapper),
-                        new MappingJackson2XmlHttpMessageConverter())
+                        new MappingJackson2XmlHttpMessageConverter(),
+                        new ByteArrayHttpMessageConverter())
                 .build();
     }
 
