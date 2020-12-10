@@ -170,6 +170,19 @@
             </exclusions>
         </dependency>
         <dependency>
+            <!-- CVE-2020-13956 -->
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5.13</version>
+            <optional>true</optional>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
             <!-- CVE-2017-18640 -->
             <groupId>org.yaml</groupId>
             <artifactId>snakeyaml</artifactId>
