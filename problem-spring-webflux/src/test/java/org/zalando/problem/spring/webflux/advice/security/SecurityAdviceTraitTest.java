@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.reactive.config.EnableWebFlux;
 import org.springframework.web.reactive.config.WebFluxConfigurationSupport;
-import org.zalando.problem.ProblemModule;
+import org.zalando.problem.jackson.ProblemModule;
 import org.zalando.problem.spring.common.MediaTypes;
 import org.zalando.problem.spring.webflux.advice.ProblemHandling;
 

@@ -8,7 +8,7 @@ import org.springframework.test.web.reactive.server.MockServerConfigurer;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.server.adapter.WebHttpHandlerBuilder;
-import org.zalando.problem.ProblemModule;
+import org.zalando.problem.jackson.ProblemModule;
 import org.zalando.problem.spring.webflux.advice.example.ExampleRestController;
 import org.zalando.problem.violations.ConstraintViolationProblemModule;
 
