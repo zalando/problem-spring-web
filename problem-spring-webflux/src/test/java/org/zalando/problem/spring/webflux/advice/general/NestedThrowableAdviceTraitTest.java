@@ -3,7 +3,7 @@ package org.zalando.problem.spring.webflux.advice.general;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
-import org.zalando.problem.ProblemModule;
+import org.zalando.problem.jackson.ProblemModule;
 import org.zalando.problem.spring.common.MediaTypes;
 import org.zalando.problem.spring.webflux.advice.AdviceTraitTesting;
 import org.zalando.problem.spring.webflux.advice.ProblemHandling;

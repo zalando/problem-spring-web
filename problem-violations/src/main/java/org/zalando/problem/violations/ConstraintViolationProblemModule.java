@@ -9,7 +9,7 @@ import org.apiguardian.api.API;
 import static org.apiguardian.api.API.Status.STABLE;
 
 /**
- * A companion to {@link org.zalando.problem.ProblemModule} to enable serialization
+ * A companion to {@link org.zalando.problem.jackson.ProblemModule} to enable serialization
  * of {@link ConstraintViolationProblem} and {@link Violation} without relying on auto detection.
  */
 @API(status = STABLE)

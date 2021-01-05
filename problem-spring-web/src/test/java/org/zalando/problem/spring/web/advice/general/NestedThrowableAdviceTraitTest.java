@@ -2,7 +2,7 @@ package org.zalando.problem.spring.web.advice.general;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
-import org.zalando.problem.ProblemModule;
+import org.zalando.problem.jackson.ProblemModule;
 import org.zalando.problem.spring.web.advice.AdviceTraitTesting;
 import org.zalando.problem.spring.web.advice.ProblemHandling;
 
