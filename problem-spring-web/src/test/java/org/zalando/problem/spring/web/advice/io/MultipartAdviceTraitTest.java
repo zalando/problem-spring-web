@@ -15,7 +15,7 @@ final class MultipartAdviceTraitTest implements AdviceTraitTesting {
 
     @Test
     void multipart() throws Exception {
-        mvc().perform(request(POST, "http://localhost/api/handler-multipart-files"))
+        mvc().perform(request(POST, "http://localhost/api/handler-multipart"))
                 .andExpect(status().isBadRequest())
                 .andExpect(header().string("Content-Type", is("application/problem+json")))
                 .andExpect(jsonPath("$.type").doesNotExist())
