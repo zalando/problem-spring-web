@@ -1,0 +1,52 @@
+version: 2
+updates:
+- package-ecosystem: maven
+  directory: "/"
+  schedule:
+    interval: daily
+    time: "04:00"
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: com.atlassian.oai:swagger-request-validator-springmvc
+    versions:
+    - 2.12.1
+    - 2.13.0
+    - 2.15.0
+    - 2.17.0
+  - dependency-name: org.springframework.boot:spring-boot-starter-test
+    versions:
+    - 2.4.3
+    - 2.4.4
+  - dependency-name: org.springframework.boot:spring-boot-autoconfigure
+    versions:
+    - 2.4.3
+    - 2.4.4
+  - dependency-name: org.springframework.boot:spring-boot-autoconfigure-processor
+    versions:
+    - 2.4.3
+    - 2.4.4
+  - dependency-name: org.owasp:dependency-check-maven
+    versions:
+    - 6.1.0
+    - 6.1.2
+  - dependency-name: org.springframework:spring-webflux
+    versions:
+    - 5.3.4
+  - dependency-name: org.springframework:spring-context
+    versions:
+    - 5.3.4
+  - dependency-name: org.springframework:spring-test
+    versions:
+    - 5.3.4
+  - dependency-name: org.springframework:spring-webmvc
+    versions:
+    - 5.3.4
+  - dependency-name: org.springframework:spring-web
+    versions:
+    - 5.3.4
+  - dependency-name: org.springframework:spring-framework-bom
+    versions:
+    - 5.3.4
+  - dependency-name: org.hibernate.validator:hibernate-validator
+    versions:
+    - 7.0.0.Final
