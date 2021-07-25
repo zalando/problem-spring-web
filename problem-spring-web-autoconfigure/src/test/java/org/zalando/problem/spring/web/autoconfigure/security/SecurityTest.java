@@ -2,37 +2,44 @@ package org.zalando.problem.spring.web.autoconfigure.security;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.zalando.problem.spring.web.advice.AdviceTrait;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.web.servlet.MockMvc;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
-@EnableAutoConfiguration
+@AutoConfigureMockMvc
+@DirtiesContext
 final class SecurityTest {
-
-    @Configuration
-    static class TestApplication extends WebSecurityConfigurerAdapter {
-
-        @Override
-        public void configure(final HttpSecurity http) throws Exception {
-            http.csrf().disable();
-            http.httpBasic().disable();
-            http.sessionManagement().disable();
-            http.authorizeRequests()
-                    .anyRequest().authenticated();
-        }
-
-    }
+    @Autowired
+    private MockMvc mockMvc;
 
     @Test
-    void shouldConfigureExceptionHandling(
-            @Autowired final AdviceTrait trait) {
-        assertThat(trait).isExactlyInstanceOf(SecurityExceptionHandling.class);
+    void shouldConfigureExceptionHandling() throws Exception{
+        mockMvc.perform(get("/not-exists-url"))
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.status", is(401)))
+                .andExpect(jsonPath("$.title", is("Unauthorized")))
+                .andExpect(jsonPath("$.detail", is("Full authentication is required to access this resource")));
     }
 
+    @SpringBootApplication
+    static class TestApp {
+        @Configuration(proxyBeanMethods = false)
+        class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+            @Override
+            protected void configure(HttpSecurity http) throws Exception {
+                http.authorizeRequests().anyRequest().authenticated();
+            }
+        }
+    }
 }
