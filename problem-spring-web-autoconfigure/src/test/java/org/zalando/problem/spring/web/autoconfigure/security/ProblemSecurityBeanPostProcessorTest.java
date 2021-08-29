@@ -2,6 +2,8 @@ package org.zalando.problem.spring.web.autoconfigure.security;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.BeanCreationException;
+import org.springframework.beans.factory.BeanInitializationException;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.security.config.annotation.ObjectPostProcessor;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -13,9 +15,12 @@ import java.util.HashMap;
 import java.util.function.Consumer;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 
 
 class ProblemSecurityBeanPostProcessorTest {
@@ -52,5 +57,23 @@ class ProblemSecurityBeanPostProcessorTest {
     @Test
     void shouldBeNotConfiguredWhenBeanIsNotHttpSecurity() {
         assertThat(processor.postProcessAfterInitialization("test", "notHttpSecurity")).isEqualTo("test");
+    }
+
+    @SuppressWarnings("unchecked")
+    @Test
+    void shouldBeThrowBeanCreationExceptionWhenRegisterExceptionHandling() throws Exception {
+        final ObjectPostProcessor<Object> objectPostProcessor = mock(ObjectPostProcessor.class);
+        final AuthenticationManagerBuilder authenticationManagerBuilder = mock(AuthenticationManagerBuilder.class);
+        final SecurityProblemSupport securityProblemSupport = mock(SecurityProblemSupport.class);
+        final HttpSecurity http = spy(new HttpSecurity(objectPostProcessor, authenticationManagerBuilder, new HashMap<>()));
+
+        doAnswer(answer -> {
+            final Consumer<SecurityProblemSupport> consumer = (Consumer<SecurityProblemSupport>) answer.getArguments()[0];
+            consumer.accept(securityProblemSupport);
+            return null;
+        }).when(provider).ifAvailable(any(Consumer.class));
+        doThrow(new BeanInitializationException("test")).when(http).exceptionHandling();
+
+        assertThatThrownBy(() -> processor.postProcessAfterInitialization(http, "httpSecurity")).isExactlyInstanceOf(BeanCreationException.class);
     }
 }
