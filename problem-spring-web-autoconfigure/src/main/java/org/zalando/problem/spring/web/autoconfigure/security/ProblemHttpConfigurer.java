@@ -1,7 +1,7 @@
 package org.zalando.problem.spring.web.autoconfigure.security;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanInstantiationException;
+import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -19,13 +19,15 @@ public class ProblemHttpConfigurer extends AbstractHttpConfigurer<ProblemHttpCon
             return;
         }
         final ObjectProvider<SecurityProblemSupport> provider = applicationContext.getBeanProvider(SecurityProblemSupport.class);
-        provider.ifAvailable(support -> {
-            try {
-                http.exceptionHandling().authenticationEntryPoint(support).accessDeniedHandler(support);
-            } catch (final Exception cause) {
-                throw new BeanInstantiationException(getClass(), "Fail to register HttpSecurity's exceptionHandling", cause);
-            }
-            log.info("ProblemHttpConfigurer register HttpSecurity's exceptionHandling");
-        });
+        provider.ifAvailable(support -> register(http, support));
+    }
+
+    private void register(final HttpSecurity http, final SecurityProblemSupport support) {
+        try {
+            http.exceptionHandling().authenticationEntryPoint(support).accessDeniedHandler(support);
+        } catch (final Exception cause) {
+            throw new BeanCreationException("Fail to register HttpSecurity's exceptionHandling", cause);
+        }
+        log.info("Register HttpSecurity's exceptionHandling");
     }
 }
