@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.zalando</groupId>
     <artifactId>problem-spring-parent</artifactId>
-    <version>0.27.0-SNAPSHOT</version>
+    <version>0.28.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <url>https://github.com/zalando/problem-spring-web</url>
     <organization>
