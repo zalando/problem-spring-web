@@ -7,25 +7,28 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 import static org.apiguardian.api.API.Status.INTERNAL;
 import static org.apiguardian.api.API.Status.STABLE;
 
 /**
- * A compound {@link AuthenticationEntryPoint} and {@link AccessDeniedHandler} that delegates exceptions to
- * Spring WebMVC's {@link HandlerExceptionResolver} as defined in {@link WebMvcConfigurationSupport}.
+ * A compound {@link AuthenticationEntryPoint}, {@link AuthenticationFailureHandler} and {@link AccessDeniedHandler}
+ * that delegates exceptions to Spring WebMVC's {@link HandlerExceptionResolver} as defined in {@link WebMvcConfigurationSupport}.
  *
  * Compatible with spring-webmvc 4.3.3.
  */
 @API(status = STABLE)
 @Component
-public class SecurityProblemSupport implements AuthenticationEntryPoint, AccessDeniedHandler {
+public class SecurityProblemSupport implements AuthenticationEntryPoint, AuthenticationFailureHandler, AccessDeniedHandler {
 
     private final HandlerExceptionResolver resolver;
 
@@ -40,6 +43,12 @@ public class SecurityProblemSupport implements AuthenticationEntryPoint, AccessD
     public void commence(final HttpServletRequest request, final HttpServletResponse response,
             final AuthenticationException exception) {
         resolver.resolveException(request, response, null, exception);
+    }
+
+    @Override
+    public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
+    		AuthenticationException exception) throws IOException, ServletException {
+    	resolver.resolveException(request, response, null, exception);
     }
 
     @Override
