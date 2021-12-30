@@ -56,6 +56,13 @@ class ProblemSecurityBeanPostProcessorTest {
     }
 
     @Test
+    void shouldBeFailWhenThrowException() {
+        doThrow(RuntimeException.class).when(http).getConfigurer(ProblemHttpConfigurer.class);
+
+        assertThatThrownBy(() -> processor.postProcessAfterInitialization(http, "httpSecurity")).isInstanceOf(BeanCreationException.class);
+    }
+
+    @Test
     void shouldBeNotConfiguredWhenBeanIsNotHttpSecurity() {
         assertThat(processor.postProcessAfterInitialization("test", "notHttpSecurity")).isEqualTo("test");
     }
