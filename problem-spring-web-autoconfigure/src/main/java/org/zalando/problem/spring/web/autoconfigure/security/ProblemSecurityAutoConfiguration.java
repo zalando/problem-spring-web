@@ -33,7 +33,7 @@ public class ProblemSecurityAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(AdviceTrait.class)
-    public AdviceTrait securityExceptionHandling() {
+    public SecurityExceptionHandling securityExceptionHandling() {
         return new SecurityExceptionHandling();
     }
 

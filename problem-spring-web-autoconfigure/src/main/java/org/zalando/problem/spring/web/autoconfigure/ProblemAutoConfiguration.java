@@ -19,7 +19,7 @@ public class ProblemAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(AdviceTrait.class)
-    public AdviceTrait exceptionHandling() {
+    public ExceptionHandling exceptionHandling() {
         return new ExceptionHandling();
     }
 
