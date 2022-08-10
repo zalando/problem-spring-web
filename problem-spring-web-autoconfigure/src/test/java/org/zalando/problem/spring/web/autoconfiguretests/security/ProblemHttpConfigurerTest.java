@@ -1,4 +1,4 @@
-package org.zalando.problem.spring.web.autoconfigure.security;
+package org.zalando.problem.spring.web.autoconfiguretests.security;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,6 +14,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.util.ClassUtils;
 import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
+import org.zalando.problem.spring.web.autoconfigure.security.ProblemHttpConfigurer;
 
 import java.util.HashMap;
 import java.util.Map;

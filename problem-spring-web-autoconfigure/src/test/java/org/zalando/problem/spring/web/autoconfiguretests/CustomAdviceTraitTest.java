@@ -1,4 +1,4 @@
-package org.zalando.problem.spring.web.autoconfigure;
+package org.zalando.problem.spring.web.autoconfiguretests;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

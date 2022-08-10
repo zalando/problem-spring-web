@@ -9,7 +9,7 @@ import static org.apiguardian.api.API.Status.INTERNAL;
 
 @API(status = INTERNAL)
 @ControllerAdvice
-final class SecurityExceptionHandling
+public final class SecurityExceptionHandling
         implements ProblemHandling, SecurityAdviceTrait {
 
 }
