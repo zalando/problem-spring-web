@@ -8,7 +8,8 @@ import org.springframework.boot.test.context.runner.WebApplicationContextRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.DefaultSecurityFilterChain;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.zalando.problem.spring.web.advice.AdviceTrait;
 import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
@@ -65,9 +66,11 @@ class ProblemSecurityAutoConfigurationTest {
         }
 
         @Configuration
-        static class SecurityConfig extends WebSecurityConfigurerAdapter {
-            @Override
-            public void configure(final HttpSecurity http) {
+        static class SecurityConfig {
+            @Bean
+            public SecurityFilterChain configure(final HttpSecurity http) throws Exception {
+                DefaultSecurityFilterChain build = http.build();
+                return build;
             }
         }
     }

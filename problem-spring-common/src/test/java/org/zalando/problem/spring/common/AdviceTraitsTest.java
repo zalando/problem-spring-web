@@ -12,9 +12,9 @@ import org.springframework.http.ResponseEntity;
 import org.zalando.problem.Problem;
 import org.zalando.problem.Status;
 import uk.org.lidalia.slf4jext.Level;
-import uk.org.lidalia.slf4jtest.LoggingEvent;
-import uk.org.lidalia.slf4jtest.TestLogger;
-import uk.org.lidalia.slf4jtest.TestLoggerFactory;
+import com.github.valfirst.slf4jtest.LoggingEvent;
+import com.github.valfirst.slf4jtest.TestLogger;
+import com.github.valfirst.slf4jtest.TestLoggerFactory;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -54,7 +54,7 @@ final class AdviceTraitsTest {
         assertThat(event.getLevel(), is(Level.WARN));
         assertThat(event.getMessage(), is("{}: {}"));
         assertThat(event.getArguments(), contains(status.getReasonPhrase(), "Test message"));
-        assertThat(event.getThrowable().orNull(), is(nullValue()));
+        assertThat(event.getThrowable().orElse(null), is(nullValue()));
     }
 
     @ParameterizedTest
@@ -68,7 +68,7 @@ final class AdviceTraitsTest {
         assertThat(event.getLevel(), is(Level.ERROR));
         assertThat(event.getMessage(), is(status.getReasonPhrase()));
         assertThat(event.getArguments(), emptyIterable());
-        assertThat(event.getThrowable().orNull(), is(throwable));
+        assertThat(event.getThrowable().orElse(null), is(throwable));
     }
 
     @ParameterizedTest

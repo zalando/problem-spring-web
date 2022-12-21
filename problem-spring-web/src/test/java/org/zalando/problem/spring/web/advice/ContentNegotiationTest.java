@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.zalando.problem.spring.common.MediaTypes;
 
-import javax.servlet.ServletException;
+import jakarta.servlet.ServletException;
 
 import static org.hamcrest.Matchers.emptyString;
 import static org.hamcrest.Matchers.not;

@@ -26,7 +26,7 @@ final class ResponseStatusAdviceTraitTest implements AdviceTraitTesting {
         assertThat(problem.getType().toString(), is("about:blank"));
         assertThat(problem.getTitle(), is("Bad Request"));
         assertThat(problem.getStatus(), is(Status.BAD_REQUEST));
-        assertThat(problem.getDetail(), containsString("Request body is missing"));
+        assertThat(problem.getDetail(), containsString("No request body"));
     }
 
     @Test
@@ -42,7 +42,7 @@ final class ResponseStatusAdviceTraitTest implements AdviceTraitTesting {
         assertThat(problem.getType().toString(), is("about:blank"));
         assertThat(problem.getTitle(), is("Bad Request"));
         assertThat(problem.getStatus(), is(Status.BAD_REQUEST));
-        assertThat(problem.getDetail(), containsString("Unexpected end-of-input"));
+        assertThat(problem.getDetail(), containsString("Failed to read HTTP message"));
     }
 
     @Test
@@ -58,8 +58,7 @@ final class ResponseStatusAdviceTraitTest implements AdviceTraitTesting {
         assertThat(problem.getType().toString(), is("about:blank"));
         assertThat(problem.getTitle(), is("Bad Request"));
         assertThat(problem.getStatus(), is(Status.BAD_REQUEST));
-        assertThat(problem.getDetail(), containsString("java.math.BigDecimal"));
-        assertThat(problem.getDetail(), containsString("foobar"));
+        assertThat(problem.getDetail(), containsString("Failed to read HTTP message"));
     }
 
     @Test
@@ -75,7 +74,7 @@ final class ResponseStatusAdviceTraitTest implements AdviceTraitTesting {
         assertThat(problem.getType().toString(), is("about:blank"));
         assertThat(problem.getTitle(), is("Bad Request"));
         assertThat(problem.getStatus(), is(Status.BAD_REQUEST));
-        assertThat(problem.getDetail(), containsString("org.zalando.problem.spring.webflux.advice.example.User"));
+        assertThat(problem.getDetail(), containsString("Failed to read HTTP message"));
     }
 
     @Test
@@ -91,8 +90,7 @@ final class ResponseStatusAdviceTraitTest implements AdviceTraitTesting {
         assertThat(problem.getType().toString(), is("about:blank"));
         assertThat(problem.getTitle(), is("Bad Request"));
         assertThat(problem.getStatus(), is(Status.BAD_REQUEST));
-        assertThat(problem.getDetail(), containsString("java.util.LinkedHashMap"));
-        assertThat(problem.getDetail(), containsString("START_ARRAY"));
+        assertThat(problem.getDetail(), containsString("Failed to read HTTP message"));
 
     }
 
@@ -138,7 +136,7 @@ final class ResponseStatusAdviceTraitTest implements AdviceTraitTesting {
         assertThat(problem.getType().toString(), is("about:blank"));
         assertThat(problem.getTitle(), is("Bad Request"));
         assertThat(problem.getStatus(), is(Status.BAD_REQUEST));
-        assertThat(problem.getDetail(), containsString("Failed to convert"));
+        assertThat(problem.getDetail(), containsString("Type mismatch"));
     }
 
     @Test
@@ -180,7 +178,7 @@ final class ResponseStatusAdviceTraitTest implements AdviceTraitTesting {
         assertThat(problem.getType().toString(), is("about:blank"));
         assertThat(problem.getTitle(), is("Not Found"));
         assertThat(problem.getStatus(), is(Status.NOT_FOUND));
-        assertThat(problem.getDetail(), containsString("No matching handler"));
+        assertThat(problem.getDetail(), containsString("404 NOT_FOUND"));
     }
 
     @Test
@@ -193,7 +191,7 @@ final class ResponseStatusAdviceTraitTest implements AdviceTraitTesting {
         assertThat(problem.getType().toString(), is("about:blank"));
         assertThat(problem.getTitle(), is("Not Found"));
         assertThat(problem.getStatus(), is(Status.NOT_FOUND));
-        assertThat(problem.getDetail(), containsString("No matching handler"));
+        assertThat(problem.getDetail(), containsString("404 NOT_FOUND"));
     }
 
 }

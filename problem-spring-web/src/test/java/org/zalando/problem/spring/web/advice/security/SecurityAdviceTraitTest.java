@@ -1,6 +1,10 @@
 package org.zalando.problem.spring.web.advice.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import java.util.List;
+import java.util.Locale;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,9 +19,9 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -36,13 +40,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupp
 import org.zalando.problem.jackson.ProblemModule;
 import org.zalando.problem.spring.common.MediaTypes;
 import org.zalando.problem.spring.web.advice.ProblemHandling;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.List;
-import java.util.Locale;
 
 import static org.hamcrest.Matchers.is;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.anonymous;
@@ -98,23 +95,24 @@ final class SecurityAdviceTraitTest {
 
     @Configuration
     @Import(SecurityProblemSupport.class)
-    public static class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+    public static class SecurityConfiguration {
 
         @Autowired
         private SecurityProblemSupport problemSupport;
 
-        @Override
-        public void configure(final HttpSecurity http) throws Exception {
+        @Bean
+        public SecurityFilterChain configure(final HttpSecurity http) throws Exception {
             http.csrf().disable();
             http.httpBasic().disable();
             http.sessionManagement().disable();
             http.authorizeRequests()
-                    .antMatchers("/greet").hasRole("ADMIN")
+                    .requestMatchers("/greet").hasRole("ADMIN")
                     .anyRequest().authenticated();
             http.exceptionHandling()
                     .authenticationEntryPoint(problemSupport)
                     .accessDeniedHandler(problemSupport);
             http.addFilterBefore(new AuthenticationFilter(problemSupport), LogoutFilter.class);
+            return http.build();
         }
 
     }
@@ -128,7 +126,7 @@ final class SecurityAdviceTraitTest {
 
 		@Override
 		public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
-				throws AuthenticationException, IOException, ServletException {
+				throws AuthenticationException {
 			throw new BadCredentialsException("invalid pass");
 		}
     	

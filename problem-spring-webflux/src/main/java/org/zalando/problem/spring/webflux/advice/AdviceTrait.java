@@ -27,7 +27,7 @@ import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
-import static javax.servlet.RequestDispatcher.ERROR_EXCEPTION;
+import static jakarta.servlet.RequestDispatcher.ERROR_EXCEPTION;
 import static org.apiguardian.api.API.Status.STABLE;
 
 /**

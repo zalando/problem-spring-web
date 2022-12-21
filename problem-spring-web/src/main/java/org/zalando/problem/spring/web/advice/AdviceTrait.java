@@ -28,12 +28,12 @@ import org.zalando.problem.spring.web.advice.network.NetworkAdviceTrait;
 import org.zalando.problem.spring.web.advice.routing.RoutingAdviceTrait;
 import org.zalando.problem.spring.web.advice.validation.ValidationAdviceTrait;
 
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletResponse;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
-import static javax.servlet.RequestDispatcher.ERROR_EXCEPTION;
+import static jakarta.servlet.RequestDispatcher.ERROR_EXCEPTION;
 import static org.apiguardian.api.API.Status.STABLE;
 import static org.springframework.web.context.request.RequestAttributes.SCOPE_REQUEST;
 import static org.zalando.fauxpas.FauxPas.throwingSupplier;
