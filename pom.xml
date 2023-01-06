@@ -191,13 +191,6 @@
             </exclusions>
         </dependency>
         <dependency>
-            <!-- CVE-2017-18640 -->
-            <groupId>org.yaml</groupId>
-            <artifactId>snakeyaml</artifactId>
-            <version>1.33</version>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-ext</artifactId>
             <version>${slf4j.version}</version>
