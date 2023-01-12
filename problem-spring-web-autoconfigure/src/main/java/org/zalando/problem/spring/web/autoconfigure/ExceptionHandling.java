@@ -8,6 +8,6 @@ import static org.apiguardian.api.API.Status.INTERNAL;
 
 @API(status = INTERNAL)
 @ControllerAdvice
-final class ExceptionHandling implements ProblemHandling {
+public final class ExceptionHandling implements ProblemHandling {
 
 }

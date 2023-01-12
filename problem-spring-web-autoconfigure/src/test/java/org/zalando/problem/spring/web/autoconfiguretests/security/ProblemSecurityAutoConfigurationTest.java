@@ -1,4 +1,4 @@
-package org.zalando.problem.spring.web.autoconfigure.security;
+package org.zalando.problem.spring.web.autoconfiguretests.security;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,6 +13,9 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.zalando.problem.spring.web.advice.AdviceTrait;
 import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
 import org.zalando.problem.spring.web.autoconfigure.ProblemAutoConfiguration;
+import org.zalando.problem.spring.web.autoconfigure.security.ProblemSecurityAutoConfiguration;
+import org.zalando.problem.spring.web.autoconfigure.security.ProblemSecurityBeanPostProcessor;
+import org.zalando.problem.spring.web.autoconfigure.security.SecurityExceptionHandling;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
