@@ -83,15 +83,14 @@ class ExceptionHandling implements ProblemHandling {
 }
 ```
 
+Check if you already have a ControllerAdvice. In this case you might want to adjust your code to solely rely on this library, or set a `@Order(Ordered.HIGHEST_PRECEDENCE)` in your existing Advice for specific exceptions and leave the others for the library to handle.
+
 The [`NoHandlerFoundAdviceTrait`](src/main/java/org/zalando/problem/spring/web/advice/routing/NoHandlerFoundAdviceTrait.java)
 in addition also requires the following configuration:
 
 ```yaml
-spring:
-  resources:
-    add-mappings: false
-  mvc:
-    throw-exception-if-no-handler-found: true
+spring.web.resources.add-mappings=false
+spring.mvc.throw-exception-if-no-handler-found=true
 ```
 
 If you're using Spring Boot, make sure you disable the `ErrorMvcAutoConfiguration`:
