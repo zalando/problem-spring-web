@@ -2,6 +2,7 @@ package org.zalando.problem.spring.common;
 
 import org.apiguardian.api.API;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.zalando.problem.StatusType;
 
 import java.util.Objects;
@@ -14,10 +15,15 @@ import static org.apiguardian.api.API.Status.EXPERIMENTAL;
 @API(status = EXPERIMENTAL)
 public final class HttpStatusAdapter implements StatusType {
 
-    private final HttpStatus status;
+    private HttpStatusCode status;
 
-    public HttpStatusAdapter(final HttpStatus status) {
+    private String reason;
+
+    public HttpStatusAdapter(HttpStatusCode status) {
         this.status = status;
+        if (status instanceof HttpStatus) {
+            this.reason = ((HttpStatus) status).getReasonPhrase();
+        }
     }
 
     @Override
@@ -27,7 +33,7 @@ public final class HttpStatusAdapter implements StatusType {
 
     @Override
     public String getReasonPhrase() {
-        return status.getReasonPhrase();
+        return reason;
     }
 
     @Override

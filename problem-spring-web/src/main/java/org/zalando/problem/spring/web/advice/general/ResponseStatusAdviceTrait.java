@@ -24,7 +24,8 @@ public interface ResponseStatusAdviceTrait extends AdviceTrait {
     default ResponseEntity<Problem> handleResponseStatusException(
             final ResponseStatusException exception,
             final NativeWebRequest request) {
-        return create(new HttpStatusAdapter(exception.getStatus()),exception, request);
+        String reason = exception.getReason();
+        return create(new HttpStatusAdapter(exception.getStatusCode()),exception, request);
     }
 
 }

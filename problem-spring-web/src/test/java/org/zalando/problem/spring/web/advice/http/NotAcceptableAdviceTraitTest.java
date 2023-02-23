@@ -22,7 +22,7 @@ final class NotAcceptableAdviceTraitTest implements AdviceTraitTesting {
                 .andExpect(jsonPath("$.type").doesNotExist())
                 .andExpect(jsonPath("$.title", is("Not Acceptable")))
                 .andExpect(jsonPath("$.status", is(406)))
-                .andExpect(jsonPath("$.detail", containsString("Could not find acceptable representation")));
+                .andExpect(jsonPath("$.detail", containsString("No acceptable representation")));
     }
 
     @Test
@@ -34,7 +34,7 @@ final class NotAcceptableAdviceTraitTest implements AdviceTraitTesting {
                 .andExpect(jsonPath("$.type").doesNotExist())
                 .andExpect(jsonPath("$.title", is("Not Acceptable")))
                 .andExpect(jsonPath("$.status", is(406)))
-                .andExpect(jsonPath("$.detail", containsString("Could not find acceptable representation")));
+                .andExpect(jsonPath("$.detail", containsString("No acceptable representation")));
     }
 
 }

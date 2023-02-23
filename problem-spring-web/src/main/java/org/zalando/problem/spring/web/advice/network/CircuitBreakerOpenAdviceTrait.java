@@ -1,6 +1,6 @@
 package org.zalando.problem.spring.web.advice.network;
 
-import net.jodah.failsafe.CircuitBreakerOpenException;
+import dev.failsafe.CircuitBreakerOpenException;
 import org.apiguardian.api.API;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;

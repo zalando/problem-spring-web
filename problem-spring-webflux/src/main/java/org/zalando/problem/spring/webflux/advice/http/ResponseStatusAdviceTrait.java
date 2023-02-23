@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.server.ServerWebExchange;
 import org.zalando.problem.Problem;
+import org.zalando.problem.spring.common.HttpStatusAdapter;
 import org.zalando.problem.spring.webflux.advice.SpringAdviceTrait;
 import reactor.core.publisher.Mono;
 
@@ -23,7 +24,8 @@ public interface ResponseStatusAdviceTrait extends SpringAdviceTrait {
     default Mono<ResponseEntity<Problem>> handleResponseStatusException(
             final ResponseStatusException exception,
             final ServerWebExchange request) {
-        return create(exception.getStatus(), exception, request);
+
+        return create(new HttpStatusAdapter(exception.getStatusCode()), exception, request);
     }
 
 }

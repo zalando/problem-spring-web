@@ -1,8 +1,2 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  org.zalando.problem.spring.web.autoconfigure.ProblemAutoConfiguration,\
-  org.zalando.problem.spring.web.autoconfigure.ProblemJacksonWebMvcAutoConfiguration, \
-  org.zalando.problem.spring.web.autoconfigure.ProblemJacksonAutoConfiguration, \
-  org.zalando.problem.spring.web.autoconfigure.security.ProblemSecurityAutoConfiguration
-
 org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer=\
   org.zalando.problem.spring.web.autoconfigure.security.ProblemHttpConfigurer

@@ -28,7 +28,7 @@ final class NoHandlerFoundAdviceTraitTest implements AdviceTraitTesting {
                 .andExpect(jsonPath("$.type").doesNotExist())
                 .andExpect(jsonPath("$.title", is("Not Found")))
                 .andExpect(jsonPath("$.status", is(404)))
-                .andExpect(jsonPath("$.detail", containsString("No handler found")));
+                .andExpect(jsonPath("$.detail", containsString("No endpoint GET")));
     }
 
     @Test
@@ -42,7 +42,7 @@ final class NoHandlerFoundAdviceTraitTest implements AdviceTraitTesting {
                 .andExpect(jsonPath("$.type").doesNotExist())
                 .andExpect(jsonPath("$.title", is("Not Found")))
                 .andExpect(jsonPath("$.status", is(404)))
-                .andExpect(jsonPath("$.detail", containsString("No handler found")));
+                .andExpect(jsonPath("$.detail", containsString("No endpoint GET")));
     }
 
     private void throwExceptionIfNoHandlerFound(final MockMvc mvc) throws NoSuchFieldException, IllegalAccessException {

@@ -1,0 +1,4 @@
+org.zalando.problem.spring.web.autoconfigure.ProblemAutoConfiguration
+org.zalando.problem.spring.web.autoconfigure.ProblemJacksonWebMvcAutoConfiguration
+org.zalando.problem.spring.web.autoconfigure.ProblemJacksonAutoConfiguration
+org.zalando.problem.spring.web.autoconfigure.security.ProblemSecurityAutoConfiguration
