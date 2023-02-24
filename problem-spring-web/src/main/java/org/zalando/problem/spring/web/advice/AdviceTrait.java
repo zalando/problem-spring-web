@@ -25,7 +25,6 @@ import org.zalando.problem.spring.web.advice.general.GeneralAdviceTrait;
 import org.zalando.problem.spring.web.advice.http.HttpAdviceTrait;
 import org.zalando.problem.spring.web.advice.io.IOAdviceTrait;
 import org.zalando.problem.spring.web.advice.network.NetworkAdviceTrait;
-import org.zalando.problem.spring.web.advice.routing.RoutingAdviceTrait;
 import org.zalando.problem.spring.web.advice.validation.ValidationAdviceTrait;
 
 import jakarta.servlet.http.HttpServletResponse;
@@ -62,7 +61,6 @@ import static org.zalando.fauxpas.FauxPas.throwingSupplier;
  * @see HttpAdviceTrait
  * @see IOAdviceTrait
  * @see NetworkAdviceTrait
- * @see RoutingAdviceTrait
  * @see ValidationAdviceTrait
  */
 @API(status = STABLE)
