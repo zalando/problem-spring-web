@@ -10,6 +10,5 @@ import static org.apiguardian.api.API.Status.STABLE;
  */
 @API(status = STABLE)
 public interface IOAdviceTrait extends
-        MultipartAdviceTrait,
-        TypeMismatchAdviceTrait {
+        MultipartAdviceTrait {
 }
