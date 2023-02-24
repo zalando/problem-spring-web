@@ -22,7 +22,6 @@ import org.zalando.problem.ThrowableProblem;
 import org.zalando.problem.spring.common.AdviceTraits;
 import org.zalando.problem.spring.web.advice.custom.CustomAdviceTrait;
 import org.zalando.problem.spring.web.advice.general.GeneralAdviceTrait;
-import org.zalando.problem.spring.web.advice.http.HttpAdviceTrait;
 import org.zalando.problem.spring.web.advice.io.IOAdviceTrait;
 import org.zalando.problem.spring.web.advice.network.NetworkAdviceTrait;
 import org.zalando.problem.spring.web.advice.validation.ValidationAdviceTrait;
@@ -58,7 +57,6 @@ import static org.zalando.fauxpas.FauxPas.throwingSupplier;
  * @see ProblemHandling
  * @see CustomAdviceTrait
  * @see GeneralAdviceTrait
- * @see HttpAdviceTrait
  * @see IOAdviceTrait
  * @see NetworkAdviceTrait
  * @see ValidationAdviceTrait
