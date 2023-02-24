@@ -9,8 +9,6 @@ import static org.apiguardian.api.API.Status.STABLE;
  * @see AdviceTrait
  */
 @API(status = STABLE)
-public interface HttpAdviceTrait extends
-        NotAcceptableAdviceTrait,
-        UnsupportedMediaTypeAdviceTrait {
+public interface HttpAdviceTrait {
 
 }
