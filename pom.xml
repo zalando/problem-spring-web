@@ -68,7 +68,7 @@
         <jakarta.annotation-api.version>2.1.0</jakarta.annotation-api.version>
         <json-path-assert.version>2.7.0</json-path-assert.version>
         <gag.version>1.0.1</gag.version>
-        <slf4j-test.version>2.7.0</slf4j-test.version>
+        <slf4j-test.version>2.8.1</slf4j-test.version>
         <hamcrest-compose.version>0.4.0</hamcrest-compose.version>
         <faux-pas.version>0.9.0</faux-pas.version>
         <mockito-core.version>4.4.0</mockito-core.version>
