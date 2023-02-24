@@ -9,6 +9,5 @@ import static org.apiguardian.api.API.Status.STABLE;
  * @see AdviceTrait
  */
 @API(status = STABLE)
-public interface RoutingAdviceTrait extends
-        MissingServletRequestParameterAdviceTrait {
+public interface RoutingAdviceTrait {
 }
