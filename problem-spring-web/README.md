@@ -94,6 +94,16 @@ spring:
     throw-exception-if-no-handler-found: true
 ```
 
+Please note this will work in spring boot version less 2.4 if version  >=2.4 use below configuration
+```yaml
+spring:
+  web:
+    resources:
+      add-mappings: false
+  mvc:
+    throw-exception-if-no-handler-found: true
+```
+
 If you're using Spring Boot, make sure you disable the `ErrorMvcAutoConfiguration`:
 
 ```java
