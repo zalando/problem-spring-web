@@ -11,6 +11,7 @@ import org.zalando.problem.violations.Violation;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import java.util.List;
+import java.util.Set;
 
 import static java.util.stream.Collectors.toList;
 import static org.apiguardian.api.API.Status.INTERNAL;
@@ -32,14 +33,16 @@ public interface ConstraintViolationAdviceTrait extends BaseValidationAdviceTrai
             final ConstraintViolationException exception,
             final NativeWebRequest request) {
 
-        final List<Violation> violations = exception.getConstraintViolations().stream()
-                .map(this::createViolation)
-                .collect(toList());
+        final List<Violation> violations = createViolations(exception.getConstraintViolations());
 
         return newConstraintViolationProblem(exception, violations, request);
     }
 
-    default Violation createViolation(final ConstraintViolation violation) {
+    default List<Violation> createViolations(Set<ConstraintViolation<?>> violations) {
+    	return violations.stream().map(this::createViolation).collect(toList());
+    }
+    
+    default Violation createViolation(final ConstraintViolation<?> violation) {
         return new Violation(formatFieldName(violation.getPropertyPath().toString()), violation.getMessage());
     }
 
