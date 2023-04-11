@@ -40,7 +40,6 @@
         <dependency>
             <groupId>org.zalando</groupId>
             <artifactId>jackson-datatype-problem</artifactId>
-            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
