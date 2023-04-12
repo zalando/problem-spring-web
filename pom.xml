@@ -58,7 +58,7 @@
         <spring-boot.version>3.0.0</spring-boot.version>
         <junit-jupiter.version>5.9.2</junit-jupiter.version>
         <jakarta-el.version>4.0.2</jakarta-el.version>
-        <jakarta-el-api.version>5.0.0</jakarta-el-api.version>
+        <jakarta-el-api.version>5.0.1</jakarta-el-api.version>
         <jakarta.websocket.version>2.1.0</jakarta.websocket.version>
         <jsr305.version>3.0.2</jsr305.version>
         <lombok.version>1.18.26</lombok.version>
