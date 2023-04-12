@@ -65,7 +65,7 @@
         <jakarta.validation-api.version>3.0.2</jakarta.validation-api.version>
         <jakarta.servlet-api.version>6.0.0</jakarta.servlet-api.version>
         <failsafe.version>3.3.1</failsafe.version>
-        <jakarta.annotation-api.version>2.1.0</jakarta.annotation-api.version>
+        <jakarta.annotation-api.version>2.1.1</jakarta.annotation-api.version>
         <json-path-assert.version>2.8.0</json-path-assert.version>
         <gag.version>1.0.1</gag.version>
         <slf4j-test.version>2.9.0</slf4j-test.version>
