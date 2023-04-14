@@ -5,13 +5,18 @@
 
 ## Installation
 
-Add the following dependency to your project:
+Add the following dependencies to your project:
 
 ```xml
 <dependency>
     <groupId>org.zalando</groupId>
     <artifactId>problem-spring-webflux</artifactId>
     <version>${problem-spring-webflux.version}</version>
+</dependency>
+<dependency>
+    <groupId>org.zalando</groupId>
+    <artifactId>jackson-datatype-problem</artifactId>
+    <version>0.27.1</version>
 </dependency>
 ```
 

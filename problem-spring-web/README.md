@@ -19,13 +19,18 @@ Add the starter module to your dependencies. That is all you will need to get a 
 The autoconfiguration will configure problem-spring-web to handle all problems plus Spring Security problems if Spring Security is detected
 
 ### WebMVC
-If you're not using Spring Boot, add the following dependency to your project:
+If you're not using Spring Boot, add the following dependencies to your project:
 
 ```xml
 <dependency>
     <groupId>org.zalando</groupId>
     <artifactId>problem-spring-web</artifactId>
     <version>${problem-spring-web.version}</version>
+</dependency>
+<dependency>
+    <groupId>org.zalando</groupId>
+    <artifactId>jackson-datatype-problem</artifactId>
+    <version>0.27.1</version>
 </dependency>
 ```
 
