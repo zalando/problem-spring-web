@@ -27,14 +27,20 @@
     </modules>
     <developers>
         <developer>
-            <name>Lukas Niemeier</name>
-            <email>lukas.niemeier@zalando.de</email>
-            <organization>Zalando SE</organization>
+            <name>Daniel Rohe</name>
+            <email>daniel.rohe@zalando.de</email>
+            <organization>Zalando Payments GmbH</organization>
             <organizationUrl>https://tech.zalando.com/</organizationUrl>
         </developer>
         <developer>
-            <name>Willi Schönborn</name>
-            <email>willi.schoenborn@zalando.de</email>
+            <name>Malte Pickhan</name>
+            <email>malte.pickhan@zalando.de</email>
+            <organization>Zalando Payments GmbH</organization>
+            <organizationUrl>https://tech.zalando.com/</organizationUrl>
+        </developer>
+        <developer>
+            <name>Christoph Berg</name>
+            <email>christoph.berg@zalando.de</email>
             <organization>Zalando SE</organization>
             <organizationUrl>https://tech.zalando.com/</organizationUrl>
         </developer>
