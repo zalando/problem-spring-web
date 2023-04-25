@@ -37,9 +37,9 @@ class for your [`@ControllerAdvice`](http://docs.spring.io/spring/docs/current/j
 - Any build tool using Maven Central, or direct download
 - Servlet Container for [problem-spring-web](problem-spring-web) or
 - Reactive, non-blocking runtime for [problem-spring-webflux](problem-spring-webflux)
-- Spring 6
-  - Spring 5 (or Spring Boot 2) users may use version [0.28.0](https://github.com/zalando/problem-spring-web/releases/tag/0.28.0)
-  - Spring 4 (or Spring Boot 1.5) users may use version [0.23.0](https://github.com/zalando/problem-spring-web/releases/tag/0.23.0)
+- Spring 6 (or Spring Boot 3) users may use version >= [0.28.0](https://github.com/zalando/problem-spring-web/releases/tag/0.28.0)
+- Spring 5 (or Spring Boot 2) users may use version [0.27.0](https://github.com/zalando/problem-spring-web/releases/tag/0.27.0)
+- Spring 4 (or Spring Boot 1.5) users may use version [0.23.0](https://github.com/zalando/problem-spring-web/releases/tag/0.23.0)
 - Spring Security 5 (optional)
 - Failsafe 2.3.3 (optional)
 
