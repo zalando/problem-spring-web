@@ -62,7 +62,7 @@
         <spring.version>6.0.2</spring.version>
         <spring-security.version>6.0.3</spring-security.version>
         <spring-boot.version>3.0.6</spring-boot.version>
-        <junit-jupiter.version>5.9.2</junit-jupiter.version>
+        <junit-jupiter.version>5.9.3</junit-jupiter.version>
         <jakarta-el.version>4.0.2</jakarta-el.version>
         <jakarta-el-api.version>5.0.1</jakarta-el-api.version>
         <jakarta.websocket.version>2.1.0</jakarta.websocket.version>
