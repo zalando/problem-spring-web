@@ -88,6 +88,8 @@ class ExceptionHandling implements ProblemHandling {
 }
 ```
 
+In case you are already have a ControllerAdvice, you may want to adjust your code to solely rely on this library, or set a `@Order(Ordered.HIGHEST_PRECEDENCE)` in your existing Advice for specific exceptions and leave the others for the library to handle.
+
 The [`NoHandlerFoundAdviceTrait`](src/main/java/org/zalando/problem/spring/web/advice/routing/NoHandlerFoundAdviceTrait.java)
 in addition also requires the following configuration:
 
