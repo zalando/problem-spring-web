@@ -8,7 +8,7 @@
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/zalando/problem-spring-web/main/LICENSE)
 
 *Problem Spring Web* is a set of libraries that makes it easy to produce
-[`application/problem+json`](http://tools.ietf.org/html/rfc7807) responses from a Spring
+[`application/problem+json`](https://datatracker.ietf.org/doc/html/rfc9457) responses from a Spring
 application. It fills a niche, in that it connects the [Problem library](https://github.com/zalando/problem) and either 
 [Spring Web MVC's exception handling](https://spring.io/blog/2013/11/01/exception-handling-in-spring-mvc#using-controlleradvice-classes)
 or [Spring WebFlux's exception handling](https://docs.spring.io/spring/docs/current/spring-framework-reference/web-reactive.html#webflux-ann-controller-exceptions)
