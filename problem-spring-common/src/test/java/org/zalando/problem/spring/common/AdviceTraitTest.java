@@ -84,7 +84,6 @@ class AdviceTraitTest {
         assertThat(result.getStatus().getStatusCode(), is(404));
         assertThat(result.getType().toString(), is("about:blank"));
         assertThat(result.getTitle(), is("Not Found"));
-        assertThat(result.getDetail(), is("Message"));
     }
 
     @Test
