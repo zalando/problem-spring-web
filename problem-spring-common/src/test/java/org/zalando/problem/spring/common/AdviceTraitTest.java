@@ -2,7 +2,10 @@ package org.zalando.problem.spring.common;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.zalando.problem.Problem;
 import org.zalando.problem.Status;
@@ -26,6 +29,24 @@ class AdviceTraitTest {
     class TestException extends RuntimeException {
         public TestException(String message) {
             super(message);
+        }
+    }
+
+    class SpringExpception extends Throwable implements ErrorResponse {
+        final HttpStatus status;
+
+        SpringExpception(HttpStatus status) {
+            this.status = status;
+        }
+
+        @Override
+        public HttpStatusCode getStatusCode() {
+            return status;
+        }
+
+        @Override
+        public ProblemDetail getBody() {
+            return ProblemDetail.forStatusAndDetail(status, status.getReasonPhrase());
         }
     }
 
@@ -54,6 +75,15 @@ class AdviceTraitTest {
         assertThat(result.getType().toString(), is("about:blank"));
         assertThat(result.getTitle(), is("Reset Content"));
         assertThat(result.getDetail(), is("Message"));
+    }
+
+    @Test
+    void buildsOnErrorResponseThrowable() {
+        final Problem result = unit.toProblem(new SpringExpception(HttpStatus.NOT_FOUND));
+
+        assertThat(result.getStatus().getStatusCode(), is(404));
+        assertThat(result.getType().toString(), is("about:blank"));
+        assertThat(result.getTitle(), is("Not Found"));
     }
 
     @Test

@@ -1,7 +1,9 @@
 package org.zalando.problem.spring.common;
 
 import org.apiguardian.api.API;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -41,9 +43,17 @@ public interface AdviceTrait {
     default ThrowableProblem toProblem(final Throwable throwable) {
         final StatusType status = Optional.ofNullable(resolveResponseStatus(throwable))
                 .<StatusType>map(ResponseStatusAdapter::new)
+                .or(() -> Optional.ofNullable(resolveStatusFromErrorResponse(throwable)))
                 .orElse(Status.INTERNAL_SERVER_ERROR);
 
         return toProblem(throwable, status);
+    }
+
+    default StatusType resolveStatusFromErrorResponse(final Throwable type) {
+        if (!(type instanceof ErrorResponse)) return null;
+
+        final HttpStatusCode code = ((ErrorResponse) type).getStatusCode();
+        return Status.valueOf(code.value());
     }
 
     @API(status = MAINTAINED)
