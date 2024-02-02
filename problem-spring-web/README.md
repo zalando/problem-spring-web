@@ -36,7 +36,7 @@ If you're not using problem-spring-web-starter, add the following dependencies t
 
 ## Configuration  
 
-If not using the starter module, make sure you register the required modules with your ObjectMapper:
+If not using the starter module, make sure you register the required Jackson Modules with your ObjectMapper:
 
 ```java
 @Bean
@@ -47,6 +47,18 @@ public ProblemModule problemModule() {
 @Bean
 public ConstraintViolationProblemModule constraintViolationProblemModule() {
     return new ConstraintViolationProblemModule();
+}
+```
+
+If using the starter module, but disabling Spring Boot AutoConfiguration, you could easily import the `ProblemJacksonAutoConfiguration` class.
+For example, this is necessary when writing tests and use `@WebMvcTest` instead of `@SpringBootTest`:
+
+```java
+@WebMvcTest
+@ContextConfiguration(classes = ...)
+@Import(ProblemJacksonAutoConfiguration.class)
+class MyTest {
+  // ...
 }
 ```
 
