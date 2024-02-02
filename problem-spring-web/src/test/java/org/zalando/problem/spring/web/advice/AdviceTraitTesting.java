@@ -2,7 +2,9 @@ package org.zalando.problem.spring.web.advice;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.converter.ByteArrayHttpMessageConverter;
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.http.converter.json.ProblemDetailJacksonMixin;
 import org.springframework.http.converter.xml.MappingJackson2XmlHttpMessageConverter;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -13,6 +15,8 @@ import org.zalando.problem.spring.web.advice.example.ExampleRestController;
 
 import static java.util.Collections.singletonList;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+
+import org.springframework.http.ProblemDetail;
 
 public interface AdviceTraitTesting {
 
@@ -25,9 +29,10 @@ public interface AdviceTraitTesting {
 
         return MockMvcBuilders
                 .standaloneSetup(new ExampleRestController())
-                .setContentNegotiationManager(new ContentNegotiationManager(singletonList(
-                        new FixedContentNegotiationStrategy(APPLICATION_JSON))))
-                .setControllerAdvice(unit())
+                //.setContentNegotiationManager(new ContentNegotiationManager(singletonList(
+                //        new FixedContentNegotiationStrategy(APPLICATION_JSON))))
+                //.setControllerAdvice(unit())
+                .setControllerAdvice(new ZalandoProblemExceptionHandler())
                 .setMessageConverters(
                         new MappingJackson2HttpMessageConverter(mapper),
                         new MappingJackson2XmlHttpMessageConverter(),
@@ -36,7 +41,7 @@ public interface AdviceTraitTesting {
     }
 
     default ObjectMapper mapper() {
-        return new ObjectMapper().registerModule(new ProblemModule());
+    	return Jackson2ObjectMapperBuilder.json().build();
     }
 
 }
