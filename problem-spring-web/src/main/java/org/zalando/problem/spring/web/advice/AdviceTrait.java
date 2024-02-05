@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.NativeWebRequest;
+import org.springframework.web.server.ResponseStatusException;
 import org.zalando.problem.Problem;
 import org.zalando.problem.Status;
 import org.zalando.problem.StatusType;
@@ -164,11 +165,16 @@ public interface AdviceTrait extends org.zalando.problem.spring.common.AdviceTra
                 })), request);
     }
 
+    default boolean shouldLog(final Throwable throwable) {
+        return !(throwable instanceof ResponseStatusException) && !(throwable instanceof Problem);
+    }
+
     default void log(
             final Throwable throwable,
             @SuppressWarnings("UnusedParameters") final Problem problem,
             @SuppressWarnings("UnusedParameters") final NativeWebRequest request,
             final HttpStatus status) {
+        if (!this.shouldLog(throwable)) return;
         AdviceTraits.log(throwable, status);
     }
 
