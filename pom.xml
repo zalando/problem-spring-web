@@ -447,6 +447,13 @@
                 <groupId>org.eluder.coveralls</groupId>
                 <artifactId>coveralls-maven-plugin</artifactId>
                 <version>4.3.0</version>
+		<dependencies>
+                    <dependency>
+                        <artifactId>jaxb-api</artifactId>
+                        <groupId>javax.xml.bind</groupId>
+                        <version>2.3.1</version>
+                    </dependency>
+                </dependencies>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
