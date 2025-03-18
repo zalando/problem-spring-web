@@ -12,68 +12,58 @@ import org.springframework.test.util.ReflectionTestUtils;
 import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Consumer;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
 
 
 class ProblemSecurityBeanPostProcessorTest {
 
-    private ObjectProvider<SecurityProblemSupport> provider;
     private ProblemSecurityBeanPostProcessor processor;
+    private HttpSecurity http;
 
     @SuppressWarnings("unchecked")
     @BeforeEach
     void setUp() {
-        provider = mock(ObjectProvider.class);
-        processor = new ProblemSecurityBeanPostProcessor(provider);
-    }
-
-    @SuppressWarnings("unchecked")
-    @Test
-    void shouldBeConfigured() throws Exception {
+        processor = new ProblemSecurityBeanPostProcessor();
         final ObjectPostProcessor<Object> objectPostProcessor = mock(ObjectPostProcessor.class);
         final AuthenticationManagerBuilder authenticationManagerBuilder = mock(AuthenticationManagerBuilder.class);
-        final SecurityProblemSupport securityProblemSupport = mock(SecurityProblemSupport.class);
-        final HttpSecurity http = new HttpSecurity(objectPostProcessor, authenticationManagerBuilder, new HashMap<>());
+        http = spy(new HttpSecurity(objectPostProcessor, authenticationManagerBuilder, new HashMap<>()));
+    }
 
-        doAnswer(answer -> {
-            final Consumer<SecurityProblemSupport> consumer = (Consumer<SecurityProblemSupport>) answer.getArguments()[0];
-            consumer.accept(securityProblemSupport);
-            return null;
-        }).when(provider).ifAvailable(any(Consumer.class));
+    @Test
+    void shouldBeConfigured() throws Exception {
+        assertThat(processor.postProcessAfterInitialization(http, "httpSecurity")).isEqualTo(http);
+        verify(http).apply(any(ProblemHttpConfigurer.class));
+    }
+
+    @Test
+    void shouldBeNotConfiguredWhenAlreadyConfigured() throws Exception {
+        doReturn(new ProblemHttpConfigurer()).when(http).getConfigurer(ProblemHttpConfigurer.class);
 
         assertThat(processor.postProcessAfterInitialization(http, "httpSecurity")).isEqualTo(http);
-        assertThat(ReflectionTestUtils.getField(http.exceptionHandling(), "authenticationEntryPoint")).isEqualTo(securityProblemSupport);
-        assertThat(ReflectionTestUtils.getField(http.exceptionHandling(), "accessDeniedHandler")).isEqualTo(securityProblemSupport);
+        verify(http, never()).apply(any(ProblemHttpConfigurer.class));
+    }
+
+    @Test
+    void shouldBeFailWhenThrowException() {
+        doThrow(RuntimeException.class).when(http).getConfigurer(ProblemHttpConfigurer.class);
+
+        assertThatThrownBy(() -> processor.postProcessAfterInitialization(http, "httpSecurity")).isInstanceOf(BeanCreationException.class);
     }
 
     @Test
     void shouldBeNotConfiguredWhenBeanIsNotHttpSecurity() {
         assertThat(processor.postProcessAfterInitialization("test", "notHttpSecurity")).isEqualTo("test");
-    }
-
-    @SuppressWarnings("unchecked")
-    @Test
-    void shouldBeThrowBeanCreationExceptionWhenRegisterExceptionHandling() throws Exception {
-        final ObjectPostProcessor<Object> objectPostProcessor = mock(ObjectPostProcessor.class);
-        final AuthenticationManagerBuilder authenticationManagerBuilder = mock(AuthenticationManagerBuilder.class);
-        final SecurityProblemSupport securityProblemSupport = mock(SecurityProblemSupport.class);
-        final HttpSecurity http = spy(new HttpSecurity(objectPostProcessor, authenticationManagerBuilder, new HashMap<>()));
-
-        doAnswer(answer -> {
-            final Consumer<SecurityProblemSupport> consumer = (Consumer<SecurityProblemSupport>) answer.getArguments()[0];
-            consumer.accept(securityProblemSupport);
-            return null;
-        }).when(provider).ifAvailable(any(Consumer.class));
-        doThrow(new BeanInitializationException("test")).when(http).exceptionHandling();
-
-        assertThatThrownBy(() -> processor.postProcessAfterInitialization(http, "httpSecurity")).isExactlyInstanceOf(BeanCreationException.class);
     }
 }
