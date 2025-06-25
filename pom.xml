@@ -532,7 +532,7 @@
                         <configuration>
                             <publishingServerId>central</publishingServerId>
                             <deploymentName>${project.name}:${project.version}</deploymentName>
-                            <autoPublish>false</autoPublish>
+                            <autoPublish>true</autoPublish>
                         </configuration>
                     </plugin>
                 </plugins>
