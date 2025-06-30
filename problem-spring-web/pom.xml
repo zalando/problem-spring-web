@@ -8,6 +8,7 @@
         <version>0.29.2-SNAPSHOT</version>
     </parent>
     <artifactId>problem-spring-web</artifactId>
+    <name>${artifactId}</name>
     <dependencies>
 
         <dependency>
