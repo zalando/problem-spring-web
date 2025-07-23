@@ -25,7 +25,7 @@ public interface ResponseStatusAdviceTrait extends AdviceTrait {
             final ResponseStatusException exception,
             final NativeWebRequest request) {
         String reason = exception.getReason();
-        return create(new HttpStatusAdapter(exception.getStatusCode()),exception, request);
+        return create(new HttpStatusAdapter(exception.getStatusCode()),exception, request, exception.getHeaders());
     }
 
 }
