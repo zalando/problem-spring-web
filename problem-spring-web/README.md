@@ -93,8 +93,9 @@ in addition also requires the following configuration:
 
 ```yaml
 spring:
-  resources:
-    add-mappings: false
+  web:
+    resources:
+      add-mappings: false
   mvc:
     throw-exception-if-no-handler-found: true
 ```
