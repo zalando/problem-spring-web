@@ -17,6 +17,7 @@ final class ResponseStatusAdviceTraitTest implements AdviceTraitTesting {
         mvc().perform(request(GET, "http://localhost/api/handler-throwable-extended"))
                 .andExpect(status().isNotImplemented())
                 .andExpect(header().string("Content-Type", is("application/problem+json")))
+                .andExpect(header().string("Retry-After", is("5")))
                 .andExpect(jsonPath("$.type").doesNotExist())
                 .andExpect(jsonPath("$.title", is("Not Implemented")))
                 .andExpect(jsonPath("$.status", is(501)));

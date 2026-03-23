@@ -12,6 +12,7 @@ import com.google.gag.annotation.remark.OhNoYouDidnt;
 import dev.failsafe.CircuitBreaker;
 import dev.failsafe.Failsafe;
 import lombok.Data;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -111,6 +112,13 @@ public class ExampleRestController {
     private static final class MyResponseStatusException extends ResponseStatusException {
         MyResponseStatusException() {
             super(HttpStatus.NOT_IMPLEMENTED);
+        }
+
+        @Override
+        public HttpHeaders getHeaders() {
+            var headers = new HttpHeaders();
+            headers.set(HttpHeaders.RETRY_AFTER, "5");
+            return headers;
         }
     }
 
