@@ -40,7 +40,7 @@ final class MethodArgumentNotValidAdviceTraitTest implements AdviceTraitTesting 
                 .andExpect(jsonPath("$.title", is("Constraint Violation")))
                 .andExpect(jsonPath("$.status", is(400)))
                 .andExpect(jsonPath("$.violations", hasSize(1)))
-                .andExpect(jsonPath("$.violations[0].field", is("user_request")))
+                .andExpect(jsonPath("$.violations[0].field", is("userRequest")))
                 .andExpect(jsonPath("$.violations[0].message", is("must not be called Bob")));
     }
 
