@@ -1,5 +1,10 @@
 # Problems for Spring MVC and Spring WebFlux
 
+> [!IMPORTANT]
+> This project is in maintenance mode because Spring provides support for RFC 9457 through their Errors Responses feature.
+> 
+> Please migrate to Spring's Error Responses feature for [Servlet Stack](https://docs.spring.io/spring-framework/reference/web/webmvc/mvc-ann-rest-exceptions.html) and [Reactive Stack](https://docs.spring.io/spring-framework/reference/web/webflux/ann-rest-exceptions.html).
+
 [![Stability: Sustained](https://masterminds.github.io/stability/sustained.svg)](https://masterminds.github.io/stability/sustained.html)
 ![Build Status](https://github.com/zalando/problem-spring-web/workflows/build/badge.svg)
 [![Coverage Status](https://img.shields.io/coveralls/zalando/problem-spring-web/main.svg)](https://coveralls.io/r/zalando/problem-spring-web)
